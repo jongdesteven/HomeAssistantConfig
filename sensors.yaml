@@ -1,0 +1,39 @@
+- platform: hue
+
+- platform: mqtt
+  state_topic: "raspi/temp"
+  name: "Raspi Temperature"
+  unit_of_measurement: "°C"
+  value_template: '{{ value_json.temperature }}'
+- platform: mqtt
+  state_topic: "/home/DHT11/temperature"
+  name: "DHT11 Temperature"
+  unit_of_measurement: "°C"
+- platform: mqtt
+  state_topic: "/home/DHT11/humidity"
+  name: "DHT11 Humidity"
+  unit_of_measurement: "%"
+
+- platform: template
+  sensors:
+    alarm_clock_time:
+      friendly_name: 'Alarm Time'
+      icon_template: 'mdi:alarm'
+      value_template: '{{ "%0.02d:%0.02d" | format(states.input_number.alarm_clock_hour.state | int, states.input_number.alarm_clock_minute.state | int ) }}'
+    alarm_clock_fade_in_minutes:
+      friendly_name: 'Fade In (Minutes)'
+      icon_template: 'mdi:gradient'
+      value_template: '{{ states.input_number.alarm_clock_fade_in_minutes.state | int }}'
+    doorbell_last_press:
+      friendly_name: 'Last Doorbell Press'
+      icon_template: 'mdi:clock-alert'
+      value_template: '{{ as_timestamp(states.binary_sensor.doorbell.last_changed) | timestamp_custom("%a %d %b %H:%M") }}'
+    overloop_lux_level:
+      friendly_name: 'Overloop Lux Level'
+      icon_template: 'mdi:white-balance-sunny'
+      unit_of_measurement: 'lx'
+      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.lux }}'
+    overloop_light_level:
+      friendly_name: 'Overloop Light Level'
+      icon_template: 'mdi:white-balance-sunny'
+      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.light_level | int }}'

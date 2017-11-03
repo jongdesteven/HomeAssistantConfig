@@ -1,0 +1,132 @@
+default_view:
+  view: true
+  icon: mdi:home
+  entities:
+  - group.climate
+  - group.music
+  - group.lights
+  - group.lightscenes
+  - group.family
+  - group.alarm_clock_basic
+  - group.raspi
+  - group.weather
+  - group.doorbell
+  - group.tv
+music:
+  name: Music
+  view: true
+  entities:
+  - media_player.bedroom
+  - media_player.family_room
+  - media_player.apple_tv
+climate:
+  name: Climate
+  view: false
+  entities:
+  - climate.woonkamer
+  - climate.keuken
+  - climate.slaapkamer
+  - climate.slaapkamer_2
+  - climate.slaapkamer_klein
+alllights:
+  name: Lights
+  view: true
+  entities:
+  - light.bank_kamer
+  - light.bol_kamer
+  - light.staande_lamp
+  - light.tafel
+  - light.trap_spot
+  - light.carport
+  - light.buiten_lamp
+  - group.all_lights
+climate_basic:
+  name: Climate
+  view: false
+  entities:
+  - sensor.woonkamer_temperature
+  - sensor.keuken_temperature
+  - sensor.slaapkamer_temperature
+  - sensor.slaapkamer_2_temperature
+  - sensor.slaapkamer_klein_temperature
+lights:
+  name: Lights
+  view: false
+  entities:
+  - light.woonkamer
+  - light.slaapkamer
+  - light.overloop
+  - light.tuinkamer
+#  - light.carport
+lightscenes:
+  name: Light Scenes
+  view: false
+  control: hidden
+  entities:
+  - input_boolean.diner_lights
+  - input_boolean.avond_lights
+doorbell:
+  name: Doorbell
+  view: false
+  control: hidden
+  entities:
+  - switch.doorbell_ringer
+  - sensor.doorbell_last_press
+# - binary_sensor.doorbell
+tv:
+  name: TV
+  view: false
+  control: hidden
+  entities:
+  - cover.tv_lift
+family:
+  name: Family
+  view: false
+  entities:
+  - device_tracker.iphone_steven
+  - device_tracker.iphone_marcha
+raspi:
+  name: Server
+  view: true
+  entities:
+  - group.motion_sensors
+  - sensor.raspi_temperature
+  - sensor.keuken_temperature
+  - sensor.keuken_humidity
+  - sensor.slaapkamer_temperature
+  - sensor.slaapkamer_humidity
+  - sensor.woonkamer_temperature
+  - sensor.woonkamer_humidity
+  - sensor.woonkamer_heating
+  - input_boolean.alarm_toggle
+  - switch.test_switch
+  - switch.tv_lift_up
+  - switch.tv_lift_down
+  
+alarm_clock_basic:
+  name: Alarm Clock
+  view: false
+  control: hidden
+  entities:
+    - input_boolean.alarm_clock_status
+    - input_boolean.alarm_clock_weekend_status
+    - sensor.alarm_clock_time
+alarm_clock_all:
+  name: Alarm Clock
+  view: true
+  control: hidden
+  entities:
+    - input_boolean.alarm_clock_status
+    - input_boolean.alarm_clock_weekend_status
+    - sensor.alarm_clock_time
+    - input_number.alarm_clock_hour
+    - input_number.alarm_clock_minute
+    - input_number.alarm_clock_fade_in_minutes
+
+motion_sensors:
+  name: Motion Sensors
+  view: false
+  entities:
+    - sensor.overloop_motion_sensor
+    - sensor.overloop_light_level
+    - sensor.overloop_lux_level
