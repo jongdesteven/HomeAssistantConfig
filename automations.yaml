@@ -73,8 +73,7 @@
       data:
         push:
           sound: "doorbell-sound-effect.wav"
-  - condition:
-    condition: state
+  - condition: state
     entity_id: light.trap_spot
     state: 'off'    
   - service: light.turn_on
