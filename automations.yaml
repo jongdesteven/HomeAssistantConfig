@@ -257,5 +257,25 @@
       to: '4_hold'
   action:
     - service: light.turn_off
-      entity_id: light.slaapkamer, light.woonkamer, light.overloop, light.tuinkamer
+      entity_id:
+        - light.slaapkamer
+        - light.woonkamer
+        - light.overloop
+        - light.tuinkamer
+- id: automation_12
+  alias: 'All indoor lights bright on when holding buttons'
+  trigger:
+    - platform: state
+      entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
+      to: '1_hold'
+  action:
+    - service: light.turn_on
+      entity_id:
+        - light.slaapkamer
+        - light.woonkamer
+        - light.overloop
+        - light.tuinkamer
+      data:
+        brightness: 254
+        color_temp: 200
 
