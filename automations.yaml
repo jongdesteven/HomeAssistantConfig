@@ -249,3 +249,13 @@
         alarm_id: 61
         time: '{{ states.sensor.alarm_clock_time.state }}'  
 
+- id: automation_11
+  alias: 'All indoor lights off when holding buttons'
+  trigger:
+    - platform: state
+      entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
+      to: '4_hold'
+  action:
+    - service: light.turn_off
+      entity_id: light.slaapkamer, light.woonkamer, light.overloop, light.tuinkamer
+
