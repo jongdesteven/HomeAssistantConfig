@@ -152,12 +152,27 @@
         value_template: '{{ now().strftime("%H:%M") == states.sensor.alarm_clock_time.state }}'
       - condition: or
         conditions:
-          - condition: state
-            entity_id: input_boolean.alarm_clock_status
-            state: 'on'
-          - condition: state
-            entity_id: input_boolean.alarm_clock_weekend_status
-            state: 'on'
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.alarm_clock_status
+                state: 'on'
+              - condition: time
+                weekday:
+                  - mon
+                  - tue
+                  - wed
+                  - thu
+                  - fri
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.alarm_clock_weekend_status
+                state: 'on'
+              - condition: time
+                weekday:
+                  - sat
+                  - sun
   action:
     - service: light.turn_on
       data_template:
