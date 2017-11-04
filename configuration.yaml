@@ -51,13 +51,16 @@ zone:
   longitude: !secret zone1_longitude
   radius: 300
   icon: mdi:worker
-
 zone 2:
   name: !secret zone2_name
   latitude: !secret zone2_latitude
   longitude: !secret zone2_longitude
   icon: mdi:worker
-
+zone 3:
+  name: !secret zone3_name
+  latitude: !secret zone3_latitude
+  longitude: !secret zone3_longitude
+  icon: mdi:weight-kilogram
 
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
