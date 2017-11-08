@@ -279,3 +279,65 @@
         brightness: 254
         color_temp: 200
 
+- id: automation_13a
+  alias: 'All indoor lights off when leaving the house'
+  trigger:
+    platform: state
+    entity_id: group.family
+    to: 'not_home'
+  condition:
+    condition: sun
+    after: sunrise
+  action:
+    - service: light.turn_off
+      entity_id:
+        - light.slaapkamer
+        - light.woonkamer
+        - light.overloop
+        - light.tuinkamer
+- id: automation_13b
+  alias: 'Woonkamer on  when coming home after dark'
+  trigger:
+    platform: state
+    entity_id: group.family
+    to: 'home'
+  condition:
+    condition: sun
+    after: sunset
+  action:
+    - service: light.turn_on
+      entity_id:
+        - light.woonkamer
+- id: automation_13c
+  alias: 'Woonkamer on after dark when not home'
+  trigger:
+    platform: sun
+    event: sunset
+  condition:
+    condition: state
+    entity_id: group.family
+    state: 'not_home'
+  action:
+    - service: light.turn_on
+      entity_id:
+        - light.bol_kamer
+      data:
+        brightness: 50
+        color_temp: 300
+- id: automation_13d
+  alias: 'All off on sunrise when not home'
+  trigger:
+    platform: sun
+    event: sunrise
+    offset: "00:30:00"
+  condition:
+    condition: state
+    entity_id: group.family
+    state: 'not_home'
+  action:
+    - service: light.turn_on
+      entity_id:
+        - light.bol_kamer
+      data:
+        brightness: 50
+        color_temp: 300

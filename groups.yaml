@@ -111,14 +111,22 @@ alarm_clock_basic:
     - input_boolean.alarm_clock_status
     - input_boolean.alarm_clock_weekend_status
     - sensor.alarm_clock_time
-alarm_clock_all:
+#    - input_datetime.alarm_clock_time_input
+alarm_clock_tab:
   name: Alarm Clock
   view: true
+  control: hidden
+  entities:
+    - group.alarm_clock_all
+alarm_clock_all:
+  name: Alarm Clock
+  view: false
   control: hidden
   entities:
     - input_boolean.alarm_clock_status
     - input_boolean.alarm_clock_weekend_status
     - sensor.alarm_clock_time
+#   - input_datetime.alarm_clock_time_input
     - input_number.alarm_clock_hour
     - input_number.alarm_clock_minute
     - input_number.alarm_clock_fade_in_minutes
