@@ -320,7 +320,7 @@
   action:
     - service: light.turn_on
       entity_id:
-        - light.bol_kamer
+        - light.bank_kamer
       data:
         brightness: 50
         color_temp: 300
@@ -337,7 +337,7 @@
   action:
     - service: light.turn_on
       entity_id:
-        - light.bol_kamer
+        - light.bank_kamer
       data:
         brightness: 50
         color_temp: 300
