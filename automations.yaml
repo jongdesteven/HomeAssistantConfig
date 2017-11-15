@@ -305,9 +305,10 @@
     condition: sun
     after: sunset
   action:
-    - service: light.turn_on
-      entity_id:
-        - light.woonkamer
+    - service: light.hue_activate_scene
+      data:
+        group_name: 'Woonkamer'
+        scene_name: 'Diner'
 - id: automation_13c
   alias: 'Woonkamer on after dark when not home'
   trigger:
@@ -323,7 +324,7 @@
         - light.bank_kamer
       data:
         brightness: 50
-        color_temp: 300
+        color_temp: 366
 - id: automation_13d
   alias: 'All off on sunrise when not home'
   trigger:
