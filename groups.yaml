@@ -27,7 +27,7 @@ climate:
   - climate.keuken
   - climate.slaapkamer
   - climate.slaapkamer_2
-  - climate.slaapkamer_klein
+  - climate.badkamer
 alllights:
   name: Lights
   view: true
@@ -48,7 +48,7 @@ climate_basic:
   - sensor.keuken_temperature
   - sensor.slaapkamer_temperature
   - sensor.slaapkamer_2_temperature
-  - sensor.slaapkamer_klein_temperature
+  - sensor.badkamer_temperature
 lights:
   name: Lights
   view: false

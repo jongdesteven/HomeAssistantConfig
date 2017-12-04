@@ -308,7 +308,7 @@
     - service: light.hue_activate_scene
       data:
         group_name: 'Woonkamer'
-        scene_name: 'Diner'
+        scene_name: 'Avond'
 - id: automation_13c
   alias: 'Woonkamer on after dark when not home'
   trigger:
