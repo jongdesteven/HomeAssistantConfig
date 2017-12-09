@@ -103,24 +103,8 @@
     - service: switch.turn_on
       entity_id: switch.doorbell_ringer
 
-- id: automation_6
-  alias: 'Coming home after dark'
-  trigger:
-    platform: state
-    entity_id: device_tracker.iphone_steven, device_tracker.iphone_marcha
-    to: 'home'
-  condition: 
-    condition: sun
-    after: sunset
-    # after_offset: "-0:30:00"
-  action:
-    - service: light.turn_on
-      entity_id: light.carport
-#    - delay: 00:02:00
-#    - service: light.turn_off
-#      entity_id: light.carport
 - id: automation_6a
-  alias: 'Turn on at sunset'
+  alias: 'Carport lights on at sunset'
   trigger:
     platform: sun
     event: sunset
@@ -131,7 +115,7 @@
         brightness: 63 
         color_temp: 330
 - id: automation_6b
-  alias: 'Turn off at sunrise'
+  alias: 'Carport lights off at sunrise'
   trigger:
     platform: sun
     event: sunrise

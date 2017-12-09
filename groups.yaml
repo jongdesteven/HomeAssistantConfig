@@ -90,11 +90,15 @@ raspi:
   view: true
   entities:
   - group.motion_sensors
+  - group.climate_basic
   - sensor.raspi_temperature
   - sensor.keuken_temperature
   - sensor.keuken_humidity
   - sensor.slaapkamer_temperature
   - sensor.slaapkamer_humidity
+  - sensor.badkamer_temperature
+  - sensor.badkamer_humidity
+  - sensor.badkamer_heating
   - sensor.woonkamer_temperature
   - sensor.woonkamer_humidity
   - sensor.woonkamer_heating
