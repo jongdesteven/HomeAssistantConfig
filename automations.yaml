@@ -73,7 +73,7 @@
       message: "Doorbell pressed test"
       data:
         attachment: 
-          url: http://stevendejong.duckdns.org/frontdoor.jpg
+          url: !secret url_voordeur_snapshot
           content-type: jpg
           hide-thumbnail: false
         push:
@@ -92,7 +92,7 @@
       message: "Doorbell pressed"
       data:
         attachment: 
-          url: http://stevendejong.duckdns.org/frontdoor.jpg
+          url: !secret url_voordeur_snapshot
           content-type: jpg
           hide-thumbnail: false
         push:
