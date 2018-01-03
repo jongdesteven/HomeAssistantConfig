@@ -25,6 +25,7 @@ homeassistant:
 
 # Enables the frontend
 frontend:
+  javascript_version: es5
 
 # Enables configuration UI
 config:
@@ -119,6 +120,10 @@ apple_tv:
 ios:
 
 hue:
+
+shell_command:
+  grab_frontdoor_image: /home/homeassistant/images/grabframe.sh
+  test_shell_command: 'touch /home/homeassistant/images/testfile'
 
 light:
   - platform: hue
@@ -233,6 +238,26 @@ notify:
     services:
       - service: ios_iphone_steven
       - service: ios_iphone_marcha
+
+weblink:
+  entities:
+    - name: Voordeur Live
+      url: !secret url_voordeur_live
+      icon: mdi:video
+    - name: Transmission
+      url: !secret url_transmission
+      icon: mdi:download
+
+history_graph:
+  gr1:
+    name: Temperature
+    entities:
+      - sensor.woonkamer_temperature
+      - sensor.keuken_temperature
+      - sensor.badkamer_temperature
+      - sensor.slaapkamer_temperature
+      - sensor.overloop_temperature
+      - sensor.waalre_temperature
 
 sensor: !include sensors.yaml
 automation: !include automations.yaml

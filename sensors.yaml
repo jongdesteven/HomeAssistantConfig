@@ -1,4 +1,4 @@
-- platform: hue
+- platform: hue_sensor
 
 - platform: mqtt
   state_topic: "raspi/temp"
@@ -28,6 +28,11 @@
       friendly_name: 'Last Doorbell Press'
       icon_template: 'mdi:clock-alert'
       value_template: '{{ as_timestamp(states.binary_sensor.doorbell.last_changed) | timestamp_custom("%a %d %b %H:%M") }}'
+    waalre_temperature:
+      friendly_name: 'Waalre Weather Temperature'
+      icon_template: 'mdi:temperature-celsius'
+      value_template: '{{ states.weather.waalre.attributes.temperature | float }}'
+      unit_of_measurement: "°C"
     overloop_lux_level:
       friendly_name: 'Overloop Lux Level'
       icon_template: 'mdi:white-balance-sunny'
@@ -37,3 +42,8 @@
       friendly_name: 'Overloop Light Level'
       icon_template: 'mdi:white-balance-sunny'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.light_level | int }}'
+    overloop_temperature:
+      friendly_name: 'Overloop Sensor Temperature'
+      icon_template: 'mdi:temperature-celsius'
+      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.temperature | float }}'
+      unit_of_measurement: "°C"

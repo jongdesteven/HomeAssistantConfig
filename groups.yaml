@@ -72,6 +72,7 @@ doorbell:
   entities:
   - switch.doorbell_ringer
   - sensor.doorbell_last_press
+  - weblink.voordeur_live
 # - binary_sensor.doorbell
 tv:
   name: TV
@@ -106,6 +107,7 @@ raspi:
   - switch.test_switch
   - switch.tv_lift_up
   - switch.tv_lift_down
+  - history_graph.temperature
   
 alarm_clock_basic:
   name: Alarm Clock
@@ -139,6 +141,7 @@ motion_sensors:
   name: Motion Sensors
   view: false
   entities:
+    - sensor.overloop_temperature
     - sensor.overloop_motion_sensor
     - sensor.overloop_light_level
     - sensor.overloop_lux_level

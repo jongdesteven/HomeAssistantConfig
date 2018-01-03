@@ -7,7 +7,7 @@
     entity_id: input_boolean.diner_lights
     to: 'on'
   action:
-  - service: light.hue_activate_scene
+  - service: hue.hue_activate_scene
     data:
       group_name: 'Woonkamer'
       scene_name: 'Diner'
@@ -24,7 +24,7 @@
     entity_id: input_boolean.avond_lights
     to: 'on'
   action:
-  - service: light.hue_activate_scene
+  - service: hue.hue_activate_scene
     data:
       group_name: 'Woonkamer'
       scene_name: 'Avond'
@@ -32,33 +32,52 @@
     data:
       entity_id: input_boolean.avond_lights
 
-- id: automation_3
-  alias: 'Alarm On'
-  trigger:
-    platform: state
-    entity_id: input_boolean.alarm_toggle
-    to: 'on'
-  action:
-  - service: media_player.volume_set
-    data:
-      entity_id: media_player.family_room
-      volume_level: 0.13
+#- id: automation_3
+#  alias: 'Alarm On'
+#  trigger:
+#    platform: state
+#    entity_id: input_boolean.alarm_toggle
+#    to: 'on'
+#  action:
+#  - service: media_player.volume_set
+#    data:
+#      entity_id: media_player.family_room
+#      volume_level: 0.13
 #  - service: media_player.select_source
 #    data:
 #      entity_id: media_player.family_room
 #      source: "Peaceful Piano"
-  - service: media_player.play_media
-    data:
-      entity_id: media_player.family_room
-      media_content_id: "spotify:user:spotify:playlist:37i9dQZF1DX4sWSpwq3LiO"
-      media_content_type: "playlist"
-
+#  - service: media_player.play_media
+#    data:
+#      entity_id: media_player.family_room
+#      media_content_id: "spotify:user:spotify:playlist:37i9dQZF1DX4sWSpwq3LiO"
+#      media_content_type: "playlist"
+#
 #  - service: script.sonos_say
 #    data:
 #      sonos_entity: media_player.family_room
 #      volume: 0.5
 #      message: 'Alarm button is pressed!'
 #      delay: '00:00:05'
+
+- id: automation_4a
+  alias: 'Doorbell pressed Test'
+  trigger:
+    platform: state
+    entity_id: input_boolean.alarm_toggle
+    to: 'on'
+  action:
+  - service: shell_command.grab_frontdoor_image 
+  - service: notify.all_iphones
+    data:
+      message: "Doorbell pressed test"
+      data:
+        attachment: 
+          url: http://stevendejong.duckdns.org/frontdoor.jpg
+          content-type: jpg
+          hide-thumbnail: false
+        push:
+          sound: "doorbell-sound-effect.wav"
 
 - id: automation_4
   alias: 'Doorbell pressed'
@@ -67,10 +86,15 @@
     entity_id: binary_sensor.doorbell
     to: 'on'
   action:
+  - service: shell_command.grab_frontdoor_image 
   - service: notify.all_iphones
     data:
       message: "Doorbell pressed"
       data:
+        attachment: 
+          url: http://stevendejong.duckdns.org/frontdoor.jpg
+          content-type: jpg
+          hide-thumbnail: false
         push:
           sound: "doorbell-sound-effect.wav"
   - condition: state
@@ -289,7 +313,7 @@
     condition: sun
     after: sunset
   action:
-    - service: light.hue_activate_scene
+    - service: hue.hue_activate_scene
       data:
         group_name: 'Woonkamer'
         scene_name: 'Avond'
@@ -305,7 +329,7 @@
   action:
     - service: light.turn_on
       entity_id:
-        - light.bank_kamer
+        - light.tafel1
       data:
         brightness: 50
         color_temp: 366
@@ -326,3 +350,24 @@
         - light.woonkamer
         - light.overloop
         - light.tuinkamer
+
+- id: automation_14
+  alias: 'Set heating up when at work'
+  trigger:
+    platform: time
+    at: '14:00:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.iphone_marcha
+        state: 'GGZE'
+      - condition: numeric_state
+        entity_id: sensor.woonkamer_temperature
+        below: 18
+  action:
+    service: script.early_heating
+    # data_:
+      #minutes_togo: {{ ( ( 20.0 - ( states.sensor.woonkamer_temperature.state | float ) ) * 60.0 ) | int }}     
+      # minutes_togo: 120
+

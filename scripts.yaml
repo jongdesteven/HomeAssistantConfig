@@ -40,3 +40,28 @@ tv_lift_down:
 #    - service: media_player.apple_tv_press_buttons
 #      entity_id: media_player.apple_tv
 #      buttons: top_menu, top_menu, select
+
+early_heating:
+  alias: "Pre-heat the house"
+  sequence:
+    - service: notify.ios_iphone_steven
+      data_template:
+        message: "Het is nu {{ states.sensor.woonkamer_temperature.state | float }}°C. \n {{ ( ( 20.0 - ( states.sensor.woonkamer_temperature.state | float ) ) * 60.0 ) | int }} min togo"
+        title: "Het is koud thuis"
+    - delay:
+        minutes: 120
+      #- delay: >
+      #{% if ( ( 20.0 - ( states.sensor.woonkamer_temperature.state | float ) ) * 60.0 ) | int <= 180 %}
+      #  {% if {{ 120 <= 180 }} %}
+      #    minutes: {{ 180 - ( ( ( 20.0 - ( states.sensor.woonkamer_temperature.state | float ) ) * 60.0 ) | int ) }}
+      #  {% else %}
+      #    seconds: 10
+      #  {% endif %}
+    - service: climate.set_temperature
+      entity_id: climate.woonkamer 
+      data:
+        temperature: 20
+        operation_mode: Manual
+
+
+    
