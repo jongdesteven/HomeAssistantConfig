@@ -258,12 +258,19 @@
         time: '{{ states.sensor.alarm_clock_time.state }}'  
 
 - id: automation_11
-  alias: 'All indoor lights off when holding buttons'
+  alias: 'All indoor lights off, climate low when holding buttons'
   trigger:
     - platform: state
       entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
       to: '4_hold'
   action:
+    - service: climate.set_temperature
+      data:
+        entity_id:
+          - climate.keuken
+          - climate.woonkamer
+          - climate.badkamer
+        temperature: 18
     - service: light.turn_off
       entity_id:
         - light.slaapkamer
@@ -304,7 +311,7 @@
         - light.overloop
         - light.tuinkamer
 - id: automation_13b
-  alias: 'Woonkamer on  when coming home after dark'
+  alias: 'Woonkamer on when coming home after dark'
   trigger:
     platform: state
     entity_id: group.family
@@ -318,7 +325,7 @@
         group_name: 'Woonkamer'
         scene_name: 'Avond'
 - id: automation_13c
-  alias: 'Woonkamer on after dark when not home'
+  alias: 'Woonkamer on at sunset when not home'
   trigger:
     platform: sun
     event: sunset
@@ -329,12 +336,12 @@
   action:
     - service: light.turn_on
       entity_id:
-        - light.tafel1
+        - light.bank_kamer
       data:
         brightness: 50
         color_temp: 366
 - id: automation_13d
-  alias: 'All off on sunrise when not home'
+  alias: 'All off at sunrise when not home'
   trigger:
     platform: sun
     event: sunrise

@@ -26,7 +26,7 @@ climate:
   - climate.woonkamer
   - climate.keuken
   - climate.slaapkamer
-  - climate.slaapkamer_2
+  - climate.slaapkamer_klein
   - climate.badkamer
 alllights:
   name: Lights
