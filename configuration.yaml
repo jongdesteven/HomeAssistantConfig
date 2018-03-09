@@ -67,7 +67,7 @@ zone 3:
 conversation:
 
 recorder:
-#  db_url: mysql://hass:hass@localhost/hass
+  db_url: !secret recorder_mysql_url
 
 # Enables support for tracking state changes over time.
 history:
@@ -93,7 +93,7 @@ rflink:
     - f007_th_45151_*
 
 logger:
-  default: info
+  default: error
   logs:
     homeassistant.loader: info
     #rflink: debug
@@ -120,16 +120,15 @@ apple_tv:
 ios:
 
 hue:
+  bridges:
+    - host: 10.1.1.10
+      allow_hue_groups: true
 
 shell_command:
   grab_frontdoor_image: /home/homeassistant/images/grabframe.sh
   test_shell_command: 'touch /home/homeassistant/images/testfile'
 
 light:
-  - platform: hue
-    host: 10.1.1.10
-    allow_hue_groups: true
-
   - platform: rflink
     automatic_add: false
     devices: 
@@ -142,6 +141,15 @@ binary_sensor:
     state_topic: "home/doorbell/button"
     name: "Doorbell"
     device_class: sound
+  
+  - platform: trend
+    sensors:
+      shower_detected:
+        entity_id: sensor.badkamer_humidity
+        min_gradient: 0.008
+        sample_duration: 180
+        device_class: moisture
+
 
 switch:
   - platform: mqtt

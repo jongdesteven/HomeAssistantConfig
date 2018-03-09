@@ -49,15 +49,14 @@ climate_basic:
   - sensor.slaapkamer_temperature
   - sensor.slaapkamer_2_temperature
   - sensor.badkamer_temperature
+  - sensor.waalre_temperature
 lights:
-  name: Lights
   view: false
   entities:
   - light.woonkamer
   - light.slaapkamer
   - light.overloop
   - light.tuinkamer
-#  - light.carport
 lightscenes:
   name: Light Scenes
   view: false
@@ -87,20 +86,18 @@ family:
   - device_tracker.iphone_steven
   - device_tracker.iphone_marcha
 raspi:
-  name: Server
+  name: Sensors
   view: true
   entities:
   - group.motion_sensors
   - group.climate_basic
+  - sensor.shower_gradient
   - sensor.raspi_temperature
-  - sensor.keuken_temperature
+  - sensor.keuken_heating
   - sensor.keuken_humidity
-  - sensor.slaapkamer_temperature
   - sensor.slaapkamer_humidity
-  - sensor.badkamer_temperature
   - sensor.badkamer_humidity
   - sensor.badkamer_heating
-  - sensor.woonkamer_temperature
   - sensor.woonkamer_humidity
   - sensor.woonkamer_heating
   - input_boolean.alarm_toggle

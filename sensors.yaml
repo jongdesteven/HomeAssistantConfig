@@ -37,13 +37,22 @@
       friendly_name: 'Overloop Lux Level'
       icon_template: 'mdi:white-balance-sunny'
       unit_of_measurement: 'lx'
-      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.lux }}'
+      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.lux | float }}'
     overloop_light_level:
       friendly_name: 'Overloop Light Level'
       icon_template: 'mdi:white-balance-sunny'
+      unit_of_measurement: 'll'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.light_level | int }}'
     overloop_temperature:
       friendly_name: 'Overloop Sensor Temperature'
       icon_template: 'mdi:temperature-celsius'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.temperature | float }}'
       unit_of_measurement: "°C"
+    shower_gradient:
+      friendly_name: 'Shower Gradient'
+      icon_template: 'mdi:triangle'
+      value_template: '{{ states.binary_sensor.shower_detected.attributes.gradient | float }}'
+      unit_of_measurement: "°C"
+
+- platform: rflink
+  automatic_add: false

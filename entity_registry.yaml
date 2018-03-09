@@ -1,0 +1,198 @@
+media_player.apple_tv:
+  platform: apple_tv
+  unique_id: adae670dc593a4a3bafb769bdc24fbc1fd03224420b84d87b1d7a456841fd69e
+remote.apple_tv:
+  platform: apple_tv
+  unique_id: adae670dc593a4a3bafb769bdc24fbc1fd03224420b84d87b1d7a456841fd69e
+light.carport_spot_2:
+  platform: hue
+  unique_id: 00:0b:57:ff:fe:c0:b2:1b-01
+light.livingcolors_1:
+  platform: hue
+  unique_id: 00:17:88:01:00:19:23:f8-0b
+light.slaapkamer_spot_1:
+  platform: hue
+  unique_id: 00:17:88:01:02:e4:ca:0a-0b
+light.tafel1:
+  platform: hue
+  unique_id: 00:17:88:01:00:e1:89:f6-0b
+light.bed_steven:
+  platform: hue
+  unique_id: 00:17:88:01:00:e6:7a:03-0b
+light.slaapkamer_spot_3:
+  platform: hue
+  unique_id: 00:17:88:01:02:e4:c6:0a-0b
+light.tafel:
+  platform: hue
+  unique_id: 00:17:88:01:00:e1:87:c5-0b
+light.carport_spot_3:
+  platform: hue
+  unique_id: 00:0b:57:ff:fe:b1:d3:77-01
+light.bol_kamer:
+  platform: hue
+  unique_id: 00:17:88:01:00:e1:86:51-0b
+light.voordeur:
+  platform: hue
+  unique_id: 84:18:26:00:00:0d:47:5f-03
+light.bed_marcha:
+  platform: hue
+  unique_id: 00:17:88:01:00:e1:8f:0e-0b
+light.bank_kamer:
+  platform: hue
+  unique_id: 00:17:88:01:00:dd:38:dd-0b
+light.slaapkamer_spot_4:
+  platform: hue
+  unique_id: 00:17:88:01:02:e4:b7:b4-0b
+light.trap_spot:
+  platform: hue
+  unique_id: 00:17:88:01:02:e4:c3:f1-0b
+light.overloop_spot_1:
+  platform: hue
+  unique_id: 00:17:88:01:02:e4:c8:76-0b
+light.slaapkamer_spot_2:
+  platform: hue
+  unique_id: 00:17:88:01:02:e4:ca:32-0b
+light.overloop_spot_2:
+  platform: hue
+  unique_id: 00:17:88:01:02:f2:20:36-0b
+light.staande_lamp:
+  platform: hue
+  unique_id: 00:17:88:01:00:e6:66:7e-0b
+light.slaapkamer_spot_5:
+  platform: hue
+  unique_id: 00:17:88:01:02:e4:ca:19-0b
+light.carport_spot_1:
+  platform: hue
+  unique_id: 00:0b:57:ff:fe:b1:c5:fe-01
+sensor.slaapkamer_temperature:
+  platform: tado
+  unique_id: temperature 3
+sensor.slaapkamer_humidity:
+  platform: tado
+  unique_id: humidity 3
+sensor.slaapkamer_power:
+  platform: tado
+  unique_id: power 3
+sensor.slaapkamer_link:
+  platform: tado
+  unique_id: link 3
+sensor.slaapkamer_heating:
+  platform: tado
+  unique_id: heating 3
+sensor.slaapkamer_tado_mode:
+  platform: tado
+  unique_id: tado mode 3
+sensor.slaapkamer_overlay:
+  platform: tado
+  unique_id: overlay 3
+sensor.badkamer_temperature:
+  platform: tado
+  unique_id: temperature 4
+sensor.badkamer_humidity:
+  platform: tado
+  unique_id: humidity 4
+sensor.badkamer_power:
+  platform: tado
+  unique_id: power 4
+sensor.badkamer_link:
+  platform: tado
+  unique_id: link 4
+sensor.badkamer_heating:
+  platform: tado
+  unique_id: heating 4
+sensor.badkamer_tado_mode:
+  platform: tado
+  unique_id: tado mode 4
+sensor.badkamer_overlay:
+  platform: tado
+  unique_id: overlay 4
+sensor.slaapkamer_klein_temperature:
+  platform: tado
+  unique_id: temperature 5
+sensor.slaapkamer_klein_humidity:
+  platform: tado
+  unique_id: humidity 5
+sensor.slaapkamer_klein_power:
+  platform: tado
+  unique_id: power 5
+sensor.slaapkamer_klein_link:
+  platform: tado
+  unique_id: link 5
+sensor.slaapkamer_klein_heating:
+  platform: tado
+  unique_id: heating 5
+sensor.slaapkamer_klein_tado_mode:
+  platform: tado
+  unique_id: tado mode 5
+sensor.woonkamer_overlay:
+  platform: tado
+  unique_id: overlay 1
+sensor.slaapkamer_klein_overlay:
+  platform: tado
+  unique_id: overlay 5
+sensor.keuken_power:
+  platform: tado
+  unique_id: power 2
+sensor.de_molenbeemd_tado_bridge_status:
+  platform: tado
+  unique_id: tado bridge status 88630
+sensor.keuken_link:
+  platform: tado
+  unique_id: link 2
+sensor.woonkamer_tado_mode:
+  platform: tado
+  unique_id: tado mode 1
+sensor.woonkamer_power:
+  platform: tado
+  unique_id: power 1
+sensor.keuken_humidity:
+  platform: tado
+  unique_id: humidity 2
+sensor.keuken_overlay:
+  platform: tado
+  unique_id: overlay 2
+sensor.keuken_heating:
+  platform: tado
+  unique_id: heating 2
+sensor.keuken_temperature:
+  platform: tado
+  unique_id: temperature 2
+sensor.woonkamer_heating:
+  platform: tado
+  unique_id: heating 1
+sensor.keuken_tado_mode:
+  platform: tado
+  unique_id: tado mode 2
+sensor.woonkamer_humidity:
+  platform: tado
+  unique_id: humidity 1
+sensor.woonkamer_link:
+  platform: tado
+  unique_id: link 1
+sensor.woonkamer_temperature:
+  platform: tado
+  unique_id: temperature 1
+sensor.marchas_iphone_battery_level:
+  platform: ios
+  unique_id: level_iphone_marcha
+sensor.iphone_steven_battery_state:
+  platform: ios
+  unique_id: state_iphone_steven
+sensor.iphone_steven_battery_level:
+  platform: ios
+  unique_id: level_iphone_steven
+sensor.marchas_iphone_battery_state:
+  platform: ios
+  unique_id: state_iphone_marcha
+media_player.tv_room:
+  platform: sonos
+  unique_id: RINCON_949F3E68429101400
+media_player.bedroom:
+  platform: sonos
+  unique_id: RINCON_B8E937E43E5C01400
+media_player.family_room:
+  platform: sonos
+  unique_id: RINCON_5CAAFD00EA4401400
+media_player.kitchen:
+  platform: sonos
+  unique_id: RINCON_5CAAFD00F54401400
