@@ -128,51 +128,11 @@ shell_command:
   grab_frontdoor_image: /home/homeassistant/images/grabframe.sh
   test_shell_command: 'touch /home/homeassistant/images/testfile'
 
-light:
-  - platform: rflink
-    automatic_add: false
-    devices: 
-      newkaku_5177344_1:
-        name: Buiten Lamp
-        signal_repetitions: 2
-  
-  - platform: mqtt
-    name: "Lamp Voordeur"
-    state_topic: "home/sonoff_voordeur/stat/POWER"
-    command_topic: "home/sonoff_voordeur/cmnd/POWER"
-    availability_topic: "home/sonoff_voordeur/tele/LWT"
-    qos: 1
-    payload_on: "ON"
-    payload_off: "OFF"
-    payload_available: "Online"
-    payload_not_available: "Offline"
-    retain: true
-
 binary_sensor:
   - platform: mqtt
     state_topic: "home/doorbell/button"
     name: "Doorbell"
     device_class: sound 
-
-switch:
-  - platform: mqtt
-    name: "Doorbell Ringer"
-    state_topic: "home/doorbell/ringer"
-    command_topic: "home/doorbell/ringer/set"
-    payload_on: "1"
-    payload_off: "0"
-
-
-  - platform: rflink
-    devices:
-      ev1527_0ec667_2:
-        name: "TV Lift Down"
-      ev1527_0ec667_1:
-        name: "TV Lift Up"
-      fa20rf_1dca51_01:
-        name: "Smoke Detector 1"
-      fa20rf_d82da9_01:
-        name: "Smoke Detector 2"
 
 cover:
   - platform: template
@@ -197,56 +157,11 @@ weather:
       - temp_max
       - temperature
 
-input_boolean:
-  diner_lights:
-    name: Lights in diner mode
-    initial: off
-    icon: mdi:lightbulb
-  avond_lights:
-    name: Lights in avond mode
-    initial: off
-    icon: mdi:lightbulb
-  alarm_toggle:
-    name: sound the alarm
-    initial: off
-    icon: mdi:lightbulb
-  alarm_clock_status:
-    name: Alarm set (Weekdays)
-    initial: off
-    icon: mdi:alarm-check
-  alarm_clock_weekend_status:
-    name: Alarm Set (Weekend)
-    initial: off
-    icon: mdi:alarm-check
-
 input_datetime:
   alarm_clock_time_input:
     name: Alarm clock time
     has_date: false
     has_time: true
-
-input_number:
-  alarm_clock_hour:
-    name: Hour
-    icon: mdi:timer
-    initial: 6
-    min: 0
-    max: 23
-    step: 1
-  alarm_clock_minute:
-    name: Minute
-    icon: mdi:timer
-    initial: 0
-    min: 0
-    max: 59
-    step: 1
-  alarm_clock_fade_in_minutes:
-    name: Fade In (Minutes)
-    icon: mdi:gradient
-    initial: 15
-    min: 0
-    max: 30
-    step: 5
 
 notify:
   - name: all_iphones
@@ -279,3 +194,7 @@ sensor: !include sensors.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 group: !include groups.yaml
+light: !include lights.yaml
+switch: !include switches.yaml
+input_boolean: !include input_booleans.yaml
+input_number: !include input_numbers.yaml

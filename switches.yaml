@@ -1,0 +1,17 @@
+- platform: mqtt
+  name: "Doorbell Ringer"
+  state_topic: "home/doorbell/ringer"
+  command_topic: "home/doorbell/ringer/set"
+  payload_on: "1"
+  payload_off: "0"
+
+- platform: rflink
+  devices:
+    ev1527_0ec667_2:
+      name: "TV Lift Down"
+    ev1527_0ec667_1:
+      name: "TV Lift Up"
+    fa20rf_1dca51_01:
+      name: "Smoke Detector 1"
+    fa20rf_d82da9_01:
+      name: "Smoke Detector 2"

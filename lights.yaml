@@ -1,0 +1,18 @@
+- platform: rflink
+  automatic_add: false
+  devices: 
+    newkaku_5177344_1:
+      name: Buiten Lamp
+      signal_repetitions: 2
+
+- platform: mqtt
+  name: "Lamp Voordeur"
+  state_topic: "home/sonoff_voordeur/stat/POWER"
+  command_topic: "home/sonoff_voordeur/cmnd/POWER"
+  availability_topic: "home/sonoff_voordeur/tele/LWT"
+  qos: 1
+  payload_on: "ON"
+  payload_off: "OFF"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  retain: true

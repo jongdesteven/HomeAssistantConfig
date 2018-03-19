@@ -1,0 +1,20 @@
+diner_lights:
+  name: Lights in diner mode
+  initial: off
+  icon: mdi:lightbulb
+avond_lights:
+  name: Lights in avond mode
+  initial: off
+  icon: mdi:lightbulb
+alarm_toggle:
+  name: sound the alarm
+  initial: off
+  icon: mdi:lightbulb
+alarm_clock_status:
+  name: Alarm set (Weekdays)
+  initial: off
+  icon: mdi:alarm-check
+alarm_clock_weekend_status:
+  name: Alarm Set (Weekend)
+  initial: off
+  icon: mdi:alarm-check
