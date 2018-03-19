@@ -39,6 +39,7 @@ alllights:
   - light.trap_spot
   - light.carport
   - light.buiten_lamp
+  - light.lamp_voordeur
   - group.all_lights
 climate_basic:
   name: Climate
@@ -91,6 +92,7 @@ raspi:
   entities:
   - group.motion_sensors
   - group.climate_basic
+  - group.sonoff_pow
   - sensor.shower_gradient
   - sensor.raspi_temperature
   - sensor.keuken_heating
@@ -105,7 +107,14 @@ raspi:
   - switch.tv_lift_up
   - switch.tv_lift_down
   - history_graph.temperature
-  
+sonoff_pow:
+  name: Sonoff POW
+  view: false
+  entities:
+  - sensor.washing_machine_power_now
+  - sensor.washing_machine_power_today
+  - sensor.net_voltage
+
 alarm_clock_basic:
   name: Alarm Clock
   view: false

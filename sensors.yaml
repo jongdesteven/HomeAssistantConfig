@@ -14,6 +14,22 @@
   name: "DHT11 Humidity"
   unit_of_measurement: "%"
 
+- platform: mqtt
+  state_topic: "home/sonoffpow/tele/SENSOR"
+  name: "Washing Machine Power Today"
+  value_template: '{{ value_json["ENERGY"]["Today"] }}'
+  unit_of_measurement: "KWh"
+- platform: mqtt
+  state_topic: "home/sonoffpow/tele/SENSOR"
+  name: "Washing Machine Power Now"
+  value_template: '{{ value_json["ENERGY"]["Power"] }}'
+  unit_of_measurement: "W"
+- platform: mqtt
+  state_topic: "home/sonoffpow/tele/SENSOR"
+  name: "Net Voltage"
+  value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+  unit_of_measurement: "V"
+
 - platform: template
   sensors:
     alarm_clock_time:
@@ -47,11 +63,6 @@
       friendly_name: 'Overloop Sensor Temperature'
       icon_template: 'mdi:temperature-celsius'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.temperature | float }}'
-      unit_of_measurement: "°C"
-    shower_gradient:
-      friendly_name: 'Shower Gradient'
-      icon_template: 'mdi:triangle'
-      value_template: '{{ states.binary_sensor.shower_detected.attributes.gradient | float }}'
       unit_of_measurement: "°C"
 
 - platform: rflink
