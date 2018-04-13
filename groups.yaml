@@ -24,7 +24,7 @@ climate:
   view: false
   entities:
   - climate.woonkamer
-  - climate.keuken
+  - climate.tuinkamer
   - climate.slaapkamer
   - climate.slaapkamer_klein
   - climate.badkamer
@@ -46,7 +46,7 @@ climate_basic:
   view: false
   entities:
   - sensor.woonkamer_temperature
-  - sensor.keuken_temperature
+  - sensor.tuinkamer_temperature
   - sensor.slaapkamer_temperature
   - sensor.slaapkamer_2_temperature
   - sensor.badkamer_temperature
@@ -93,10 +93,11 @@ raspi:
   - group.motion_sensors
   - group.climate_basic
   - group.sonoff_pow
+  - group.smoke_detectors
   - sensor.shower_gradient
   - sensor.raspi_temperature
-  - sensor.keuken_heating
-  - sensor.keuken_humidity
+  - sensor.tuinkamer_heating
+  - sensor.tuinkamer_humidity
   - sensor.slaapkamer_humidity
   - sensor.badkamer_humidity
   - sensor.badkamer_heating
@@ -107,6 +108,26 @@ raspi:
   - switch.tv_lift_up
   - switch.tv_lift_down
   - history_graph.temperature
+smoke_detectors:
+  name: Smoke Detectors
+  view: false
+  entities:
+  - switch.smoke_detector_1
+  - switch.smoke_detector_2
+babykamer:
+  name: Babykamer
+  view: true
+  control: hidden
+  entities:
+  - camera.babykamer
+  - switch.babykamer_nightvision
+  - switch.camera_ir
+  - switch.camera_yellow_led
+  - switch.camera_blue_led
+  - switch.camera_ir_cut
+  - switch.camera_left__right
+  - switch.camera_up__down
+  - weblink.babykamer_live
 sonoff_pow:
   name: Sonoff POW
   view: false

@@ -1,0 +1,11 @@
+- platform: mqtt
+  state_topic: "home/doorbell/button"
+  name: "Doorbell"
+  device_class: sound
+
+- platform: template
+  sensors: 
+    sensor.washing_machine_running:
+      friendly_name: "Washing Machine Running"
+      value_template: {{ states.sensor.washing_machine_power_now|int > 10 }}
+      device_class: power

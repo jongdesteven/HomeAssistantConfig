@@ -93,7 +93,7 @@ rflink:
     - f007_th_45151_*
 
 logger:
-  default: error
+  default: info
   logs:
     homeassistant.loader: info
     #rflink: debug
@@ -127,12 +127,6 @@ hue:
 shell_command:
   grab_frontdoor_image: /home/homeassistant/images/grabframe.sh
   test_shell_command: 'touch /home/homeassistant/images/testfile'
-
-binary_sensor:
-  - platform: mqtt
-    state_topic: "home/doorbell/button"
-    name: "Doorbell"
-    device_class: sound 
 
 cover:
   - platform: template
@@ -178,6 +172,9 @@ weblink:
     - name: Transmission
       url: !secret url_transmission
       icon: mdi:download
+    - name: Babykamer Live
+      url: !secret url_babykamer_live
+      icon: mdi:video
 
 history_graph:
   gr1:
@@ -191,6 +188,7 @@ history_graph:
       - sensor.waalre_temperature
 
 sensor: !include sensors.yaml
+binary_senor: !include binary_sensors.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 group: !include groups.yaml
@@ -198,3 +196,4 @@ light: !include lights.yaml
 switch: !include switches.yaml
 input_boolean: !include input_booleans.yaml
 input_number: !include input_numbers.yaml
+camera: !include cameras.yaml

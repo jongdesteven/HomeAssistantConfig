@@ -4,6 +4,57 @@
   command_topic: "home/doorbell/ringer/set"
   payload_on: "1"
   payload_off: "0"
+  retain: true
+  qos: 1
+
+- platform: mqtt
+  name: "Camera Left / Right"
+  command_topic: "home/dafangbaby/set"
+  payload_on: "motor_right"
+  payload_off: "motor_left"
+  optimistic: false
+- platform: mqtt
+  name: "Camera Up / Down"
+  command_topic: "home/dafangbaby/set"
+  payload_on: "motor_down"
+  payload_off: "motor_up"
+  optimistic: false
+- platform: mqtt
+  name: "Camera Yellow LED"
+  state_topic: "home/dafangbaby/status"
+  value_template: '{{ value_json["LEDs"]["Yellow"] }}'
+  command_topic: "home/dafangbaby/Yellow_LED/set"
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+  optimistic: false
+- platform: mqtt
+  name: "Camera Blue LED"
+  state_topic: "home/dafangbaby/status"
+  value_template: '{{ value_json["LEDs"]["Blue"] }}'
+  command_topic: "home/dafangbaby/Blue_LED/set"
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+  optimistic: false
+- platform: mqtt
+  name: "Camera IR"
+  state_topic: "home/dafangbaby/status"
+  value_template: '{{ value_json["LEDs"]["Infrared"] }}'
+  command_topic: "home/dafangbaby/IR_LED/set"
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+  optimistic: false
+- platform: mqtt
+  name: "Camera IR Cut"
+  state_topic: "home/dafangbaby/status"
+  value_template: "{{ value_json[\"IR-Cut\"] }}"
+  command_topic: "home/dafangbaby/IR_Cut/set"
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+  optimistic: false
 
 - platform: rflink
   devices:

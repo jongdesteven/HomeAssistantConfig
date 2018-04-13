@@ -1,9 +1,10 @@
-- platform: hue_sensor
+- platform: hue
 
 - platform: mqtt
   state_topic: "raspi/temp"
   name: "Raspi Temperature"
   unit_of_measurement: "°C"
+  icon_template: 'mdi:oil-temperature'
   value_template: '{{ value_json.temperature }}'
 - platform: mqtt
   state_topic: "/home/DHT11/temperature"
@@ -18,16 +19,19 @@
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Washing Machine Power Today"
   value_template: '{{ value_json["ENERGY"]["Today"] }}'
+  icon_template: 'mdi:washing_machine'
   unit_of_measurement: "KWh"
 - platform: mqtt
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Washing Machine Power Now"
   value_template: '{{ value_json["ENERGY"]["Power"] }}'
+  icon_template: 'mdi:washin-machine'
   unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Net Voltage"
   value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+  icon_template: 'mdi:power-plug'
   unit_of_measurement: "V"
 
 - platform: template
