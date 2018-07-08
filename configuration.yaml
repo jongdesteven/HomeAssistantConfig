@@ -109,6 +109,8 @@ tado:
 mqtt:
   broker: localhost
   client_id: home_assistant
+  discovery: true
+  discovery_prefix: homeassistant
 
 apple_tv:
   - host: 10.1.1.24
@@ -188,7 +190,7 @@ history_graph:
       - sensor.waalre_temperature
 
 sensor: !include sensors.yaml
-binary_senor: !include binary_sensors.yaml
+binary_sensor: !include binary_sensors.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 group: !include groups.yaml
@@ -197,3 +199,4 @@ switch: !include switches.yaml
 input_boolean: !include input_booleans.yaml
 input_number: !include input_numbers.yaml
 camera: !include cameras.yaml
+timer: !include timers.yaml

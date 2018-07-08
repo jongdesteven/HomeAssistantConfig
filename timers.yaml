@@ -1,0 +1,3 @@
+sprinkler_pump:
+  name: 'Sprinkler Duration Timer'
+  icon: mdi:timer

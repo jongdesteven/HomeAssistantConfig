@@ -28,6 +28,11 @@
     data:
       group_name: 'Woonkamer'
       scene_name: 'Avond'
+  - service: light.turn_on
+    data:
+      entity_id: light.lamp_keukeneiland
+      brightness: 10
+      color_temp: 431
   - service: input_boolean.turn_off
     data:
       entity_id: input_boolean.avond_lights
@@ -126,6 +131,18 @@
   action:
     - service: switch.turn_on
       entity_id: switch.doorbell_ringer
+
+- id: automation_5b
+  alias: 'Doorbell ring time set'
+  trigger:
+    platform: state
+    entity_id: input_number.doorbell_ring_time
+  action:
+    service: mqtt.publish
+    data_template:
+      topic: 'home/doorbell/ringer/time/set'
+      retain: true
+      payload: "{{ states('input_number.doorbell_ring_time') | int }}'\n'"
 
 - id: automation_6a
   alias: 'Carport lights on at sunset'
@@ -360,23 +377,89 @@
         - light.overloop
         - light.tuinkamer
 
-- id: automation_14
-  alias: 'Set heating up when at work'
-  trigger:
-    platform: time
-    at: '14:00:00'
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: device_tracker.iphone_marcha
-        state: 'GGZE'
-      - condition: numeric_state
-        entity_id: sensor.woonkamer_temperature
-        below: 18
-  action:
-    service: script.early_heating
+#- id: automation_14
+#  alias: 'Set heating up when at work'
+#  trigger:
+#    platform: time
+#    at: '14:00:00'
+#  condition:
+#    condition: and
+#    conditions:
+#      - condition: state
+#        entity_id: device_tracker.iphone_marcha
+#        state: 'GGZE'
+#      - condition: numeric_state
+#        entity_id: sensor.woonkamer_temperature
+#        below: 18
+#  action:
+#    service: script.early_heating
     # data_:
       #minutes_togo: {{ ( ( 20.0 - ( states.sensor.woonkamer_temperature.state | float ) ) * 60.0 ) | int }}     
       # minutes_togo: 120
 
+- id: automation_15
+  alias: 'Update Available Notifications'
+  trigger:
+    platform: state
+    entity_id: updater.updater
+  action:
+    service: notify.notify
+    data:
+      message: 'Update for Home Assistant is available.'
+
+- id: automation_16
+  alias: 'Sprinkler Automation'
+  trigger:
+    platform: state
+    entity_id: switch.sprinklers_gazon
+    to: 'on'
+  action:
+  - service: timer.start
+    data_template:
+      entity_id: timer.sprinkler_pump
+      duration: >
+        {% set duration = states.input_number.sprinkler_run_time.state | int %}
+        {% set minutes = (duration % 60)|int  %}
+        {% set hours = (duration / 60)|int %}
+        {{ "%02i:%02i:00"|format(hours, minutes) }}
+
+- id: automation_16a
+  alias: 'Turn Sprinkler off at timer end'
+  trigger:
+    platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.sprinkler_pump
+  action:
+  - service: switch.turn_off
+    entity_id: switch.sprinklers_gazon
+- id: automation_16b
+  alias: 'Cancel timer on manual pump switch off'
+  trigger:
+    platform: state
+    entity_id: switch.sprinklers_gazon
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: timer.sprinkler_pump
+    state: 'active'
+  action:
+  - service: timer.cancel
+    entity_id: timer.sprinkler_pump
+
+
+- id: automation_17
+  alias: 'Smoke Detector Notifier'
+  trigger:
+    platform: state
+    entity_id: group.smoke_detectors
+    to: 'on'
+  action:
+  - service: light.turn_on
+    entity_id: group.all_lights
+    data:
+      brightness: 255
+  - service: notify.all_iphones
+    data:
+      title: "Alarm!"
+      message: "Smoke Detected!"

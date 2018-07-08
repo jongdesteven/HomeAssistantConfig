@@ -11,6 +11,7 @@ default_view:
   - group.raspi
   - group.weather
   - group.doorbell
+  - group.sprinklers
   - group.tv
 music:
   name: Music
@@ -28,6 +29,28 @@ climate:
   - climate.slaapkamer
   - climate.slaapkamer_klein
   - climate.badkamer
+babykamer:
+  name: Babykamer
+  view: true
+  control: hidden
+  entities:
+  - camera.babykamer
+#  - camera.babykamer_cam 
+  - cover.dafangbaby_move_leftright
+#  - binary_sensor.dafangbaby_motion_sensor
+  - cover.dafangbaby_move_updown
+  - switch.dafangbaby_night_mode
+  - switch.dafangbaby_blue_led
+  - switch.dafangbaby_yellow_led
+#  - sensor.dafangbaby_light_sensor
+#  - switch.dafangbaby_ir_filter
+#  - switch.dafangbaby_ir_led
+#  - switch.dafangbaby_mjpeg_rtsp_server
+#  - switch.dafangbaby_motion_detection
+#  - switch.dafangbaby_motion_tracking
+#  - switch.dafangbaby_night_mode_auto
+  - light.babykamer
+  - weblink.babykamer_live
 alllights:
   name: Lights
   view: true
@@ -40,6 +63,9 @@ alllights:
   - light.carport
   - light.buiten_lamp
   - light.lamp_voordeur
+  - light.lamp_keukeneiland
+  - light.keuken
+  - light.babykamer 
   - group.all_lights
 climate_basic:
   name: Climate
@@ -58,6 +84,8 @@ lights:
   - light.slaapkamer
   - light.overloop
   - light.tuinkamer
+  - light.keuken_lampen
+  - light.babykamer
 lightscenes:
   name: Light Scenes
   view: false
@@ -72,8 +100,19 @@ doorbell:
   entities:
   - switch.doorbell_ringer
   - sensor.doorbell_last_press
+  - input_number.doorbell_ring_time
+  - sensor.doorbell_ring_time
   - weblink.voordeur_live
-# - binary_sensor.doorbell
+# - binary_sensor.doorbel
+  - camera.voordeur
+sprinklers:
+  name: Sprinklers
+  view: false
+  control: hidden
+  entities:
+  - switch.sprinklers_gazon
+  - input_number.sprinkler_run_time
+  - timer.sprinkler_pump
 tv:
   name: TV
   view: false
@@ -114,20 +153,6 @@ smoke_detectors:
   entities:
   - switch.smoke_detector_1
   - switch.smoke_detector_2
-babykamer:
-  name: Babykamer
-  view: true
-  control: hidden
-  entities:
-  - camera.babykamer
-  - switch.babykamer_nightvision
-  - switch.camera_ir
-  - switch.camera_yellow_led
-  - switch.camera_blue_led
-  - switch.camera_ir_cut
-  - switch.camera_left__right
-  - switch.camera_up__down
-  - weblink.babykamer_live
 sonoff_pow:
   name: Sonoff POW
   view: false
@@ -135,6 +160,7 @@ sonoff_pow:
   - sensor.washing_machine_power_now
   - sensor.washing_machine_power_today
   - sensor.net_voltage
+  - binary_sensor.washing_machine_status
 
 alarm_clock_basic:
   name: Alarm Clock

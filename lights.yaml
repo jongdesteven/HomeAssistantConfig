@@ -1,3 +1,9 @@
+- platform: group
+  name: Keuken Lampen
+  entities:
+    - light.keuken
+    - light.lamp_keukeneiland
+
 - platform: rflink
   automatic_add: false
   devices: 
@@ -16,3 +22,23 @@
   payload_available: "Online"
   payload_not_available: "Offline"
   retain: true
+
+- platform: mqtt
+  name: "Lamp Keukeneiland"
+  state_topic: "home/keukeneiland/stat/RESULT"
+  state_value_template: "{{ value_json.POWER }}"
+  command_topic: "home/keukeneiland/cmnd/POWER"
+  brightness_command_topic: "home/keukeneiland/cmnd/Dimmer"
+  brightness_scale: 100
+  brightness_state_topic: "home/keukeneiland/stat/RESULT"
+  brightness_value_template: "{{ value_json.Dimmer }}"
+  color_temp_command_topic : "home/keukeneiland/cmnd/CT" 
+  color_temp_state_topic: "home/keukeneiland/stat/RESULT"
+  color_temp_value_template: "{{ value_json.CT }}" 
+  availability_topic: "home/keukeneiland/tele/LWT"
+  qos: 1
+  payload_on: "ON"
+  payload_off: "OFF"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  retain: false

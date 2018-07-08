@@ -1,3 +1,12 @@
 - platform: generic
   name: Babykamer
-  still_image_url: http://dafangbaby/cgi-bin/currentpic.cgi
+  still_image_url: !secret camera_babykamer_still_url
+  framerate: 1
+
+- platform: generic
+  name: Voordeur
+  still_image_url: !secret url_voordeur_snapshot
+
+- platform: ffmpeg
+  name: Babykamer Cam
+  input: !secret camera_babykamer_rtsp_url

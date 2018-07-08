@@ -16,6 +16,11 @@
   unit_of_measurement: "%"
 
 - platform: mqtt
+  state_topic: "home/doorbell/ringer/time"
+  name: "Doorbell Ring Time"
+  unit_of_measurement: "ms"
+
+- platform: mqtt
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Washing Machine Power Today"
   value_template: '{{ value_json["ENERGY"]["Today"] }}'

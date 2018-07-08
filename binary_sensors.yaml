@@ -5,7 +5,9 @@
 
 - platform: template
   sensors: 
-    sensor.washing_machine_running:
-      friendly_name: "Washing Machine Running"
-      value_template: {{ states.sensor.washing_machine_power_now|int > 10 }}
+    washing_machine_status:
+      friendly_name: "Washing Machine Status"
+      value_template: "{{ states.sensor.washing_machine_power_now.state|int > 5 }}"
+      delay_off:
+        seconds: 30
       device_class: power
