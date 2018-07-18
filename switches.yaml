@@ -45,6 +45,19 @@
   payload_not_available: "Offline"
   retain: true
 
+- platform: mqtt
+  name: "Waterpomp"
+  icon: mdi:water-pump
+  state_topic: "home/sonoff_pomp/stat/POWER"
+  command_topic: "home/sonoff_pomp/cmnd/POWER"
+  availability_topic: "home/sonoff_pomp/tele/LWT"
+  qos: 1
+  payload_on: "ON"
+  payload_off: "OFF"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  retain: true
+
 - platform: rflink
   devices:
     ev1527_0ec667_2:

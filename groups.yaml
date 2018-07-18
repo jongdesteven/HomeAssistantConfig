@@ -111,8 +111,10 @@ sprinklers:
   control: hidden
   entities:
   - switch.sprinklers_gazon
+  - switch.waterpomp
   - input_number.sprinkler_run_time
   - timer.sprinkler_pump
+  - sensor.water_pump_power_now
 tv:
   name: TV
   view: false

@@ -39,6 +39,19 @@
   icon_template: 'mdi:power-plug'
   unit_of_measurement: "V"
 
+- platform: mqtt
+  state_topic: "home/sonoff_pomp/tele/SENSOR"
+  name: "Water pump Power Now"
+  value_template: '{{ value_json["ENERGY"]["Power"] }}'
+  icon_template: 'mdi:flash'
+  unit_of_measurement: "W"
+- platform: mqtt
+  state_topic: "home/sonoff_pomp/tele/SENSOR"
+  name: "Water pump Power Today"
+  value_template: '{{ value_json["ENERGY"]["Today"] }}'
+  icon_template: 'mdi:flash'
+  unit_of_measurement: "KWh"
+
 - platform: template
   sensors:
     alarm_clock_time:

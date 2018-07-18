@@ -1,0 +1,49 @@
+title: My Awesome Home
+excluded_entities:
+views:
+    # View tab title.
+  - title: Example
+    # Optional unique id for direct access /lovelace/${id}
+    id: example
+    # Each view can have a different theme applied.
+    theme: dark-mode
+    # The cards to show on this view.
+    cards:
+        # The filter card will filter entities for their state
+      - type: entity-filter
+        entities:
+          - device_tracker.marcha
+          - device_tracker.steven
+        state_filter:
+          - 'home'
+        card_config:
+          type: glance
+          title: People that are home
+
+        # The picture entity card will represent an entity with a picture
+      - type: picture-entity
+        image: https://www.home-assistant.io/images/default-social.png
+        entity: light.tafel
+
+    # Specify a tab icon if you want the view tab to be an icon.
+  - icon: mdi:home-assistant
+    # Title of the view. Will be used as the tooltip for tab icon
+    title: Second 
+    cards:
+        # Entities card will take a list of entities and show their state.
+      - type: entities
+        # Title of the entities card
+        title: Climate
+        # The entities here will be shown in the same order as specified.
+        # Each entry is an entity ID or a map with extra options.
+        entities:
+          - climate.woonkamer
+          - climate.tuinkamer
+          - climate.slaapkamer
+          - climate.slaapkamer_klein
+          - climate.badkamer
+        # The markdown card will render markdown text.
+      - type: markdown
+        title: Lovelace
+        content: >
+          Welcome to your **Lovelace UI**.
