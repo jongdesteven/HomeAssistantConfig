@@ -412,6 +412,7 @@
   trigger:
     platform: state
     entity_id: switch.sprinklers_gazon
+    from: 'off'
     to: 'on'
   action:
   - service: timer.start
@@ -463,3 +464,34 @@
     data:
       title: "Alarm!"
       message: "Smoke Detected!"
+
+- id: automation_18
+  alias: 'Turn on Baby feeding time lights'
+  trigger:
+    platform: state
+    entity_id: light.dimmable_light_1
+    to: 'on'
+  condition:
+  - condition: sun
+    after: sunset
+  action:
+  - service: light.turn_on
+    entity_id: light.lamp_keukeneiland
+  - service: light.turn_off
+    entity_id: light.dimmable_light_2, light.dimmable_light_3
+- id: automation_18a
+  alias: 'Turn Off lights from baby feeding time'
+  trigger:
+    platform: state
+    entity_id: light.dimmable_light_1
+    to: 'unavailable'
+  condition:
+  - condition: sun
+    after: sunset
+  action:
+  - service: light.turn_off
+    entity_id: light.lamp_keukeneiland
+  - service: light.turn_off
+    entity_id: light.babykamer
+  
+

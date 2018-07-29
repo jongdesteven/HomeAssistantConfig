@@ -20,6 +20,64 @@
   name: "Doorbell Ring Time"
   unit_of_measurement: "ms"
 
+
+- platform: mqtt
+  state_topic: "home/smartmeter/electricity_tariff"
+  name: "Energie Tarief"
+  icon_template: 'mdi:theme-light-dark'
+- platform: mqtt
+  state_topic: "home/smartmeter/power_delivered"
+  name: "Energieverbruik Actueel"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "KW"
+- platform: mqtt
+  state_topic: "home/smartmeter/gas_delivered"
+  name: "Gasverbruik Totaal"
+  icon_template: 'mdi:fire'
+  unit_of_measurement: "m3"
+- platform: mqtt
+  state_topic: "home/smartmeter/energy_delivered_tariff1"
+  name: "Energieverbruik Totaal Dag"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "KWh"
+- platform: mqtt
+  state_topic: "home/smartmeter/energy_delivered_tariff2"
+  name: "Energieverbruik Totaal Nacht"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "KWh"
+
+- platform: mqtt
+  state_topic: "home/smartmeter/power_delivered_l1"
+  name: "Energieverbruik Actueel L1"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "KW"
+- platform: mqtt
+  state_topic: "home/smartmeter/power_delivered_l2"
+  name: "Energieverbruik Actueel L2"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "KW"
+- platform: mqtt
+  state_topic: "home/smartmeter/power_delivered_l3"
+  name: "Energieverbruik Actueel L3"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "KW"
+
+- platform: mqtt
+  state_topic: "home/smartmeter/voltage_l1"
+  name: "Spanning L1"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "V"
+- platform: mqtt
+  state_topic: "home/smartmeter/voltage_l2"
+  name: "Spanning L2"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "V"
+- platform: mqtt
+  state_topic: "home/smartmeter/voltage_l3"
+  name: "Spanning L3"
+  icon_template: 'mdi:power-plug'
+  unit_of_measurement: "V"
+
 - platform: mqtt
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Washing Machine Power Today"
@@ -86,6 +144,11 @@
       icon_template: 'mdi:temperature-celsius'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.temperature | float }}'
       unit_of_measurement: "°C"
+
+
+
+
+
 
 - platform: rflink
   automatic_add: false

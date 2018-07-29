@@ -9,6 +9,7 @@ default_view:
   - group.family
   - group.alarm_clock_basic
   - group.raspi
+  - group.smart_meter
   - group.weather
   - group.doorbell
   - group.sprinklers
@@ -86,6 +87,30 @@ lights:
   - light.tuinkamer
   - light.keuken_lampen
   - light.babykamer
+smart_meter:
+  name: Energieverbruik
+  view: false
+  control: hidden
+  entities:
+  - sensor.energieverbruik_actueel
+  - sensor.gasverbruik_totaal
+  - sensor.energieverbruik_totaal_dag
+  - sensor.energieverbruik_totaal_nacht
+smart_meter_details:
+  name: Energieverbruik
+  view: false
+  control: hidden
+  entities:
+  - sensor.energieverbruik_actueel
+  - sensor.gasverbruik_totaal
+  - sensor.energieverbruik_totaal_dag
+  - sensor.energieverbruik_totaal_nacht
+  - sensor.spanning_l1
+  - sensor.spanning_l2
+  - sensor.spanning_l3
+  - sensor.energieverbruik_actueel_l1
+  - sensor.energieverbruik_actueel_l2
+  - sensor.energieverbruik_actueel_l3
 lightscenes:
   name: Light Scenes
   view: false
@@ -134,6 +159,7 @@ raspi:
   - group.motion_sensors
   - group.climate_basic
   - group.sonoff_pow
+  - group.smart_meter_details
   - group.smoke_detectors
   - sensor.shower_gradient
   - sensor.raspi_temperature
