@@ -20,6 +20,18 @@
   name: "Doorbell Ring Time"
   unit_of_measurement: "ms"
 
+- platform: template
+  sensors:
+    energieverbruik_totaal:
+      value_template: >
+        {{ (float(states.sensor.energieverbruik_totaal_hoog.state) + float(states.sensor.energieverbruik_totaal_laag.state)) | round(2) }}
+      unit_of_measurement: 'kWh'
+- platform: template
+  sensors:
+    energieverbruik_per_uur:
+      value_template: >
+        {{ (float(states.sensor.energieverbruik_totaal.state) - float(states.input_number.power_usage_previous_hour.state)) | round(2) }}
+      unit_of_measurement: 'kWh'
 
 - platform: mqtt
   state_topic: "home/smartmeter/electricity_tariff"
@@ -28,8 +40,9 @@
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered"
   name: "Energieverbruik Actueel"
+  value_template: "{{ (float(value) * 1000) | int }}"
   icon_template: 'mdi:power-plug'
-  unit_of_measurement: "KW"
+  unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/smartmeter/gas_delivered"
   name: "Gasverbruik Totaal"
@@ -37,30 +50,33 @@
   unit_of_measurement: "m3"
 - platform: mqtt
   state_topic: "home/smartmeter/energy_delivered_tariff1"
-  name: "Energieverbruik Totaal Dag"
+  name: "Energieverbruik Totaal Laag"
   icon_template: 'mdi:power-plug'
-  unit_of_measurement: "KWh"
+  unit_of_measurement: "kWh"
 - platform: mqtt
   state_topic: "home/smartmeter/energy_delivered_tariff2"
-  name: "Energieverbruik Totaal Nacht"
+  name: "Energieverbruik Totaal Hoog"
   icon_template: 'mdi:power-plug'
-  unit_of_measurement: "KWh"
+  unit_of_measurement: "kWh"
 
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered_l1"
   name: "Energieverbruik Actueel L1"
+  value_template: "{{ (float(value) * 1000) | int }}"
   icon_template: 'mdi:power-plug'
-  unit_of_measurement: "KW"
+  unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered_l2"
   name: "Energieverbruik Actueel L2"
+  value_template: "{{ (float(value) * 1000) | int }}"
   icon_template: 'mdi:power-plug'
-  unit_of_measurement: "KW"
+  unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered_l3"
   name: "Energieverbruik Actueel L3"
+  value_template: "{{ (float(value) * 1000) | int }}"
   icon_template: 'mdi:power-plug'
-  unit_of_measurement: "KW"
+  unit_of_measurement: "W"
 
 - platform: mqtt
   state_topic: "home/smartmeter/voltage_l1"

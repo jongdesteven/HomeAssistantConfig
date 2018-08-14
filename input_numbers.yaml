@@ -35,4 +35,10 @@ sprinkler_run_time:
   min: 1
   max: 180
   step: 1
-  mode: box
+  mode: slider
+
+power_usage_previous_hour:
+  name: Power Usage last hour
+  initial: 0
+  min: 0
+  max: 999999999

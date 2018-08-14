@@ -36,21 +36,15 @@ babykamer:
   control: hidden
   entities:
   - camera.babykamer
-#  - camera.babykamer_cam 
   - cover.dafangbaby_move_leftright
-#  - binary_sensor.dafangbaby_motion_sensor
   - cover.dafangbaby_move_updown
   - switch.dafangbaby_night_mode
   - switch.dafangbaby_blue_led
   - switch.dafangbaby_yellow_led
-#  - sensor.dafangbaby_light_sensor
-#  - switch.dafangbaby_ir_filter
-#  - switch.dafangbaby_ir_led
-#  - switch.dafangbaby_mjpeg_rtsp_server
-#  - switch.dafangbaby_motion_detection
-#  - switch.dafangbaby_motion_tracking
-#  - switch.dafangbaby_night_mode_auto
   - light.babykamer
+  - light.dimmable_light_1
+  - light.dimmable_light_2
+  - light.dimmable_light_3
   - weblink.babykamer_live
 alllights:
   name: Lights
@@ -94,17 +88,18 @@ smart_meter:
   entities:
   - sensor.energieverbruik_actueel
   - sensor.gasverbruik_totaal
-  - sensor.energieverbruik_totaal_dag
-  - sensor.energieverbruik_totaal_nacht
+  - sensor.energieverbruik_totaal
+  - sensor.energieverbruik_per_uur
 smart_meter_details:
   name: Energieverbruik
   view: false
   control: hidden
   entities:
   - sensor.energieverbruik_actueel
+  - sensor.energieverbruik_per_uur
   - sensor.gasverbruik_totaal
-  - sensor.energieverbruik_totaal_dag
-  - sensor.energieverbruik_totaal_nacht
+  - sensor.energieverbruik_totaal_hoog
+  - sensor.energieverbruik_totaal_laag
   - sensor.spanning_l1
   - sensor.spanning_l2
   - sensor.spanning_l3

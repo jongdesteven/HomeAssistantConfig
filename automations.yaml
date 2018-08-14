@@ -475,8 +475,6 @@
   - condition: sun
     after: sunset
   action:
-  - service: light.turn_on
-    entity_id: light.lamp_keukeneiland
   - service: light.turn_off
     entity_id: light.dimmable_light_2, light.dimmable_light_3
 - id: automation_18a
@@ -490,8 +488,37 @@
     after: sunset
   action:
   - service: light.turn_off
-    entity_id: light.lamp_keukeneiland
-  - service: light.turn_off
     entity_id: light.babykamer
   
+- id: automation_19
+  alias: 'Save power_consumption'
+  trigger:
+    platform: time
+    minutes: 0
+    seconds: 0
+  action:
+    service: input_number.set_value
+    data_template:
+      entity_id: input_number.power_usage_previous_hour
+      value: "{{ states.sensor.energieverbruik_totaal.state }}"
+
+- id: automation_20a
+  alias: 'Turn On keuken lampen with hue remote'
+  trigger:
+    platform: state
+    entity_id: sensor.woonkamer_dimmer_switch_1
+    to: '1_click'
+  action:
+    service: light.turn_on
+    entity_id: light.lamp_keukeneiland
+- id: automation_20b
+  alias: 'Turn Off keuken lampen with hue remote'
+  trigger:
+    platform: state
+    entity_id: sensor.woonkamer_dimmer_switch_1
+    to: '4_click'
+  action:
+    service: light.turn_off
+    entity_id: light.lamp_keukeneiland
+
 
