@@ -25,7 +25,7 @@ homeassistant:
 
 # Enables the frontend
 frontend:
-  javascript_version: es5
+  javascript_version: latest
 
 # Enables configuration UI
 config:
@@ -156,6 +156,10 @@ weather:
 input_datetime:
   alarm_clock_time_input:
     name: Alarm clock time
+    has_date: false
+    has_time: true
+  sprinkler_program_time_input:
+    name: Sprinkler Program time
     has_date: false
     has_time: true
 

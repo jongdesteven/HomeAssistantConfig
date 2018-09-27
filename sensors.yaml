@@ -32,6 +32,24 @@
       value_template: >
         {{ (float(states.sensor.energieverbruik_totaal.state) - float(states.input_number.power_usage_previous_hour.state)) | round(2) }}
       unit_of_measurement: 'kWh'
+- platform: template
+  sensors:
+    gasverbruik_per_uur:
+      value_template: >
+        {{ (float(states.sensor.gasverbruik_totaal.state) - float(states.input_number.gas_usage_previous_hour.state)) | round(2) }}
+      unit_of_measurement: 'm3'
+- platform: template
+  sensors:
+    energieverbruik_per_dag:
+      value_template: >
+        {{ (float(states.sensor.energieverbruik_totaal.state) - float(states.input_number.power_usage_previous_day.state)) | round(2) }}
+      unit_of_measurement: 'kWh'
+- platform: template
+  sensors:
+    gasverbruik_per_dag:
+      value_template: >
+        {{ (float(states.sensor.gasverbruik_totaal.state) - float(states.input_number.gas_usage_previous_day.state)) | round(2) }}
+      unit_of_measurement: 'm3'
 
 - platform: mqtt
   state_topic: "home/smartmeter/electricity_tariff"
@@ -44,7 +62,7 @@
   icon_template: 'mdi:power-plug'
   unit_of_measurement: "W"
 - platform: mqtt
-  state_topic: "home/smartmeter/gas_delivered"
+  state_topic: "home/smartmeter/water_delivered"
   name: "Gasverbruik Totaal"
   icon_template: 'mdi:fire'
   unit_of_measurement: "m3"
@@ -160,11 +178,6 @@
       icon_template: 'mdi:temperature-celsius'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.temperature | float }}'
       unit_of_measurement: "°C"
-
-
-
-
-
 
 - platform: rflink
   automatic_add: false

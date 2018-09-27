@@ -42,3 +42,18 @@ power_usage_previous_hour:
   initial: 0
   min: 0
   max: 999999999
+gas_usage_previous_hour:
+  name: Gas Usage last hour
+  initial: 0
+  min: 0
+  max: 999999999
+power_usage_previous_day:
+  name: Power Usage last day
+  initial: 0
+  min: 0
+  max: 999999999
+gas_usage_previous_day:
+  name: Gas Usage last day
+  initial: 0
+  min: 0
+  max: 999999999

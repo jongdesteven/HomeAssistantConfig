@@ -433,7 +433,9 @@
       entity_id: timer.sprinkler_pump
   action:
   - service: switch.turn_off
-    entity_id: switch.sprinklers_gazon
+    entity_id: 
+      - switch.sprinklers_gazon
+      - switch.waterpomp
 - id: automation_16b
   alias: 'Cancel timer on manual pump switch off'
   trigger:
@@ -447,7 +449,6 @@
   action:
   - service: timer.cancel
     entity_id: timer.sprinkler_pump
-
 
 - id: automation_17
   alias: 'Smoke Detector Notifier'
@@ -491,16 +492,34 @@
     entity_id: light.babykamer
   
 - id: automation_19
-  alias: 'Save power_consumption'
+  alias: 'Save power_consumption hourly'
   trigger:
     platform: time
     minutes: 0
     seconds: 0
   action:
-    service: input_number.set_value
-    data_template:
-      entity_id: input_number.power_usage_previous_hour
-      value: "{{ states.sensor.energieverbruik_totaal.state }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.power_usage_previous_hour
+        value: "{{ states.sensor.energieverbruik_totaal.state }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.gas_usage_previous_hour
+        value: "{{ states.sensor.gasverbruik_totaal.state }}"
+- id: automation_19a
+  alias: 'Save power_consumption dayly'
+  trigger:
+    platform: time
+    at: '00:00:00'
+  action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.power_usage_previous_day
+        value: "{{ states.sensor.energieverbruik_totaal.state }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.gas_usage_previous_day
+        value: "{{ states.sensor.gasverbruik_totaal.state }}"
 
 - id: automation_20a
   alias: 'Turn On keuken lampen with hue remote'
@@ -520,5 +539,4 @@
   action:
     service: light.turn_off
     entity_id: light.lamp_keukeneiland
-
 

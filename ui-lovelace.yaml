@@ -1,49 +1,196 @@
-title: My Awesome Home
+resources:
+  - url: /local/mini-media-player/mini-media-player.js
+    type: module
+  - url: /local/button-card/button-card.js
+    type: module
+  
+title: De Molenbeemd
 excluded_entities:
 views:
-    # View tab title.
-  - title: Example
-    # Optional unique id for direct access /lovelace/${id}
-    id: example
-    # Each view can have a different theme applied.
-    theme: dark-mode
-    # The cards to show on this view.
-    cards:
-        # The filter card will filter entities for their state
-      - type: entity-filter
-        entities:
-          - device_tracker.marcha
-          - device_tracker.steven
-        state_filter:
-          - 'home'
-        card_config:
-          type: glance
-          title: People that are home
-
-        # The picture entity card will represent an entity with a picture
-      - type: picture-entity
-        image: https://www.home-assistant.io/images/default-social.png
-        entity: light.tafel
-
     # Specify a tab icon if you want the view tab to be an icon.
-  - icon: mdi:home-assistant
+  - icon: mdi:home
     # Title of the view. Will be used as the tooltip for tab icon
-    title: Second 
+    title: Main 
     cards:
         # Entities card will take a list of entities and show their state.
       - type: entities
-        # Title of the entities card
-        title: Climate
-        # The entities here will be shown in the same order as specified.
-        # Each entry is an entity ID or a map with extra options.
+        title: Verlichting
+        show_header_toggle: true
+        entities:
+          - light.woonkamer
+          - light.slaapkamer
+          - light.overloop
+          - light.tuinkamer
+          - light.keuken_lampen
+          - light.babykamer
+      - type: horizontal-stack
+        cards:
+        - type: "custom:button-card"
+          entity: light.woonkamer
+          icon: mdi:sofa
+          color_type: card
+          color: auto
+          name: Woonkamer
+        - type: "custom:button-card"
+          entity: light.keuken_lampen
+          icon: mdi:pot
+          color_type: card
+          color: auto
+          name: Keuken
+        - type: "custom:button-card"
+          entity: light.slaapkamer
+          icon: mdi:bed-empty
+          color_type: card
+          color: auto
+          name: slaapkamer
+      - type: entities
+        title: Verwarming
         entities:
           - climate.woonkamer
           - climate.tuinkamer
           - climate.slaapkamer
           - climate.slaapkamer_klein
           - climate.badkamer
-        # The markdown card will render markdown text.
-      - type: markdown
-        title: Lovelace
-        content: >
-          Welcome to your **Lovelace UI**.
+      - type: entities
+        title: Wekker
+        show_header_toggle: false
+        entities:
+          - input_boolean.alarm_clock_status
+          - input_boolean.alarm_clock_weekend_status
+          - sensor.alarm_clock_time
+
+#Music Group
+  - icon: mdi:music
+    title: Music
+    cards:
+      - type: custom:mini-media-player
+        entity: media_player.bedroom
+        icon: 'mdi:cast'
+        artwork_border: true
+        hide_power: true
+        show_source: true 
+      - type: custom:mini-media-player
+        entity: media_player.family_room
+        icon: 'mdi:cast'
+        artwork_border: true
+        hide_power: true
+        show_source: true 
+      - type: custom:mini-media-player
+        entity: media_player.apple_tv
+        icon: 'mdi:cast'
+        artwork_border: true
+        hide_power: true
+
+#Sprinkler Group
+  - icon: mdi:water
+    title: Sprinklers
+    cards:
+      - type: entities
+        title: Tuin
+        show_header_toggle: false
+        entities:
+          - switch.sprinklers_gazon
+          - switch.waterpomp
+          - input_number.sprinkler_run_time
+          - timer.sprinkler_pump
+          - sensor.water_pump_power_now
+      - type: entities
+        title: Program
+        show_header_toggle: false
+        entities:
+          -  input_boolean.sprinkler_program_run
+      - type: entities
+        title: Program
+        show_header_toggle: true
+        entities:
+          -  input_boolean.sprinkler_program_maa
+          -  input_boolean.sprinkler_program_din
+          -  input_boolean.sprinkler_program_woe
+          -  input_boolean.sprinkler_program_woe
+          -  input_boolean.sprinkler_program_don
+          -  input_boolean.sprinkler_program_vri
+          -  input_boolean.sprinkler_program_zat
+          -  input_boolean.sprinkler_program_zon
+
+#Babykamer Group            
+  - icon: mdi:baby-buggy
+    title: Babykamer
+    cards:
+      - type: picture-glance
+        #title: Babykamer
+        entities:
+          - switch.dafangbaby_night_mode
+        camera_image: camera.babykamer
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            color_type: blank-card
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-left
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafangbaby/motors/horizontal/set"
+                payload: "left"
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-up
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafangbaby/motors/vertical/set"
+                payload: "up"
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-down
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafangbaby/motors/vertical/set"
+                payload: "down"
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-right
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafangbaby/motors/horizontal/set"
+                payload: "right"
+          - type: "custom:button-card"
+            color_type: blank-card
+      - type: entities
+        title: Lampen
+        entities:
+          - light.babykamer
+          - light.dimmable_light_1
+          - light.dimmable_light_2
+          - light.dimmable_light_3
+          - light.bed_marcha
+
+# Energy Usage Group
+  - icon: mdi:flash
+    title: Energy
+    cards:
+      - type: history-graph
+        title: "Power"
+        entities:
+          - sensor.energieverbruik_per_uur
+          - sensor.energieverbruik_per_dag
+      - type: history-graph
+        title: "Gas"
+        entities:
+          - sensor.gasverbruik_per_uur
+          - sensor.gasverbruik_per_dag
