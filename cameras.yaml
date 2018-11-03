@@ -4,9 +4,15 @@
   framerate: 1
 
 - platform: generic
+  name: Woonkamer
+  still_image_url: !secret camera_woonkamer_still_url
+  framerate: 1
+
+- platform: ffmpeg
+  input: !secret camera_woonkamer_rtsp_url
+  name: dafang2 
+
+- platform: generic
   name: Voordeur
   still_image_url: !secret url_voordeur_snapshot
 
-- platform: ffmpeg
-  name: Babykamer Cam
-  input: !secret camera_babykamer_rtsp_url

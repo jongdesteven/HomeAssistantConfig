@@ -23,26 +23,10 @@ views:
           - light.tuinkamer
           - light.keuken_lampen
           - light.babykamer
-      - type: horizontal-stack
-        cards:
-        - type: "custom:button-card"
-          entity: light.woonkamer
-          icon: mdi:sofa
-          color_type: card
-          color: auto
-          name: Woonkamer
-        - type: "custom:button-card"
-          entity: light.keuken_lampen
-          icon: mdi:pot
-          color_type: card
-          color: auto
-          name: Keuken
-        - type: "custom:button-card"
-          entity: light.slaapkamer
-          icon: mdi:bed-empty
-          color_type: card
-          color: auto
-          name: slaapkamer
+      - type: sensor
+        entity: sensor.waalre_temperature
+        name: Waalre Temperatuur
+        height: 75
       - type: entities
         title: Verwarming
         entities:
@@ -51,6 +35,15 @@ views:
           - climate.slaapkamer
           - climate.slaapkamer_klein
           - climate.badkamer
+      - type: entities
+        title: Deurbel
+        show_header_toggle: false
+        entities:
+          - switch.doorbell_ringer
+          - sensor.doorbell_last_press
+          - input_number.doorbell_ring_time
+          # - sensor.doorbell_ring_time
+          - camera.voordeur
       - type: entities
         title: Wekker
         show_header_toggle: false
@@ -71,6 +64,12 @@ views:
         show_source: true 
       - type: custom:mini-media-player
         entity: media_player.family_room
+        icon: 'mdi:cast'
+        artwork_border: true
+        hide_power: true
+        show_source: true 
+      - type: custom:mini-media-player
+        entity: media_player.kitchen
         icon: 'mdi:cast'
         artwork_border: true
         hide_power: true
@@ -194,3 +193,63 @@ views:
         entities:
           - sensor.gasverbruik_per_uur
           - sensor.gasverbruik_per_dag
+
+# Camera group
+  - icon: mdi:camera
+    title: Cameras
+    cards:
+      - type: picture-glance
+        entities:
+          - switch.dafang2_night_mode
+        camera_image: camera.woonkamer
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            color_type: blank-card
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-left
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafang2/motors/horizontal/set"
+                payload: "left"
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-up
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafang2/motors/vertical/set"
+                payload: "up"
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-down
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafang2/motors/vertical/set"
+                payload: "down"
+          - type: "custom:button-card"
+            color_type: card
+            color: rgb(245, 245, 245)
+            icon: mdi:arrow-right
+            action: service
+            service:
+              domain: mqtt
+              action: publish
+              data:
+                topic: "home/dafang2/motors/horizontal/set"
+                payload: "right"
+          - type: "custom:button-card"
+            color_type: blank-card
+    
