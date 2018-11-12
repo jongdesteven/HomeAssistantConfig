@@ -2,6 +2,7 @@
   state_topic: "home/doorbell/button"
   name: "Doorbell"
   device_class: sound
+  off_delay: 1
 
 - platform: template
   sensors: 

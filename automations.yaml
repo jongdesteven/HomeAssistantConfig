@@ -120,8 +120,8 @@
     platform: time
     at: '22:00:00'
   action:
-  - service: switch.turn_off
-    entity_id: switch.doorbell_ringer
+    - service: switch.turn_off
+      entity_id: switch.doorbell_ringer
 
 - id: automation_5a
   alias: 'Doorbell Ringer on during day'

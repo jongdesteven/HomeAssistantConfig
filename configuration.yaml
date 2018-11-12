@@ -34,7 +34,9 @@ http:
   # Uncomment this to add a password (recommended!)
   api_password: !secret api_password
   # Uncomment this if you are using SSL or running in Docker etc
-  # base_url: example.duckdns.org:8123
+  #ssl_certificate: /ssl/fullchain.pem
+  #ssl_key: /ssl/privkey.pem
+  base_url: https://stevendejong.duckdns.org:8123
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -142,16 +144,6 @@ cover:
           service: script.tv_lift_down
         stop_cover:
           service: script.tv_lift_down
-
-weather:
-  - platform: yweather
-    forecast: 1
-    name: !secret weather_name
-    monitored_conditions:
-      - weather
-      - temp_min
-      - temp_max
-      - temperature
 
 input_datetime:
   alarm_clock_time_input:

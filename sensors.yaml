@@ -23,12 +23,14 @@
 - platform: template
   sensors:
     energieverbruik_totaal:
+      entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
       value_template: >
         {{ (float(states.sensor.energieverbruik_totaal_hoog.state) + float(states.sensor.energieverbruik_totaal_laag.state)) | round(2) }}
       unit_of_measurement: 'kWh'
 - platform: template
   sensors:
     energieverbruik_per_uur:
+      entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
       value_template: >
         {{ (float(states.sensor.energieverbruik_totaal.state) - float(states.input_number.power_usage_previous_hour.state)) | round(2) }}
       unit_of_measurement: 'kWh'
@@ -41,12 +43,14 @@
 - platform: template
   sensors:
     energieverbruik_per_dag:
+      entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
       value_template: >
         {{ (float(states.sensor.energieverbruik_totaal.state) - float(states.input_number.power_usage_previous_day.state)) | round(2) }}
       unit_of_measurement: 'kWh'
 - platform: template
   sensors:
     gasverbruik_per_dag:
+      entity_id: sensor.gasverbruik_totaal
       value_template: >
         {{ (float(states.sensor.gasverbruik_totaal.state) - float(states.input_number.gas_usage_previous_day.state)) | round(2) }}
       unit_of_measurement: 'm3'
@@ -156,28 +160,51 @@
       value_template: '{{ states.input_number.alarm_clock_fade_in_minutes.state | int }}'
     doorbell_last_press:
       friendly_name: 'Last Doorbell Press'
+      entity_id:  binary_sensor.doorbell
       icon_template: 'mdi:clock-alert'
       value_template: '{{ as_timestamp(states.binary_sensor.doorbell.last_changed) | timestamp_custom("%a %d %b %H:%M") }}'
-    waalre_temperature:
-      friendly_name: 'Waalre Weather Temperature'
-      icon_template: 'mdi:temperature-celsius'
-      value_template: '{{ states.weather.waalre.attributes.temperature | float }}'
-      unit_of_measurement: "°C"
     overloop_lux_level:
       friendly_name: 'Overloop Lux Level'
+      entity_id: sensor.overloop_motion_sensor
       icon_template: 'mdi:white-balance-sunny'
       unit_of_measurement: 'lx'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.lux | float }}'
     overloop_light_level:
       friendly_name: 'Overloop Light Level'
+      entity_id: sensor.overloop_motion_sensor
       icon_template: 'mdi:white-balance-sunny'
       unit_of_measurement: 'll'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.light_level | int }}'
     overloop_temperature:
       friendly_name: 'Overloop Sensor Temperature'
+      entity_id: sensor.overloop_motion_sensor
       icon_template: 'mdi:temperature-celsius'
       value_template: '{{ states.sensor.overloop_motion_sensor.attributes.temperature | float }}'
       unit_of_measurement: "°C"
 
 - platform: rflink
   automatic_add: false
+
+- platform: buienradar
+  name: !secret weather_name
+  monitored_conditions:
+    - stationname
+    - conditioncode
+    - condition
+    - conditiondetailed
+    - conditionexact
+    - symbol
+    - humidity
+    - temperature
+    - groundtemperature
+    - windspeed
+    - windforce
+    - winddirection
+    - windazimuth
+    - pressure
+    - visibility
+    - windgust
+    - precipitation
+    - irradiance
+    - precipitation_forecast_average
+    - precipitation_forecast_total

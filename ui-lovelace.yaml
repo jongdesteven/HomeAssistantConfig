@@ -24,7 +24,7 @@ views:
           - light.keuken_lampen
           - light.babykamer
       - type: sensor
-        entity: sensor.waalre_temperature
+        entity: sensor.waalre_temperature_2
         name: Waalre Temperatuur
         height: 75
       - type: entities
@@ -193,6 +193,34 @@ views:
         entities:
           - sensor.gasverbruik_per_uur
           - sensor.gasverbruik_per_dag
+      - type: entities
+        title: Rookmelders
+        entities:
+          -  switch.smoke_detector_1
+          -  switch.smoke_detector_2
+      - type: entities
+        title: Weer
+        entities:
+          - sensor.waalre_stationname
+          - sensor.waalre_condition_code
+          - sensor.waalre_condition
+          - sensor.waalre_detailed_condition
+          - sensor.waalre_full_condition
+          - sensor.waalre_symbol
+          - sensor.waalre_humidity
+          - sensor.waalre_temperature_2
+          - sensor.waalre_ground_temperature
+          - sensor.waalre_wind_speed
+          - sensor.waalre_wind_force
+          - sensor.waalre_wind_direction
+          - sensor.waalre_wind_direction_azimuth
+          - sensor.waalre_pressure
+          - sensor.waalre_visibility
+          - sensor.waalre_wind_gust
+          - sensor.waalre_precipitation
+          - sensor.waalre_irradiance
+          - sensor.waalre_precipitation_forecast_average
+          - sensor.waalre_precipitation_forecast_total
 
 # Camera group
   - icon: mdi:camera
