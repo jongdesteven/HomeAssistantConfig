@@ -19,6 +19,12 @@ homeassistant:
       icon: mdi:human-female
     device_tracker.iphone_steven:
       icon: mdi:human-male
+    climate.woonkamer:
+      target_temp_step: 0.5
+
+  auth_providers:
+   - type: homeassistant
+   - type: legacy_api_password
 
 # Show links to resources in log and frontend
 # introduction:
@@ -34,9 +40,9 @@ http:
   # Uncomment this to add a password (recommended!)
   api_password: !secret api_password
   # Uncomment this if you are using SSL or running in Docker etc
-  #ssl_certificate: /ssl/fullchain.pem
-  #ssl_key: /ssl/privkey.pem
-  base_url: https://stevendejong.duckdns.org:8123
+  ssl_certificate: !secret ssl_certificate_path
+  ssl_key: !secret ssl_key_path
+  base_url: stevenmarcha.duckdns.org:8123
 
 # Checks for available updates
 # Note: This component will send some information about your system to

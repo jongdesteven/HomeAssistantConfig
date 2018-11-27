@@ -1,11 +1,13 @@
 - platform: generic
   name: Babykamer
   still_image_url: !secret camera_babykamer_still_url
+  verify_ssl: false
   framerate: 1
 
 - platform: generic
   name: Woonkamer
   still_image_url: !secret camera_woonkamer_still_url
+  verify_ssl: false
   framerate: 1
 
 - platform: ffmpeg

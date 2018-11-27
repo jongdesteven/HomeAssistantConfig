@@ -36,6 +36,12 @@ views:
           - climate.slaapkamer_klein
           - climate.badkamer
       - type: entities
+        title: Wij
+        show_header_toggle: false
+        entities:
+          - device_tracker.iphone_steven
+          - device_tracker.iphone_marcha
+      - type: entities
         title: Deurbel
         show_header_toggle: false
         entities:
@@ -118,6 +124,7 @@ views:
       - type: picture-glance
         #title: Babykamer
         entities:
+          - sensor.slaapkamer_klein_temperature
           - switch.dafangbaby_night_mode
         camera_image: camera.babykamer
       - type: horizontal-stack
