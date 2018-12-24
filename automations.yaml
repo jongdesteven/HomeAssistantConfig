@@ -292,6 +292,8 @@
         temperature: 18
     - service: light.turn_off
       entity_id:
+        - light.keuken
+        - light.lamp_keukeneiland
         - light.slaapkamer
         - light.woonkamer
         - light.overloop
@@ -306,6 +308,8 @@
     - service: light.turn_on
       entity_id:
         - light.slaapkamer
+        - light.keuken
+        - light.lamp_keukeneiland
         - light.woonkamer
         - light.overloop
         - light.tuinkamer
@@ -327,6 +331,8 @@
       entity_id:
         - light.slaapkamer
         - light.woonkamer
+        - light.keuken
+        - light.lamp_keukeneiland
         - light.overloop
         - light.tuinkamer
 - id: automation_13b
@@ -343,6 +349,8 @@
       data:
         group_name: 'Woonkamer'
         scene_name: 'Avond'
+    - service: light.turn_on
+      entity_id: lamp.lamp_keukeneiland
 - id: automation_13c
   alias: 'Woonkamer on at sunset when not home'
   trigger:
@@ -356,6 +364,7 @@
     - service: light.turn_on
       entity_id:
         - light.bank_kamer
+        - light.livingcolors_1
       data:
         brightness: 50
         color_temp: 366
@@ -373,6 +382,8 @@
     - service: light.turn_off
       entity_id:
         - light.slaapkamer
+        - light.keuken
+        - light.lamp_keukeneiland
         - light.woonkamer
         - light.overloop
         - light.tuinkamer
@@ -466,31 +477,6 @@
       title: "Alarm!"
       message: "Smoke Detected!"
 
-- id: automation_18
-  alias: 'Turn on Baby feeding time lights'
-  trigger:
-    platform: state
-    entity_id: light.dimmable_light_1
-    to: 'on'
-  condition:
-  - condition: sun
-    after: sunset
-  action:
-  - service: light.turn_off
-    entity_id: light.dimmable_light_2, light.dimmable_light_3
-- id: automation_18a
-  alias: 'Turn Off lights from baby feeding time'
-  trigger:
-    platform: state
-    entity_id: light.dimmable_light_1
-    to: 'unavailable'
-  condition:
-  - condition: sun
-    after: sunset
-  action:
-  - service: light.turn_off
-    entity_id: light.babykamer
-  
 - id: automation_19
   alias: 'Save power_consumption hourly'
   trigger:

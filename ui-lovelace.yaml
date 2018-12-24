@@ -21,7 +21,9 @@ views:
           - light.slaapkamer
           - light.overloop
           - light.tuinkamer
-          - light.keuken_lampen
+          - light.keuken
+          - light.lamp_keukeneiland
+          - light.kerstboom
           - light.babykamer
       - type: sensor
         entity: sensor.waalre_temperature_2
@@ -86,37 +88,6 @@ views:
         artwork_border: true
         hide_power: true
 
-#Sprinkler Group
-  - icon: mdi:water
-    title: Sprinklers
-    cards:
-      - type: entities
-        title: Tuin
-        show_header_toggle: false
-        entities:
-          - switch.sprinklers_gazon
-          - switch.waterpomp
-          - input_number.sprinkler_run_time
-          - timer.sprinkler_pump
-          - sensor.water_pump_power_now
-      - type: entities
-        title: Program
-        show_header_toggle: false
-        entities:
-          -  input_boolean.sprinkler_program_run
-      - type: entities
-        title: Program
-        show_header_toggle: true
-        entities:
-          -  input_boolean.sprinkler_program_maa
-          -  input_boolean.sprinkler_program_din
-          -  input_boolean.sprinkler_program_woe
-          -  input_boolean.sprinkler_program_woe
-          -  input_boolean.sprinkler_program_don
-          -  input_boolean.sprinkler_program_vri
-          -  input_boolean.sprinkler_program_zat
-          -  input_boolean.sprinkler_program_zon
-
 #Babykamer Group            
   - icon: mdi:baby-buggy
     title: Babykamer
@@ -124,7 +95,6 @@ views:
       - type: picture-glance
         #title: Babykamer
         entities:
-          - sensor.slaapkamer_klein_temperature
           - switch.dafangbaby_night_mode
         camera_image: camera.babykamer
       - type: horizontal-stack
@@ -177,6 +147,11 @@ views:
                 payload: "right"
           - type: "custom:button-card"
             color_type: blank-card
+      - type: glance
+        entities:
+          - sensor.slaapkamer_klein_temperature
+          - sensor.slaapkamer_klein_humidity
+          - binary_sensor.dafangbaby_motion_sensor
       - type: entities
         title: Lampen
         entities:
@@ -185,6 +160,74 @@ views:
           - light.dimmable_light_2
           - light.dimmable_light_3
           - light.bed_marcha
+
+#Lights Group
+  - icon: mdi:lightbulb
+    title: Lights
+    cards:
+      - type: entities
+        title: Woonkamer
+        entities:
+          - light.tafel
+          - light.livingcolors_1
+          - light.hue_bloom_1
+          - light.bank_kamer
+          - light.staande_lamp
+          - light.kerstboom
+          - light.bol_kamer
+      - type: entities
+        title: Keuken
+        entities:
+          - light.color_temperature_light_1
+          - light.color_temperature_light_2
+          - light.lamp_keukeneiland
+      - type: entities
+        title: Slaapkamer
+        entities:
+          - light.slaapkamer_spot_1
+          - light.slaapkamer_spot_2
+          - light.slaapkamer_spot_3
+          - light.slaapkamer_spot_4
+          - light.slaapkamer_spot_5
+      - type: entities
+        title: Carport
+        entities:
+          - light.carport_spot_1
+          - light.carport_spot_2
+          - light.carport_spot_3
+          - light.lamp_voordeur
+
+
+#Sprinkler Group
+  - icon: mdi:water
+    title: Sprinklers
+    cards:
+      - type: entities
+        title: Tuin
+        show_header_toggle: false
+        entities:
+          - switch.sprinklers_gazon
+          - switch.waterpomp
+          - input_number.sprinkler_run_time
+          - timer.sprinkler_pump
+          - sensor.water_pump_power_now
+      - type: entities
+        title: Program
+        show_header_toggle: false
+        entities:
+          -  input_boolean.sprinkler_program_run
+      - type: entities
+        title: Program
+        show_header_toggle: true
+        entities:
+          -  input_boolean.sprinkler_program_maa
+          -  input_boolean.sprinkler_program_din
+          -  input_boolean.sprinkler_program_woe
+          -  input_boolean.sprinkler_program_woe
+          -  input_boolean.sprinkler_program_don
+          -  input_boolean.sprinkler_program_vri
+          -  input_boolean.sprinkler_program_zat
+          -  input_boolean.sprinkler_program_zon
 
 # Energy Usage Group
   - icon: mdi:flash

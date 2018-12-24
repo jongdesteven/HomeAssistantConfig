@@ -8,7 +8,8 @@
   sensors: 
     washing_machine_status:
       friendly_name: "Washing Machine Status"
-      value_template: "{{ states.sensor.washing_machine_power_now.state|int > 5 }}"
+      value_template: "{{ states.sensor.washing_machine_power_now.state|int > 10 }}"
       delay_off:
         seconds: 30
       device_class: power
+
