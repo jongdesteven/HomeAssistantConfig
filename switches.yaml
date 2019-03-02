@@ -66,11 +66,7 @@
 
 - platform: rflink
   devices:
-    ev1527_0ec667_2:
+    ev1527_0ec667_02:
       name: "TV Lift Down"
-    ev1527_0ec667_1:
+    ev1527_0ec667_01:
       name: "TV Lift Up"
-    fa20rf_1dca51_01:
-      name: "Smoke Detector 1"
-    fa20rf_d82da9_01:
-      name: "Smoke Detector 2"

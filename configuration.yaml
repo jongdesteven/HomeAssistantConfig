@@ -77,6 +77,8 @@ conversation:
 recorder:
   db_url: !secret recorder_mysql_url
 
+system_health:
+
 # Enables support for tracking state changes over time.
 history:
 
@@ -179,17 +181,6 @@ weblink:
     - name: Babykamer Live
       url: !secret url_babykamer_live
       icon: mdi:video
-
-history_graph:
-  gr1:
-    name: Temperature
-    entities:
-      - sensor.woonkamer_temperature
-      - sensor.keuken_temperature
-      - sensor.badkamer_temperature
-      - sensor.slaapkamer_temperature
-      - sensor.overloop_temperature
-      - sensor.waalre_temperature
 
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml

@@ -170,12 +170,6 @@ raspi:
   - switch.tv_lift_up
   - switch.tv_lift_down
   - history_graph.temperature
-smoke_detectors:
-  name: Smoke Detectors
-  view: false
-  entities:
-  - switch.smoke_detector_1
-  - switch.smoke_detector_2
 sonoff_pow:
   name: Sonoff POW
   view: false

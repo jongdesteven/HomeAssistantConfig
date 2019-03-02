@@ -4,7 +4,7 @@
   state_topic: "raspi/temp"
   name: "Raspi Temperature"
   unit_of_measurement: "°C"
-  icon_template: 'mdi:oil-temperature'
+  icon: 'mdi:oil-temperature'
   value_template: '{{ value_json.temperature }}'
 - platform: mqtt
   state_topic: "/home/DHT11/temperature"
@@ -58,94 +58,94 @@
 - platform: mqtt
   state_topic: "home/smartmeter/electricity_tariff"
   name: "Energie Tarief"
-  icon_template: 'mdi:theme-light-dark'
+  icon: 'mdi:theme-light-dark'
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered"
   name: "Energieverbruik Actueel"
   value_template: "{{ (float(value) * 1000) | int }}"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/smartmeter/water_delivered"
   name: "Gasverbruik Totaal"
-  icon_template: 'mdi:fire'
+  icon: 'mdi:fire'
   unit_of_measurement: "m3"
 - platform: mqtt
   state_topic: "home/smartmeter/energy_delivered_tariff1"
   name: "Energieverbruik Totaal Laag"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "kWh"
 - platform: mqtt
   state_topic: "home/smartmeter/energy_delivered_tariff2"
   name: "Energieverbruik Totaal Hoog"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "kWh"
 
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered_l1"
   name: "Energieverbruik Actueel L1"
   value_template: "{{ (float(value) * 1000) | int }}"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered_l2"
   name: "Energieverbruik Actueel L2"
   value_template: "{{ (float(value) * 1000) | int }}"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered_l3"
   name: "Energieverbruik Actueel L3"
   value_template: "{{ (float(value) * 1000) | int }}"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "W"
 
 - platform: mqtt
   state_topic: "home/smartmeter/voltage_l1"
   name: "Spanning L1"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "V"
 - platform: mqtt
   state_topic: "home/smartmeter/voltage_l2"
   name: "Spanning L2"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "V"
 - platform: mqtt
   state_topic: "home/smartmeter/voltage_l3"
   name: "Spanning L3"
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "V"
 
 - platform: mqtt
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Washing Machine Power Today"
   value_template: '{{ value_json["ENERGY"]["Today"] }}'
-  icon_template: 'mdi:washing_machine'
+  icon: 'mdi:washing_machine'
   unit_of_measurement: "KWh"
 - platform: mqtt
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Washing Machine Power Now"
   value_template: '{{ value_json["ENERGY"]["Power"] }}'
-  icon_template: 'mdi:washin-machine'
+  icon: 'mdi:washin-machine'
   unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/sonoffpow/tele/SENSOR"
   name: "Net Voltage"
   value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
-  icon_template: 'mdi:power-plug'
+  icon: 'mdi:power-plug'
   unit_of_measurement: "V"
 
 - platform: mqtt
   state_topic: "home/sonoff_pomp/tele/SENSOR"
   name: "Water pump Power Now"
   value_template: '{{ value_json["ENERGY"]["Power"] }}'
-  icon_template: 'mdi:flash'
+  icon: 'mdi:flash'
   unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/sonoff_pomp/tele/SENSOR"
   name: "Water pump Power Today"
   value_template: '{{ value_json["ENERGY"]["Today"] }}'
-  icon_template: 'mdi:flash'
+  icon: 'mdi:flash'
   unit_of_measurement: "KWh"
 
 - platform: template

@@ -13,3 +13,21 @@
         seconds: 30
       device_class: power
 
+- platform: rflink
+  devices:
+    ev1527_0ec667_02:
+      name: "TV Lift Down"
+      device_class: moving
+      off_delay: 5
+    ev1527_0ec667_01:
+      name: "TV Lift Up"
+      device_class: moving
+      off_delay: 5
+    fa20rf_1dca51_01:
+      name: "Smoke Detector 1"
+      device_class: smoke
+      off_delay: 5
+    fa20rf_d82da9_01:
+      name: "Smoke Detector 2"
+      device_class: smoke
+      off_delay: 5

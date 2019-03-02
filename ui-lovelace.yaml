@@ -3,6 +3,8 @@ resources:
     type: module
   - url: /local/button-card/button-card.js
     type: module
+  - url: /local/mini-graph-card-bundle.js?v=0.3.0
+    type: module
   
 title: De Molenbeemd
 excluded_entities:

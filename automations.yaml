@@ -169,9 +169,8 @@
 - id: automation_7
   alias: 'Alarm clock fade in lights'
   trigger:
-    platform: time
+    platform: time_pattern
     minutes: '/1'
-    seconds: 00
   condition:
     condition: and
     conditions:
@@ -465,7 +464,7 @@
   alias: 'Smoke Detector Notifier'
   trigger:
     platform: state
-    entity_id: group.smoke_detectors
+    entity_id: binary_sensor.smoke_detector_1, binary_sensor.smoke_detector_2
     to: 'on'
   action:
   - service: light.turn_on
@@ -480,7 +479,7 @@
 - id: automation_19
   alias: 'Save power_consumption hourly'
   trigger:
-    platform: time
+    platform: time_pattern
     minutes: 0
     seconds: 0
   action:
@@ -526,3 +525,12 @@
     service: light.turn_off
     entity_id: light.lamp_keukeneiland
 
+- id: automation_21
+  alias: 'React when Opening TV'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.tv_lift_up
+    to: 'on'
+  action:
+    service: media_player.media_pause
+    entity_id: media_player.kitchen
