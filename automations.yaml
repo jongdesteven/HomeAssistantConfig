@@ -1,7 +1,5 @@
 - id: automation_1
-  alias: 'Diner Lights'
-#  hide_entity: False
-# initial_state: "off"
+  alias: Diner Lights
   trigger:
     platform: state
     entity_id: input_boolean.diner_lights
@@ -9,16 +7,13 @@
   action:
   - service: hue.hue_activate_scene
     data:
-      group_name: 'Woonkamer'
-      scene_name: 'Diner'
+      group_name: Woonkamer
+      scene_name: Diner
   - service: input_boolean.turn_off
     data:
       entity_id: input_boolean.diner_lights
-
 - id: automation_2
-  alias: 'Avond Lights'
-#  hide_entity: False
-# initial_state: "off"
+  alias: Avond Lights
   trigger:
     platform: state
     entity_id: input_boolean.avond_lights
@@ -26,8 +21,8 @@
   action:
   - service: hue.hue_activate_scene
     data:
-      group_name: 'Woonkamer'
-      scene_name: 'Avond'
+      group_name: Woonkamer
+      scene_name: Avond
   - service: light.turn_on
     data:
       entity_id: light.lamp_keukeneiland
@@ -36,75 +31,45 @@
   - service: input_boolean.turn_off
     data:
       entity_id: input_boolean.avond_lights
-
-#- id: automation_3
-#  alias: 'Alarm On'
-#  trigger:
-#    platform: state
-#    entity_id: input_boolean.alarm_toggle
-#    to: 'on'
-#  action:
-#  - service: media_player.volume_set
-#    data:
-#      entity_id: media_player.family_room
-#      volume_level: 0.13
-#  - service: media_player.select_source
-#    data:
-#      entity_id: media_player.family_room
-#      source: "Peaceful Piano"
-#  - service: media_player.play_media
-#    data:
-#      entity_id: media_player.family_room
-#      media_content_id: "spotify:user:spotify:playlist:37i9dQZF1DX4sWSpwq3LiO"
-#      media_content_type: "playlist"
-#
-#  - service: script.sonos_say
-#    data:
-#      sonos_entity: media_player.family_room
-#      volume: 0.5
-#      message: 'Alarm button is pressed!'
-#      delay: '00:00:05'
-
 - id: automation_4a
-  alias: 'Doorbell pressed Test'
+  alias: Doorbell pressed Test
   trigger:
     platform: state
     entity_id: input_boolean.alarm_toggle
     to: 'on'
   action:
-  - service: shell_command.grab_frontdoor_image 
+  - service: shell_command.grab_frontdoor_image
   - service: notify.all_iphones
     data:
-      message: "Doorbell pressed test"
+      message: Doorbell pressed test
       data:
-        attachment: 
-          url: !secret url_voordeur_snapshot
+        attachment:
+          url: https://stevenmarcha.duckdns.org/frontdoor.jpg
           content-type: jpg
           hide-thumbnail: false
         push:
-          sound: "doorbell-sound-effect.wav"
-
+          sound: doorbell-sound-effect.wav
 - id: automation_4
-  alias: 'Doorbell pressed'
+  alias: Doorbell pressed
   trigger:
     platform: state
     entity_id: binary_sensor.doorbell
     to: 'on'
   action:
-  - service: shell_command.grab_frontdoor_image 
+  - service: shell_command.grab_frontdoor_image
   - service: notify.all_iphones
     data:
-      message: "Doorbell pressed"
+      message: Doorbell pressed
       data:
-        attachment: 
-          url: !secret url_voordeur_snapshot
+        attachment:
+          url: https://stevenmarcha.duckdns.org/frontdoor.jpg
           content-type: jpg
           hide-thumbnail: false
         push:
-          sound: "doorbell-sound-effect.wav"
+          sound: doorbell-sound-effect.wav
   - condition: state
     entity_id: light.trap_spot
-    state: 'off'    
+    state: 'off'
   - service: light.turn_on
     data:
       entity_id: light.trap_spot
@@ -113,312 +78,281 @@
   - delay: 00:05:00
   - service: light.turn_off
     entity_id: light.trap_spot
-
 - id: automation_5
-  alias: 'Doorbell Ringer off during night'
+  alias: Doorbell Ringer off during night
   trigger:
     platform: time
     at: '22:00:00'
   action:
-    - service: switch.turn_off
-      entity_id: switch.doorbell_ringer
-
+  - service: switch.turn_off
+    entity_id: switch.doorbell_ringer
 - id: automation_5a
-  alias: 'Doorbell Ringer on during day'
+  alias: Doorbell Ringer on during day
   trigger:
     platform: time
-    at: '06:00:00'
+    at: 06:00:00
   action:
-    - service: switch.turn_on
-      entity_id: switch.doorbell_ringer
-
+  - service: switch.turn_on
+    entity_id: switch.doorbell_ringer
 - id: automation_5b
-  alias: 'Doorbell ring time set'
+  alias: Doorbell ring time set
   trigger:
     platform: state
     entity_id: input_number.doorbell_ring_time
   action:
     service: mqtt.publish
     data_template:
-      topic: 'home/doorbell/ringer/time/set'
+      topic: home/doorbell/ringer/time/set
       retain: true
-      payload: "{{ states('input_number.doorbell_ring_time') | int }}'\n'"
+      payload: '{{ states(''input_number.doorbell_ring_time'') | int }}''
 
+        '''
 - id: automation_6a
-  alias: 'Carport lights on at sunset'
+  alias: Carport lights on at sunset
   trigger:
     platform: sun
     event: sunset
   action:
-    - service: light.turn_on
-      data:
-        entity_id: light.carport
-        #brightness: 63 
-        #color_temp: 330
-    - service: light.turn_on
-      entity_id: light.lamp_voordeur
+  - service: light.turn_on
+    data:
+      entity_id: light.carport
+  - service: light.turn_on
+    entity_id: light.lamp_voordeur
 - id: automation_6b
-  alias: 'Carport lights off at sunrise'
+  alias: Carport lights off at sunrise
   trigger:
     platform: sun
     event: sunrise
   action:
-    - service: light.turn_off
-      entity_id: light.carport, light.lamp_voordeur
-
+  - service: light.turn_off
+    entity_id: light.carport, light.lamp_voordeur
 - id: automation_7
-  alias: 'Alarm clock fade in lights'
+  alias: Alarm clock fade in lights
   trigger:
     platform: time_pattern
-    minutes: '/1'
+    minutes: /1
   condition:
     condition: and
     conditions:
-      - condition: template
-        value_template: '{{ now().strftime("%H:%M") == states.sensor.alarm_clock_time.state }}'
-      - condition: or
+    - condition: template
+      value_template: '{{ now().strftime("%H:%M") == states.sensor.alarm_clock_time.state
+        }}'
+    - condition: or
+      conditions:
+      - condition: and
         conditions:
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.alarm_clock_status
-                state: 'on'
-              - condition: time
-                weekday:
-                  - mon
-                  - tue
-                  - wed
-                  - thu
-                  - fri
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.alarm_clock_weekend_status
-                state: 'on'
-              - condition: time
-                weekday:
-                  - sat
-                  - sun
+        - condition: state
+          entity_id: input_boolean.alarm_clock_status
+          state: 'on'
+        - condition: time
+          weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: input_boolean.alarm_clock_weekend_status
+          state: 'on'
+        - condition: time
+          weekday:
+          - sat
+          - sun
   action:
-    - service: light.turn_on
-      data_template:
-        entity_id: light.slaapkamer
-        transition: '{{ states.sensor.alarm_clock_fade_in_minutes.state | int * 60 }}'
-        profile: energize
-
+  - service: light.turn_on
+    data_template:
+      entity_id: light.slaapkamer
+      transition: '{{ states.sensor.alarm_clock_fade_in_minutes.state | int * 60 }}'
+      profile: energize
 - id: automation_8
-  alias: 'Set Sonos Alarm Weekday'
+  alias: Set Sonos Alarm Weekday
   trigger:
-    - platform: state
-      entity_id: input_boolean.alarm_clock_status
-      to: 'on'
+  - platform: state
+    entity_id: input_boolean.alarm_clock_status
+    to: 'on'
   action:
-    - service: media_player.sonos_update_alarm
-      data_template:
-        entity_id: media_player.bedroom
-        alarm_id: 3
-        time: '{{ states.sensor.alarm_clock_time.state }}'
-        enabled: true
+  - service: media_player.sonos_update_alarm
+    data_template:
+      entity_id: media_player.bedroom
+      alarm_id: 3
+      time: '{{ states.sensor.alarm_clock_time.state }}'
+      enabled: true
 - id: automation_8a
-  alias: 'Set Sonos Alarm Weekend'
+  alias: Set Sonos Alarm Weekend
   trigger:
-    - platform: state
-      entity_id: input_boolean.alarm_clock_weekend_status
-      to: 'on'
+  - platform: state
+    entity_id: input_boolean.alarm_clock_weekend_status
+    to: 'on'
   action:
-    - service: media_player.sonos_update_alarm
-      data_template:
-        entity_id: media_player.bedroom
-        alarm_id: 61
-        time: '{{ states.sensor.alarm_clock_time.state }}'
-        enabled: true
-
+  - service: media_player.sonos_update_alarm
+    data_template:
+      entity_id: media_player.bedroom
+      alarm_id: 61
+      time: '{{ states.sensor.alarm_clock_time.state }}'
+      enabled: true
 - id: automation_9
-  alias: 'Disable Sonos Alarm Weekdays'
+  alias: Disable Sonos Alarm Weekdays
   trigger:
-    - platform: state
-      entity_id: input_boolean.alarm_clock_status
-      to: 'off'
+  - platform: state
+    entity_id: input_boolean.alarm_clock_status
+    to: 'off'
   action:
-    - service: media_player.sonos_update_alarm
-      data_template:
-        entity_id: media_player.bedroom
-        alarm_id: 3
-        enabled: false
+  - service: media_player.sonos_update_alarm
+    data_template:
+      entity_id: media_player.bedroom
+      alarm_id: 3
+      enabled: false
 - id: automation_9a
-  alias: 'Disable Sonos Alarm Weekend'
+  alias: Disable Sonos Alarm Weekend
   trigger:
-    - platform: state
-      entity_id: input_boolean.alarm_clock_weekend_status
-      to: 'off'
+  - platform: state
+    entity_id: input_boolean.alarm_clock_weekend_status
+    to: 'off'
   action:
-    - service: media_player.sonos_update_alarm
-      data_template:
-        entity_id: media_player.bedroom
-        alarm_id: 61
-        enabled: false
-    
+  - service: media_player.sonos_update_alarm
+    data_template:
+      entity_id: media_player.bedroom
+      alarm_id: 61
+      enabled: false
 - id: automation_10
-  alias: 'Change Alarm Clock time'
+  alias: Change Alarm Clock time
   trigger:
-    - platform: state
-      entity_id: sensor.alarm_clock_time
+  - platform: state
+    entity_id: sensor.alarm_clock_time
   action:
-    - service: media_player.sonos_update_alarm
-      data_template:
-        entity_id: media_player.bedroom
-        alarm_id: 3
-        time: '{{ states.sensor.alarm_clock_time.state }}'  
-    - service: media_player.sonos_update_alarm
-      data_template:
-        entity_id: media_player.bedroom
-        alarm_id: 61
-        time: '{{ states.sensor.alarm_clock_time.state }}'  
-
+  - service: media_player.sonos_update_alarm
+    data_template:
+      entity_id: media_player.bedroom
+      alarm_id: 3
+      time: '{{ states.sensor.alarm_clock_time.state }}'
+  - service: media_player.sonos_update_alarm
+    data_template:
+      entity_id: media_player.bedroom
+      alarm_id: 61
+      time: '{{ states.sensor.alarm_clock_time.state }}'
 - id: automation_11
-  alias: 'All indoor lights off, climate low when holding buttons'
+  alias: All indoor lights off, climate low when holding buttons
   trigger:
-    - platform: state
-      entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
-      to: '4_hold'
+  - platform: state
+    entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
+    to: 4_hold
   action:
-    - service: climate.set_temperature
-      data:
-        entity_id:
-          - climate.keuken
-          - climate.woonkamer
-          - climate.badkamer
-        temperature: 18
-    - service: light.turn_off
+  - service: climate.set_temperature
+    data:
       entity_id:
-        - light.keuken
-        - light.lamp_keukeneiland
-        - light.slaapkamer
-        - light.woonkamer
-        - light.overloop
-        - light.tuinkamer
+      - climate.keuken
+      - climate.woonkamer
+      - climate.badkamer
+      temperature: 18
+  - service: light.turn_off
+    entity_id:
+    - light.keuken
+    - light.lamp_keukeneiland
+    - light.slaapkamer
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
 - id: automation_12
-  alias: 'All indoor lights bright on when holding buttons'
+  alias: All indoor lights bright on when holding buttons
   trigger:
-    - platform: state
-      entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
-      to: '1_hold'
+  - platform: state
+    entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
+    to: 1_hold
   action:
-    - service: light.turn_on
-      entity_id:
-        - light.slaapkamer
-        - light.keuken
-        - light.lamp_keukeneiland
-        - light.woonkamer
-        - light.overloop
-        - light.tuinkamer
-      data:
-        brightness: 254
-        color_temp: 200
-
+  - service: light.turn_on
+    entity_id:
+    - light.slaapkamer
+    - light.keuken
+    - light.lamp_keukeneiland
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
+    data:
+      brightness: 254
+      color_temp: 200
 - id: automation_13a
-  alias: 'All indoor lights off when leaving the house'
+  alias: All indoor lights off when leaving the house
   trigger:
     platform: state
     entity_id: group.family
-    to: 'not_home'
+    to: not_home
   condition:
     condition: sun
     after: sunrise
   action:
-    - service: light.turn_off
-      entity_id:
-        - light.slaapkamer
-        - light.woonkamer
-        - light.keuken
-        - light.lamp_keukeneiland
-        - light.overloop
-        - light.tuinkamer
+  - service: light.turn_off
+    entity_id:
+    - light.slaapkamer
+    - light.woonkamer
+    - light.keuken
+    - light.lamp_keukeneiland
+    - light.overloop
+    - light.tuinkamer
 - id: automation_13b
-  alias: 'Woonkamer on when coming home after dark'
+  alias: Woonkamer on when coming home after dark
   trigger:
     platform: state
     entity_id: group.family
-    to: 'home'
+    to: home
   condition:
     condition: sun
     after: sunset
   action:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'Woonkamer'
-        scene_name: 'Avond'
-    - service: light.turn_on
-      entity_id: lamp.lamp_keukeneiland
+  - service: hue.hue_activate_scene
+    data:
+      group_name: Woonkamer
+      scene_name: Avond
+  - service: light.turn_on
+    entity_id: lamp.lamp_keukeneiland
 - id: automation_13c
-  alias: 'Woonkamer on at sunset when not home'
+  alias: Woonkamer on at sunset when not home
   trigger:
     platform: sun
     event: sunset
   condition:
     condition: state
     entity_id: group.family
-    state: 'not_home'
+    state: not_home
   action:
-    - service: light.turn_on
-      entity_id:
-        - light.bank_kamer
-        - light.livingcolors_1
-      data:
-        brightness: 50
-        color_temp: 366
+  - service: light.turn_on
+    entity_id:
+    - light.bank_kamer
+    - light.livingcolors_1
+    data:
+      brightness: 50
+      color_temp: 366
 - id: automation_13d
-  alias: 'All off at sunrise when not home'
+  alias: All off at sunrise when not home
   trigger:
     platform: sun
     event: sunrise
-    offset: "00:30:00"
+    offset: 00:30:00
   condition:
     condition: state
     entity_id: group.family
-    state: 'not_home'
+    state: not_home
   action:
-    - service: light.turn_off
-      entity_id:
-        - light.slaapkamer
-        - light.keuken
-        - light.lamp_keukeneiland
-        - light.woonkamer
-        - light.overloop
-        - light.tuinkamer
-
-#- id: automation_14
-#  alias: 'Set heating up when at work'
-#  trigger:
-#    platform: time
-#    at: '14:00:00'
-#  condition:
-#    condition: and
-#    conditions:
-#      - condition: state
-#        entity_id: device_tracker.iphone_marcha
-#        state: 'GGZE'
-#      - condition: numeric_state
-#        entity_id: sensor.woonkamer_temperature
-#        below: 18
-#  action:
-#    service: script.early_heating
-    # data_:
-      #minutes_togo: {{ ( ( 20.0 - ( states.sensor.woonkamer_temperature.state | float ) ) * 60.0 ) | int }}     
-      # minutes_togo: 120
-
+  - service: light.turn_off
+    entity_id:
+    - light.slaapkamer
+    - light.keuken
+    - light.lamp_keukeneiland
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
 - id: automation_15
-  alias: 'Update Available Notifications'
+  alias: Update Available Notifications
   trigger:
     platform: state
     entity_id: updater.updater
   action:
     service: notify.notify
     data:
-      message: 'Update for Home Assistant is available.'
-
+      message: Update for Home Assistant is available.
 - id: automation_16
-  alias: 'Sprinkler Automation'
+  alias: Sprinkler Automation
   trigger:
     platform: state
     entity_id: switch.sprinklers_gazon
@@ -428,14 +362,13 @@
   - service: timer.start
     data_template:
       entity_id: timer.sprinkler_pump
-      duration: >
-        {% set duration = states.input_number.sprinkler_run_time.state | int %}
-        {% set minutes = (duration % 60)|int  %}
-        {% set hours = (duration / 60)|int %}
-        {{ "%02i:%02i:00"|format(hours, minutes) }}
+      duration: '{% set duration = states.input_number.sprinkler_run_time.state |
+        int %} {% set minutes = (duration % 60)|int  %} {% set hours = (duration /
+        60)|int %} {{ "%02i:%02i:00"|format(hours, minutes) }}
 
+        '
 - id: automation_16a
-  alias: 'Turn Sprinkler off at timer end'
+  alias: Turn Sprinkler off at timer end
   trigger:
     platform: event
     event_type: timer.finished
@@ -443,11 +376,11 @@
       entity_id: timer.sprinkler_pump
   action:
   - service: switch.turn_off
-    entity_id: 
-      - switch.sprinklers_gazon
-      - switch.waterpomp
+    entity_id:
+    - switch.sprinklers_gazon
+    - switch.waterpomp
 - id: automation_16b
-  alias: 'Cancel timer on manual pump switch off'
+  alias: Cancel timer on manual pump switch off
   trigger:
     platform: state
     entity_id: switch.sprinklers_gazon
@@ -455,13 +388,12 @@
   condition:
   - condition: state
     entity_id: timer.sprinkler_pump
-    state: 'active'
+    state: active
   action:
   - service: timer.cancel
     entity_id: timer.sprinkler_pump
-
 - id: automation_17
-  alias: 'Smoke Detector Notifier'
+  alias: Smoke Detector Notifier
   trigger:
     platform: state
     entity_id: binary_sensor.smoke_detector_1, binary_sensor.smoke_detector_2
@@ -473,60 +405,57 @@
       brightness: 255
   - service: notify.all_iphones
     data:
-      title: "Alarm!"
-      message: "Smoke Detected!"
-
+      title: Alarm!
+      message: Smoke Detected!
 - id: automation_19
-  alias: 'Save power_consumption hourly'
+  alias: Save power_consumption hourly
   trigger:
     platform: time_pattern
     minutes: 0
     seconds: 0
   action:
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.power_usage_previous_hour
-        value: "{{ states.sensor.energieverbruik_totaal.state }}"
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.gas_usage_previous_hour
-        value: "{{ states.sensor.gasverbruik_totaal.state }}"
+  - service: input_number.set_value
+    data_template:
+      entity_id: input_number.power_usage_previous_hour
+      value: '{{ states.sensor.energieverbruik_totaal.state }}'
+  - service: input_number.set_value
+    data_template:
+      entity_id: input_number.gas_usage_previous_hour
+      value: '{{ states.sensor.gasverbruik_totaal.state }}'
 - id: automation_19a
-  alias: 'Save power_consumption dayly'
+  alias: Save power_consumption dayly
   trigger:
     platform: time
-    at: '00:00:00'
+    at: 00:00:00
   action:
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.power_usage_previous_day
-        value: "{{ states.sensor.energieverbruik_totaal.state }}"
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.gas_usage_previous_day
-        value: "{{ states.sensor.gasverbruik_totaal.state }}"
-
+  - service: input_number.set_value
+    data_template:
+      entity_id: input_number.power_usage_previous_day
+      value: '{{ states.sensor.energieverbruik_totaal.state }}'
+  - service: input_number.set_value
+    data_template:
+      entity_id: input_number.gas_usage_previous_day
+      value: '{{ states.sensor.gasverbruik_totaal.state }}'
 - id: automation_20a
-  alias: 'Turn On keuken lampen with hue remote'
+  alias: Turn On keuken lampen with hue remote
   trigger:
+  - entity_id: sensor.woonkamer_dimmer_switch_1
     platform: state
-    entity_id: sensor.woonkamer_dimmer_switch_1
-    to: '1_click'
+    to: 1_click_up
   action:
+  - entity_id: light.lamp_keukeneiland
     service: light.turn_on
-    entity_id: light.lamp_keukeneiland
 - id: automation_20b
-  alias: 'Turn Off keuken lampen with hue remote'
+  alias: Turn Off keuken lampen with hue remote
   trigger:
+  - entity_id: sensor.woonkamer_dimmer_switch_1
     platform: state
-    entity_id: sensor.woonkamer_dimmer_switch_1
-    to: '4_click'
+    to: 4_click_up
   action:
+  - entity_id: light.lamp_keukeneiland
     service: light.turn_off
-    entity_id: light.lamp_keukeneiland
-
 - id: automation_21
-  alias: 'React when Opening TV'
+  alias: React when Opening TV
   trigger:
     platform: state
     entity_id: binary_sensor.tv_lift_up

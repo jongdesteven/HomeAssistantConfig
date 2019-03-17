@@ -5,6 +5,8 @@ resources:
     type: module
   - url: /local/mini-graph-card-bundle.js?v=0.3.0
     type: module
+  - url: /customcards/github/custom-cards/tracker-card.js?track=true
+    type: module
   
 title: De Molenbeemd
 excluded_entities:

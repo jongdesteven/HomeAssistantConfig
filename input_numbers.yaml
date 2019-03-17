@@ -1,21 +1,18 @@
 alarm_clock_hour:
   name: Hour
   icon: mdi:timer
-  initial: 6
   min: 0
   max: 23
   step: 1
 alarm_clock_minute:
   name: Minute
   icon: mdi:timer
-  initial: 0
   min: 0
   max: 59
   step: 1
 alarm_clock_fade_in_minutes:
   name: Fade In (Minutes)
   icon: mdi:gradient
-  initial: 15
   min: 0
   max: 30
   step: 5
@@ -23,7 +20,6 @@ alarm_clock_fade_in_minutes:
 doorbell_ring_time:
   name: Doorbell Ring Time (Milliseconds)
   icon: mdi:timer
-  initial: 1000
   min: 0
   max: 2000
   step: 100
@@ -31,7 +27,6 @@ doorbell_ring_time:
 sprinkler_run_time:
   name: Sprinkler Run Time (Minutes)
   icon: mdi:timer
-  initial: 60
   min: 1
   max: 180
   step: 1
@@ -39,21 +34,17 @@ sprinkler_run_time:
 
 power_usage_previous_hour:
   name: Power Usage last hour
-  initial: 0
   min: 0
   max: 999999999
 gas_usage_previous_hour:
   name: Gas Usage last hour
-  initial: 0
   min: 0
   max: 999999999
 power_usage_previous_day:
   name: Power Usage last day
-  initial: 0
   min: 0
   max: 999999999
 gas_usage_previous_day:
   name: Gas Usage last day
-  initial: 0
   min: 0
   max: 999999999
