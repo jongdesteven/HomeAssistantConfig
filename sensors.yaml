@@ -1,4 +1,4 @@
-- platform: hue
+- platform: huesensor
 
 - platform: mqtt
   state_topic: "raspi/temp"
@@ -165,21 +165,21 @@
       value_template: '{{ as_timestamp(states.binary_sensor.doorbell.last_changed) | timestamp_custom("%a %d %b %H:%M") }}'
     overloop_lux_level:
       friendly_name: 'Overloop Lux Level'
-      entity_id: sensor.overloop_motion_sensor
+      entity_id: binary_sensor.overloop_motion_sensor
       icon_template: 'mdi:white-balance-sunny'
       unit_of_measurement: 'lx'
-      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.lux | float }}'
+      value_template: '{{ states.binary_sensor.overloop_motion_sensor.attributes.lx | float }}'
     overloop_light_level:
       friendly_name: 'Overloop Light Level'
-      entity_id: sensor.overloop_motion_sensor
+      entity_id: binary_sensor.overloop_motion_sensor
       icon_template: 'mdi:white-balance-sunny'
       unit_of_measurement: 'll'
-      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.light_level | int }}'
+      value_template: '{{ states.binary_sensor.overloop_motion_sensor.attributes.light_level | int }}'
     overloop_temperature:
       friendly_name: 'Overloop Sensor Temperature'
-      entity_id: sensor.overloop_motion_sensor
+      entity_id: binary_sensor.overloop_motion_sensor
       icon_template: 'mdi:temperature-celsius'
-      value_template: '{{ states.sensor.overloop_motion_sensor.attributes.temperature | float }}'
+      value_template: '{{ states.binary_sensor.overloop_motion_sensor.attributes.temperature | float }}'
       unit_of_measurement: "°C"
 
 - platform: rflink

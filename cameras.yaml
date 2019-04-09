@@ -1,14 +1,14 @@
 - platform: generic
   name: Babykamer
   still_image_url: !secret camera_babykamer_still_url
+  stream_source: !secret camera_babykamer_stream_url
   verify_ssl: false
-  framerate: 1
 
 - platform: generic
   name: Woonkamer
   still_image_url: !secret camera_woonkamer_still_url
+  stream_source: !secret camera_woonkamer_stream_url
   verify_ssl: false
-  framerate: 1
 
 - platform: generic
   name: Voordeur

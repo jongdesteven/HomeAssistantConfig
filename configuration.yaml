@@ -24,7 +24,7 @@ homeassistant:
 
   auth_providers:
    - type: homeassistant
-   - type: legacy_api_password
+#   - type: legacy_api_password
 
 # Show links to resources in log and frontend
 # introduction:
@@ -38,7 +38,7 @@ config:
 
 http:
   # Uncomment this to add a password (recommended!)
-  api_password: !secret api_password
+  # api_password: !secret api_password
   # Uncomment this if you are using SSL or running in Docker etc
   ssl_certificate: !secret ssl_certificate_path
   ssl_key: !secret ssl_key_path
@@ -83,12 +83,15 @@ custom_updater:
   card_urls:
     - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
     - https://raw.githubusercontent.com/kalkih/mini-graph-card/master/tracker.json
+    - https://raw.githubusercontent.com/robmarkcole/Hue-sensors-HASS/master/custom_updater.json
 
 # Enables support for tracking state changes over time.
 history:
 
 # View all events in a logbook
 logbook:
+
+person:
 
 # Track the sun
 sun:
@@ -109,6 +112,7 @@ rflink:
 
 logger:
   default: info
+  #default: warning 
   logs:
     homeassistant.loader: info
     #rflink: debug
@@ -135,6 +139,8 @@ apple_tv:
     credentials: !secret atv_credentials
 
 ios:
+
+#stream:
 
 hue:
   bridges:
