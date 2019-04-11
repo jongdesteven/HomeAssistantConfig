@@ -78,22 +78,7 @@
   - delay: 00:05:00
   - service: light.turn_off
     entity_id: light.trap_spot
-- id: automation_5
-  alias: Doorbell Ringer off during night
-  trigger:
-    platform: time
-    at: '22:00:00'
-  action:
-  - service: switch.turn_off
-    entity_id: switch.doorbell_ringer
-- id: automation_5a
-  alias: Doorbell Ringer on during day
-  trigger:
-    platform: time
-    at: 06:00:00
-  action:
-  - service: switch.turn_on
-    entity_id: switch.doorbell_ringer
+
 - id: automation_5b
   alias: Doorbell ring time set
   trigger:
