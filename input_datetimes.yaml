@@ -1,0 +1,19 @@
+sprinkler_program:
+  name: sprinkler timer
+  has_date: false
+  has_time: true
+
+alarm_clock:
+  name: alarm clock
+  has_date: false
+  has_time: true
+
+alarm_clock_time_input:
+  name: Alarm clock time
+  has_date: false
+  has_time: true
+sprinkler_program_time_input:
+  name: Sprinkler Program time
+  has_date: false
+  has_time: true
+

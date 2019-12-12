@@ -62,6 +62,14 @@ alllights:
   - light.keuken
   - light.babykamer 
   - group.all_lights
+tafel:
+  name: Tafel
+  view: false
+  icon: mdi:lightbulb
+  entities:
+  - light.tafel_1
+  - light.tafel_2
+  - light.tafel_3
 climate_basic:
   name: Climate
   view: false
@@ -146,7 +154,7 @@ family:
   view: false
   entities:
   - device_tracker.iphone_steven
-  - device_tracker.iphone_marcha
+  - device_tracker.marcha_s_iphone
 raspi:
   name: Sensors
   view: true

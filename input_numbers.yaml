@@ -48,3 +48,17 @@ gas_usage_previous_day:
   name: Gas Usage last day
   min: 0
   max: 999999999
+
+bbq_dome_set_temp:
+  name: BBQ Dome Set Temperature
+  min: 0
+  max: 450
+  step: 5
+  mode: slider
+bbq_meat_set_temp:
+  name: BBQ Meat Set Temperature
+  min: 0
+  max: 120
+  step: 1
+  mode: slider
+

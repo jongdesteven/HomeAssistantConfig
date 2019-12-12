@@ -31,6 +31,28 @@
   - service: input_boolean.turn_off
     data:
       entity_id: input_boolean.avond_lights
+- id: automation_4ba
+  alias: Kinderkamer Sjors te koud
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.slaapkamer_sjors_temperature
+    below: 16.5
+  action:
+  - service: notify.all_iphones
+    data:
+      title: "De Molenbeemd Alerts"
+      message: "Kamer Sjors te koud: {{ states('sensor.slaapkamer_sjors_temperature') }}°C"
+- id: automation_4bb
+  alias: Kinderkamer klein te koud
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.slaapkamer_klein_temperature
+    below: 16.5
+  action:
+  - service: notify.all_iphones
+    data:
+      title: "De Molenbeemd Alerts"
+      message: "Kinderkamer klein te koud: {{ states('sensor.slaapkamer_klein_temperature') }}°C"
 - id: automation_4a
   alias: Doorbell pressed Test
   trigger:
@@ -89,9 +111,7 @@
     data_template:
       topic: home/doorbell/ringer/time/set
       retain: true
-      payload: '{{ states(''input_number.doorbell_ring_time'') | int }}''
-
-        '''
+      payload: '{{ states(''input_number.doorbell_ring_time'') | int }}'
 - id: automation_6a
   alias: Carport lights on at sunset
   trigger:
@@ -158,7 +178,7 @@
     entity_id: input_boolean.alarm_clock_status
     to: 'on'
   action:
-  - service: media_player.sonos_update_alarm
+  - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 3
@@ -171,7 +191,7 @@
     entity_id: input_boolean.alarm_clock_weekend_status
     to: 'on'
   action:
-  - service: media_player.sonos_update_alarm
+  - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 61
@@ -184,7 +204,7 @@
     entity_id: input_boolean.alarm_clock_status
     to: 'off'
   action:
-  - service: media_player.sonos_update_alarm
+  - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 3
@@ -196,7 +216,7 @@
     entity_id: input_boolean.alarm_clock_weekend_status
     to: 'off'
   action:
-  - service: media_player.sonos_update_alarm
+  - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 61
@@ -207,30 +227,23 @@
   - platform: state
     entity_id: sensor.alarm_clock_time
   action:
-  - service: media_player.sonos_update_alarm
+  - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 3
       time: '{{ states.sensor.alarm_clock_time.state }}'
-  - service: media_player.sonos_update_alarm
+  - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 61
       time: '{{ states.sensor.alarm_clock_time.state }}'
 - id: automation_11
-  alias: All indoor lights off, climate low when holding buttons
+  alias: All indoor lights off when holding off button
   trigger:
   - platform: state
     entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
     to: 4_hold
   action:
-  - service: climate.set_temperature
-    data:
-      entity_id:
-      - climate.keuken
-      - climate.woonkamer
-      - climate.badkamer
-      temperature: 18
   - service: light.turn_off
     entity_id:
     - light.keuken
@@ -290,7 +303,7 @@
       group_name: Woonkamer
       scene_name: Avond
   - service: light.turn_on
-    entity_id: lamp.lamp_keukeneiland
+    entity_id: light.lamp_keukeneiland, light.keuken
 - id: automation_13c
   alias: Woonkamer on at sunset when not home
   trigger:
@@ -323,6 +336,26 @@
     entity_id:
     - light.slaapkamer
     - light.keuken
+    - light.badkamer
+    - light.lamp_keukeneiland
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
+- id: automation_13e
+  alias: All off at night when not home
+  trigger:
+    platform: time
+    at: "22:30:00"
+  condition:
+    condition: state
+    entity_id: group.family
+    state: not_home
+  action:
+  - service: light.turn_off
+    entity_id:
+    - light.slaapkamer
+    - light.keuken
+    - light.badkamer
     - light.lamp_keukeneiland
     - light.woonkamer
     - light.overloop
@@ -349,9 +382,7 @@
       entity_id: timer.sprinkler_pump
       duration: '{% set duration = states.input_number.sprinkler_run_time.state |
         int %} {% set minutes = (duration % 60)|int  %} {% set hours = (duration /
-        60)|int %} {{ "%02i:%02i:00"|format(hours, minutes) }}
-
-        '
+        60)|int %} {{ "%02i:%02i:00"|format(hours, minutes) }}'
 - id: automation_16a
   alias: Turn Sprinkler off at timer end
   trigger:
@@ -377,7 +408,7 @@
   action:
   - service: timer.cancel
     entity_id: timer.sprinkler_pump
-- id: automation_17
+- id: automation_17a
   alias: Smoke Detector Notifier
   trigger:
     platform: state
@@ -392,6 +423,21 @@
     data:
       title: Alarm!
       message: Smoke Detected!
+- id: automation_17b
+  alias: CO Detector Notifier
+  trigger:
+    platform: state
+    entity_id: binary_sensor.co_detector
+    to: 'on'
+  action:
+  - service: light.turn_on
+    entity_id: group.all_lights
+    data:
+      brightness: 255
+  - service: notify.all_iphones
+    data:
+      title: Alarm!
+      message: "CO Gedetecteerd, ga het huis uit!"
 - id: automation_19
   alias: Save power_consumption hourly
   trigger:
@@ -430,6 +476,8 @@
   action:
   - entity_id: light.lamp_keukeneiland
     service: light.turn_on
+  - service: switch.turn_on
+    entity_id: switch.kerstboom
 - id: automation_20b
   alias: Turn Off keuken lampen with hue remote
   trigger:
@@ -439,6 +487,8 @@
   action:
   - entity_id: light.lamp_keukeneiland
     service: light.turn_off
+  - service: switch.turn_off
+    entity_id: switch.kerstboom
 - id: automation_21
   alias: React when Opening TV
   trigger:
@@ -448,9 +498,160 @@
   action:
     - service: media_player.media_pause
       entity_id: media_player.kitchen
-    - service: remote.send_command
-      data:
-        entity_id: remote.apple_tv
-        command:
-          - menu
 
+- id: automation_23
+  alias: update display
+  trigger: 
+    platform: state
+    entity_id:  sensor.waalre_temperature, sensor.woonkamer_temperature, sensor.bbq_sensor
+  action:
+    - service: mqtt.publish
+      data_template:
+        topic: 'home/bbq/display/set'
+        payload_template: '03Woonkamer:  {{states.sensor.woonkamer_temperature.state|float|round(1)}}'
+    - service: mqtt.publish
+      data_template:
+        topic: 'home/bbq/display/set'
+        payload_template: '04Buiten:     {{states.sensor.waalre_temperature.state|float|round(1)}}'
+    - service: mqtt.publish
+      data_template:
+        topic: 'home/bbq/display/set'
+        payload_template: >
+          {% if states.sensor.bbq_sensor.state|int < 100 %}
+            05BBQ:          {{states.sensor.bbq_sensor.state|int}}
+          {% else %}
+            05BBQ:         {{states.sensor.bbq_sensor.state|int}}
+          {% endif %}
+
+
+
+- id: automation_22
+  alias: run sprinkler program
+  trigger:
+    platform: template
+    value_template: "{{ states.sensor.time.state  == (states.input_datetime.sprinkler_program.attributes.timestamp | int | timestamp_custom('%H:%M', FALSE)) }}"
+  condition:
+    condition: or
+    conditions:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_maa
+            state: 'on'
+          - condition: time
+            weekday: mon
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_din
+            state: 'on'
+          - condition: time
+            weekday: tue
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_woe
+            state: 'on'
+          - condition: time
+            weekday: wed
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_don
+            state: 'on'
+          - condition: time
+            weekday: thu
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_vri
+            state: 'on'
+          - condition: time
+            weekday: fri
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_zat
+            state: 'on'
+          - condition: time
+            weekday: sat
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_zon
+            state: 'on'
+          - condition: time
+            weekday: sun
+  action:
+    - service: switch.turn_on
+      entity_id: switch.waterpomp, switch.sprinklers_gazon
+
+- id: automation_23a
+  alias: Radio on when coming home
+  trigger:
+    platform: state
+    entity_id: group.family
+    to: 'home'
+  action:
+  - service: media_player.media_play
+    entity_id: media_player.kitchen
+  - service: media_player.volume_set
+    data_template:
+      entity_id: media_player.woonkamer, media_player.kitchen
+      volume_level: 0.1
+- id: automation_23b
+  alias: Radio off when leaving home
+  trigger:
+    platform: state
+    entity_id: group.family
+    to: 'not_home'
+  action:
+  - service: media_player.media_stop
+    entity_id: media_player.kitchen
+- id: automation_24
+  alias: climate to auto when sleeping
+  trigger:
+    platform: time
+    at: "22:00:00"
+  action:
+  - service: climate.set_hvac_mode
+    data:
+      entity_id: climate.woonkamer, climate.badkamer
+      hvac_mode: auto
+- id: automation_25
+  alias: Afval today
+  trigger:
+    platform: time
+    at: "07:00:00"
+  condition:
+    condition: template
+    value_template: "{{ 'Today' in states('sensor.waalre_gft') or 'Today' in states('sensor.waalre_papier') or 'Today' in states('sensor.waalre_pbd') or 'Today' in states('sensor.waalre_restafval') }}"
+  action:
+    service: notify.all_iphones
+    data:
+      title: Afval
+      message: >
+        Vandaag wordt opgehaald:
+        {% if 'Today' in states('sensor.waalre_pbd') %}
+        Plastic, Metaal, Drinkpakken
+        {% endif %}
+        {% if 'Today' in states('sensor.waalre_papier') %}
+        Papier
+        {% endif %}
+        {% if 'Today' in states('sensor.waalre_restafval') %}
+        Papier
+        {% endif %}
+        {% if 'Today' in states('sensor.waalre_gft') %}
+        GFT
+        {% endif %}
+
+- id: automation_26
+  alias: Reset afzuiging
+  trigger:
+    platform: state
+    entity_id: switch.afzuiging_low
+    to: "off"
+    for: "01:00:00"
+  action:
+    service: switch.turn_on
+    entity_id: switch.afzuiging_low

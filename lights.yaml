@@ -42,3 +42,10 @@
   payload_available: "Online"
   payload_not_available: "Offline"
   retain: false
+
+- platform: group
+  name: Tafel Lampen
+  entities:
+    - light.tafel_1
+    - light.tafel_2
+    - light.tafel_3

@@ -33,3 +33,7 @@
       name: "Smoke Detector 2"
       device_class: smoke
       off_delay: 5
+    ev1527_0e7aa3_06:
+      name: "CO Detector"
+      device_class: gas
+      off_delay: 5

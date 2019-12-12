@@ -13,12 +13,6 @@ homeassistant:
 
   # customize: in homeassistant:, or it will fail  
   customize:
-    switch.doorbell_ringer:
-      icon: mdi:alarm-bell
-    device_tracker.iphone_marcha:
-      icon: mdi:human-female
-    device_tracker.iphone_steven:
-      icon: mdi:human-male
     climate.woonkamer:
       target_temp_step: 0.5
 
@@ -75,15 +69,11 @@ zone 3:
 conversation:
 
 recorder:
-  db_url: !secret recorder_mysql_url
+  #  db_url: !secret recorder_mysql_url
 
 system_health:
 
-custom_updater:
-  card_urls:
-    - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
-    - https://raw.githubusercontent.com/kalkih/mini-graph-card/master/tracker.json
-    - https://raw.githubusercontent.com/robmarkcole/Hue-sensors-HASS/master/custom_updater.json
+mobile_app:
 
 # Enables support for tracking state changes over time.
 history:
@@ -96,19 +86,21 @@ person:
 # Track the sun
 sun:
 
+map:
+
 # Weather Prediction
 #sensor:
 #  platform: yr
 
 # Text to speech
 tts:
-  platform: google
+  platform: google_translate
 
 rflink:
   port: /dev/serial/by-id/usb-Arduino__www.arduino.cc__0042_556393131333514101D2-if00
-  ignore_devices:
-    - eurodomest_*
-    - f007_th_45151_*
+#  ignore_devices:
+#  - eurodomest_*
+#  - f007_th_45151_*
 
 logger:
   default: info
@@ -127,7 +119,7 @@ tado:
     
 mqtt:
   broker: localhost
-  client_id: home_assistant
+  client_id: home_assistant_tinysrv
   discovery: true
   discovery_prefix: homeassistant
 
@@ -140,7 +132,7 @@ apple_tv:
 
 ios:
 
-#stream:
+    #stream:
 
 hue:
   bridges:
@@ -164,22 +156,12 @@ cover:
         stop_cover:
           service: script.tv_lift_down
 
-input_datetime:
-  alarm_clock_time_input:
-    name: Alarm clock time
-    has_date: false
-    has_time: true
-  sprinkler_program_time_input:
-    name: Sprinkler Program time
-    has_date: false
-    has_time: true
-
 notify:
   - name: all_iphones
     platform: group
     services:
-      - service: ios_iphone_steven
-      - service: ios_iphone_marcha
+      - service: mobile_app_iphone_steven
+      - service: mobile_app_marcha_s_iphone
 
 weblink:
   entities:
@@ -204,3 +186,4 @@ input_boolean: !include input_booleans.yaml
 input_number: !include input_numbers.yaml
 camera: !include cameras.yaml
 timer: !include timers.yaml
+input_datetime: !include input_datetimes.yaml

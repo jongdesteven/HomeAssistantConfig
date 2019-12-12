@@ -70,3 +70,18 @@
       name: "TV Lift Down"
     ev1527_0ec667_01:
       name: "TV Lift Up"
+
+- platform: template
+  switches:
+    afzuiging_low:
+      value_template: "{{ is_state('switch.afzuiging_med', 'off') and is_state('switch.afzuiging_high', 'off') }}"
+      turn_on:
+        service: switch.turn_off
+        data:
+          entity_id: switch.afzuiging_med, switch.afzuiging_high
+      turn_off:
+        service: logbook.log
+        data:
+          name: Afzuiging
+          message: Kan afzuiging niet uitzetten
+          entity_id: switch.afuizing_low
