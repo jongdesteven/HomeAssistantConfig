@@ -1,0 +1,27 @@
+
+- id: automation_25
+  alias: Afval today
+  trigger:
+    platform: time
+    at: "07:00:00"
+  condition:
+    condition: template
+    value_template: "{{ 'Today' in states('sensor.waalre_gft') or 'Today' in states('sensor.waalre_papier') or 'Today' in states('sensor.waalre_pbd') or 'Today' in states('sensor.waalre_restafval') }}"
+  action:
+    service: notify.all_iphones
+    data:
+      title: Afval
+      message: >
+        Vandaag wordt opgehaald:
+        {% if 'Today' in states('sensor.waalre_pbd') %}
+        Plastic, Metaal, Drinkpakken
+        {% endif %}
+        {% if 'Today' in states('sensor.waalre_papier') %}
+        Papier
+        {% endif %}
+        {% if 'Today' in states('sensor.waalre_restafval') %}
+        Papier
+        {% endif %}
+        {% if 'Today' in states('sensor.waalre_gft') %}
+        GFT
+        {% endif %}

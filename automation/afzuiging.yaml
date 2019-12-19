@@ -1,0 +1,11 @@
+
+- id: automation_26
+  alias: Reset afzuiging
+  trigger:
+    platform: state
+    entity_id: switch.afzuiging_low
+    to: "off"
+    for: "01:00:00"
+  action:
+    service: switch.turn_on
+    entity_id: switch.afzuiging_low

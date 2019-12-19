@@ -1,0 +1,101 @@
+
+- id: automation_16
+  alias: Sprinkler Automation
+  trigger:
+    platform: state
+    entity_id: switch.sprinklers_gazon
+    from: 'off'
+    to: 'on'
+  action:
+  - service: timer.start
+    data_template:
+      entity_id: timer.sprinkler_pump
+      duration: '{% set duration = states.input_number.sprinkler_run_time.state |
+        int %} {% set minutes = (duration % 60)|int  %} {% set hours = (duration /
+        60)|int %} {{ "%02i:%02i:00"|format(hours, minutes) }}'
+- id: automation_16a
+  alias: Turn Sprinkler off at timer end
+  trigger:
+    platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.sprinkler_pump
+  action:
+  - service: switch.turn_off
+    entity_id:
+    - switch.sprinklers_gazon
+    - switch.waterpomp
+- id: automation_16b
+  alias: Cancel timer on manual pump switch off
+  trigger:
+    platform: state
+    entity_id: switch.sprinklers_gazon
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: timer.sprinkler_pump
+    state: active
+  action:
+  - service: timer.cancel
+    entity_id: timer.sprinkler_pump
+
+- id: automation_22
+  alias: run sprinkler program
+  trigger:
+    platform: template
+    value_template: "{{ states.sensor.time.state  == (states.input_datetime.sprinkler_program.attributes.timestamp | int | timestamp_custom('%H:%M', FALSE)) }}"
+  condition:
+    condition: or
+    conditions:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_maa
+            state: 'on'
+          - condition: time
+            weekday: mon
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_din
+            state: 'on'
+          - condition: time
+            weekday: tue
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_woe
+            state: 'on'
+          - condition: time
+            weekday: wed
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_don
+            state: 'on'
+          - condition: time
+            weekday: thu
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_vri
+            state: 'on'
+          - condition: time
+            weekday: fri
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_zat
+            state: 'on'
+          - condition: time
+            weekday: sat
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.sprinkler_program_zon
+            state: 'on'
+          - condition: time
+            weekday: sun
+  action:
+    - service: switch.turn_on
+      entity_id: switch.waterpomp, switch.sprinklers_gazon

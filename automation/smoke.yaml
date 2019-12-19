@@ -1,0 +1,31 @@
+
+- id: automation_17a
+  alias: Smoke Detector Notifier
+  trigger:
+    platform: state
+    entity_id: binary_sensor.smoke_detector_1, binary_sensor.smoke_detector_2
+    to: 'on'
+  action:
+  - service: light.turn_on
+    entity_id: group.all_lights
+    data:
+      brightness: 255
+  - service: notify.all_iphones
+    data:
+      title: Alarm!
+      message: Smoke Detected!
+- id: automation_17b
+  alias: CO Detector Notifier
+  trigger:
+    platform: state
+    entity_id: binary_sensor.co_detector
+    to: 'on'
+  action:
+  - service: light.turn_on
+    entity_id: group.all_lights
+    data:
+      brightness: 255
+  - service: notify.all_iphones
+    data:
+      title: Alarm!
+      message: "CO Gedetecteerd, ga het huis uit!"

@@ -1,0 +1,37 @@
+
+- id: automation_4ba
+  alias: Kinderkamer Sjors te koud
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.slaapkamer_sjors_temperature
+    below: 16.5
+  action:
+  - service: notify.all_iphones
+    data:
+      title: "De Molenbeemd Alerts"
+      message: "Kamer Sjors te koud: {{ states('sensor.slaapkamer_sjors_temperature') }}°C"
+
+
+- id: automation_4bb
+  alias: Kinderkamer klein te koud
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.slaapkamer_klein_temperature
+    below: 16.5
+  action:
+  - service: notify.all_iphones
+    data:
+      title: "De Molenbeemd Alerts"
+      message: "Kinderkamer klein te koud: {{ states('sensor.slaapkamer_klein_temperature') }}°C"
+
+
+- id: automation_24
+  alias: climate to auto when sleeping
+  trigger:
+    platform: time
+    at: "22:00:00"
+  action:
+  - service: climate.set_hvac_mode
+    data:
+      entity_id: climate.woonkamer, climate.badkamer
+      hvac_mode: auto

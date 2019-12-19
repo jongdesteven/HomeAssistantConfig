@@ -1,0 +1,197 @@
+- id: automation_1
+  alias: Diner Lights
+  trigger:
+    platform: state
+    entity_id: input_boolean.diner_lights
+    to: 'on'
+  action:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: Woonkamer
+      scene_name: Diner
+  - service: input_boolean.turn_off
+    data:
+      entity_id: input_boolean.diner_lights
+- id: automation_2
+  alias: Avond Lights
+  trigger:
+    platform: state
+    entity_id: input_boolean.avond_lights
+    to: 'on'
+  action:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: Woonkamer
+      scene_name: Avond
+  - service: light.turn_on
+    data:
+      entity_id: light.lamp_keukeneiland
+      brightness: 10
+      color_temp: 431
+  - service: input_boolean.turn_off
+    data:
+      entity_id: input_boolean.avond_lights
+- id: automation_6a
+  alias: Carport lights on at sunset
+  trigger:
+    platform: sun
+    event: sunset
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.carport
+  - service: light.turn_on
+    entity_id: light.lamp_voordeur
+- id: automation_6b
+  alias: Carport lights off at sunrise
+  trigger:
+    platform: sun
+    event: sunrise
+  action:
+  - service: light.turn_off
+    entity_id: light.carport, light.lamp_voordeur
+- id: automation_11
+  alias: All indoor lights off when holding off button
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
+    to: 4_hold
+  action:
+  - service: light.turn_off
+    entity_id:
+    - light.keuken
+    - light.lamp_keukeneiland
+    - light.slaapkamer
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
+- id: automation_12
+  alias: All indoor lights bright on when holding buttons
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
+    to: 1_hold
+  action:
+  - service: light.turn_on
+    entity_id:
+    - light.slaapkamer
+    - light.keuken
+    - light.lamp_keukeneiland
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
+    data:
+      brightness: 254
+      color_temp: 200
+- id: automation_13a
+  alias: All indoor lights off when leaving the house
+  trigger:
+    platform: state
+    entity_id: group.family
+    to: not_home
+  condition:
+    condition: sun
+    after: sunrise
+  action:
+  - service: light.turn_off
+    entity_id:
+    - light.slaapkamer
+    - light.woonkamer
+    - light.keuken
+    - light.lamp_keukeneiland
+    - light.overloop
+    - light.tuinkamer
+- id: automation_13b
+  alias: Woonkamer on when coming home after dark
+  trigger:
+    platform: state
+    entity_id: group.family
+    to: home
+  condition:
+    condition: sun
+    after: sunset
+  action:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: Woonkamer
+      scene_name: Avond
+  - service: light.turn_on
+    entity_id: light.lamp_keukeneiland, light.keuken
+- id: automation_13c
+  alias: Woonkamer on at sunset when not home
+  trigger:
+    platform: sun
+    event: sunset
+  condition:
+    condition: state
+    entity_id: group.family
+    state: not_home
+  action:
+  - service: light.turn_on
+    entity_id:
+    - light.bank_kamer
+    - light.livingcolors_1
+    data:
+      brightness: 50
+      color_temp: 366
+- id: automation_13d
+  alias: All off at sunrise when not home
+  trigger:
+    platform: sun
+    event: sunrise
+    offset: 00:30:00
+  condition:
+    condition: state
+    entity_id: group.family
+    state: not_home
+  action:
+  - service: light.turn_off
+    entity_id:
+    - light.slaapkamer
+    - light.keuken
+    - light.badkamer
+    - light.lamp_keukeneiland
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
+- id: automation_13e
+  alias: All off at night when not home
+  trigger:
+    platform: time
+    at: "22:30:00"
+  condition:
+    condition: state
+    entity_id: group.family
+    state: not_home
+  action:
+  - service: light.turn_off
+    entity_id:
+    - light.slaapkamer
+    - light.keuken
+    - light.badkamer
+    - light.lamp_keukeneiland
+    - light.woonkamer
+    - light.overloop
+    - light.tuinkamer
+- id: automation_20a
+  alias: Turn On keuken lampen with hue remote
+  trigger:
+  - entity_id: sensor.woonkamer_dimmer_switch_1
+    platform: state
+    to: 1_click_up
+  action:
+  - entity_id: light.lamp_keukeneiland
+    service: light.turn_on
+  - service: switch.turn_on
+    entity_id: switch.kerstboom
+- id: automation_20b
+  alias: Turn Off keuken lampen with hue remote
+  trigger:
+  - entity_id: sensor.woonkamer_dimmer_switch_1
+    platform: state
+    to: 4_click_up
+  action:
+  - entity_id: light.lamp_keukeneiland
+    service: light.turn_off
+  - service: switch.turn_off
+    entity_id: switch.kerstboom
