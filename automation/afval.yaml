@@ -20,7 +20,7 @@
         Papier
         {% endif %}
         {% if 'Today' in states('sensor.waalre_restafval') %}
-        Papier
+        Restafval
         {% endif %}
         {% if 'Today' in states('sensor.waalre_gft') %}
         GFT

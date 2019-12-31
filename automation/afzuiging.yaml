@@ -9,3 +9,13 @@
   action:
     service: switch.turn_on
     entity_id: switch.afzuiging_low
+
+- id: automation_afzuiging_2
+  alias: afzuiging aan bij douchen
+  trigger:
+    platform: template
+    value_template: "{% if states('sensor.badkamer_humidity')|float - states('sensor.woonkamer_humidity')|float > 20 %}true{% endif %}"
+  action:
+    service: switch.turn_on
+    entity_id: switch.afzuiging_med
+    
