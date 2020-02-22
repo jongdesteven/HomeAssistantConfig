@@ -43,3 +43,7 @@ sprinkler_program_zat:
 sprinkler_program_zon:
   name: Sprinkler Program Zondag
   initial: off
+
+speeldoos_automations:
+  name: Speeldoos Automations
+  initial: off

@@ -85,3 +85,10 @@
           name: Afzuiging
           message: Kan afzuiging niet uitzetten
           entity_id: switch.afuizing_low
+
+- platform: mqtt
+  name: "Zigbee2mqtt Main join"
+  state_topic: "zigbee2mqtt/bridge/config/permit_join"
+  command_topic: "zigbee2mqtt/bridge/config/permit_join"
+  payload_on: "true"
+  payload_off: "false"

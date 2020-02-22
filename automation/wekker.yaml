@@ -8,8 +8,7 @@
     condition: and
     conditions:
     - condition: template
-      value_template: '{{ now().strftime("%H:%M") == states.sensor.alarm_clock_time.state
-        }}'
+      value_template: "{{ now().strftime('%H:%M') == states('sensor.alarm_clock_time') }}"
     - condition: or
       conditions:
       - condition: and
@@ -37,7 +36,7 @@
   - service: light.turn_on
     data_template:
       entity_id: light.slaapkamer
-      transition: '{{ states.sensor.alarm_clock_fade_in_minutes.state | int * 60 }}'
+      transition: "{{ states('sensor.alarm_clock_fade_in_minutes') | int * 60 }}"
       profile: energize
 - id: automation_8
   alias: Set Sonos Alarm Weekday
@@ -50,7 +49,7 @@
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 3
-      time: '{{ states.sensor.alarm_clock_time.state }}'
+      time: "{{ states('sensor.alarm_clock_time') }}"
       enabled: true
 - id: automation_8a
   alias: Set Sonos Alarm Weekend
@@ -63,7 +62,7 @@
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 61
-      time: '{{ states.sensor.alarm_clock_time.state }}'
+      time: "{{ states('sensor.alarm_clock_time') }}"
       enabled: true
 - id: automation_9
   alias: Disable Sonos Alarm Weekdays
@@ -99,9 +98,9 @@
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 3
-      time: '{{ states.sensor.alarm_clock_time.state }}'
+      time: "{{ states('sensor.alarm_clock_time') }}"
   - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 61
-      time: '{{ states.sensor.alarm_clock_time.state }}'
+      time: "{{ states('sensor.alarm_clock_time') }}"

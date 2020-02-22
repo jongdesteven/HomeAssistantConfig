@@ -31,3 +31,62 @@
   action:
   - service: media_player.media_stop
     entity_id: media_player.kitchen
+
+- id: automation_sonos_1
+  alias: Sonos Slaapkamer off with remote
+  trigger:
+    platform: state
+    entity_id: sensor.slaapkamer_onoff_button_click
+    to: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.slaapkamer
+        state: 'off'
+      - condition: state
+        entity_id: media_player.bedroom
+        state: 'playing'
+  action:
+    service: media_player.media_pause
+    entity_id: media_player.bedroom
+
+- id: automation_sonos_2
+  alias: "Cube: Volume change"
+  trigger:
+    - platform: state
+      entity_id: sensor.kubus_action
+      to: "rotate_left"
+    - platform: state
+      entity_id: sensor.kubus_action
+      to: "rotate_right"
+  condition:
+    - condition: state
+      entity_id: media_player.kitchen
+      state: "playing"
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.kitchen, media_player.woonkamer
+        volume_level: "{{ (state_attr('media_player.kitchen', 'volume_level') + state_attr('sensor.kubus_action', 'angle')/1000) | round(2) | float }}"
+
+- id: automation_sonos_3
+  alias: "Cube: Play/Pause Kitchen"
+  trigger:
+    - platform: state
+      entity_id: sensor.kubus_action
+      to: "flip180"
+  action:
+    - service: media_player.media_play_pause
+      entity_id: media_player.kitchen
+
+- id: automation_sonos_4
+  alias: "Cube: next track Kitchen"
+  trigger:
+    - platform: state
+      entity_id: sensor.kubus_action
+      to: "flip90"
+  action:
+    - service: media_player.media_next_track
+      entity_id: media_player.kitchen
+

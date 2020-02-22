@@ -1,5 +1,9 @@
 - platform: huesensor
 
+- platform: fritzbox_netmonitor
+  host: 10.1.1.2
+  name: router_netmonitor
+
 - platform: time_date
   display_options:
     - 'time'
@@ -29,35 +33,55 @@
     energieverbruik_totaal:
       entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
       value_template: >
-        {{ (states.sensor.energieverbruik_totaal_hoog.state|float + states.sensor.energieverbruik_totaal_laag.state|float) | round(2) }}
+        {{ (states('sensor.energieverbruik_totaal_hoog') | float + states('sensor.energieverbruik_totaal_laag') | float) | round(2) }}
       unit_of_measurement: 'kWh'
 - platform: template
   sensors:
     energieverbruik_per_uur:
       entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
       value_template: >
-        {{ (states.sensor.energieverbruik_totaal.state|float - states.input_number.power_usage_previous_hour.state|float) | round(2) }}
+       {{ (states('sensor.energieverbruik_totaal') | float - states('input_number.power_usage_previous_hour') | float) | round(2) }}
       unit_of_measurement: 'kWh'
 - platform: template
   sensors:
     gasverbruik_per_uur:
       value_template: >
-        {{ (states.sensor.gasverbruik_totaal.state|float - states.input_number.gas_usage_previous_hour.state|float) | round(2) }}
+        {{ (states('sensor.gasverbruik_totaal') | float - states('input_number.gas_usage_previous_hour') | float) | round(2) }}
       unit_of_measurement: 'm3'
 - platform: template
   sensors:
     energieverbruik_per_dag:
       entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
       value_template: >
-        {{ (states.sensor.energieverbruik_totaal.state|float - states.input_number.power_usage_previous_day.state|float) | round(2) }}
+        {{ (states('sensor.energieverbruik_totaal') | float - states('input_number.power_usage_previous_day') | float) | round(2) }}
       unit_of_measurement: 'kWh'
 - platform: template
   sensors:
     gasverbruik_per_dag:
       entity_id: sensor.gasverbruik_totaal
       value_template: >
-        {{ (states.sensor.gasverbruik_totaal.state|float - states.input_number.gas_usage_previous_day.state|float) | round(2) }}
+       {{ (states('sensor.gasverbruik_totaal') | float - states('input_number.gas_usage_previous_day') | float) | round(2) }}
       unit_of_measurement: 'm3'
+
+- platform: template
+  sensors:
+    internet_transmission_up:
+      value_template: >-
+        {% if state_attr('sensor.router_netmonitor', 'transmission_rate_up') > 0 %}
+          {{ (state_attr('sensor.router_netmonitor', 'transmission_rate_up') /1000 ) | round(0)  }}
+        {% else %}
+          0
+        {% endif %}
+      unit_of_measurement: "kB/s"
+    internet_transmission_down:
+      #value_template: "{{ (state_attr('sensor.router_netmonitor', 'transmission_rate_down') /1000) | round(0) }}"
+      value_template: >-
+        {% if state_attr('sensor.router_netmonitor', 'transmission_rate_down') > 0 %}
+          {{ (state_attr('sensor.router_netmonitor', 'transmission_rate_down') /1000 ) | round(0)  }}
+        {% else %}
+          0
+        {% endif %}
+      unit_of_measurement: "kB/s"
 
 - platform: mqtt
   state_topic: "home/smartmeter/electricity_tariff"
@@ -66,22 +90,25 @@
 - platform: mqtt
   state_topic: "home/smartmeter/power_delivered"
   name: "Energieverbruik Actueel"
-  value_template: "{{ (float(value) * 1000) | int }}"
+  value_template: "{{ (float(value) * 1000) | round(0) }}"
   icon: 'mdi:power-plug'
   unit_of_measurement: "W"
 - platform: mqtt
   state_topic: "home/smartmeter/water_delivered"
   name: "Gasverbruik Totaal"
+  value_template: "{{ float(value) }}"
   icon: 'mdi:fire'
   unit_of_measurement: "m3"
 - platform: mqtt
   state_topic: "home/smartmeter/energy_delivered_tariff1"
   name: "Energieverbruik Totaal Laag"
+  value_template: "{{ float(value) }}"
   icon: 'mdi:power-plug'
   unit_of_measurement: "kWh"
 - platform: mqtt
   state_topic: "home/smartmeter/energy_delivered_tariff2"
   name: "Energieverbruik Totaal Hoog"
+  value_template: "{{ float(value) }}"
   icon: 'mdi:power-plug'
   unit_of_measurement: "kWh"
 
@@ -151,11 +178,11 @@
     alarm_clock_time:
       friendly_name: 'Alarm Time'
       icon_template: 'mdi:alarm'
-      value_template: '{{ "%0.02d:%0.02d" | format(states.input_number.alarm_clock_hour.state | int, states.input_number.alarm_clock_minute.state | int ) }}'
+      value_template: "{{ '%0.02d:%0.02d' | format( states('input_number.alarm_clock_hour') | int, states('input_number.alarm_clock_minute') | int ) }}"
     alarm_clock_fade_in_minutes:
       friendly_name: 'Fade In (Minutes)'
       icon_template: 'mdi:gradient'
-      value_template: '{{ states.input_number.alarm_clock_fade_in_minutes.state | int }}'
+      value_template: "{{ states('input_number.alarm_clock_fade_in_minutes') | int }}"
     doorbell_last_press:
       friendly_name: 'Last Doorbell Press'
       entity_id:  binary_sensor.doorbell
@@ -182,11 +209,12 @@
     bbq_meat_set_temp:
       friendly_name: 'BBQ Meat Set Temperature'
       unit_of_measurement: "°C"
-      value_template: '{{ states.input_number.bbq_meat_set_temp.state | int }}'
+      value_template: "{{ states('input_number.bbq_meat_set_temp') | int }}"
     bbq_dome_set_temp:
       friendly_name: 'BBQ Dome Set Temperature'
       unit_of_measurement: "°C"
-      value_template: '{{ states.input_number.bbq_dome_set_temp.state | int }}'
+      value_template: "{{ states('input_number.bbq_dome_set_temp') | int }}"
+
 
 - platform: rflink
   automatic_add: false
@@ -224,3 +252,50 @@
     - pbd
   postcode: 5581TL
   streetnumber: 15
+
+- platform: mqtt
+  name: Zigbee2mqtt Networkmap
+  # if you change base_topic of Zigbee2mqtt, change state_topic accordingly
+  state_topic: zigbee2mqtt/bridge/networkmap/raw
+  value_template: >-
+    {{ now().strftime('%Y-%m-%d %H:%M:%S') }}
+  # again, if you change base_topic of Zigbee2mqtt, change json_attributes_topic accordingly
+  json_attributes_topic: zigbee2mqtt/bridge/networkmap/raw
+
+- platform: mqtt
+  state_topic: "/speeldoos/ads1"
+  name: "Speeldoos potmeter 1"
+  value_template: "{{ value | int }}"
+  unit_of_measurement: "%"
+- platform: mqtt
+  state_topic: "/speeldoos/ads2"
+  name: "Speeldoos potmeter 2"
+  value_template: "{{ value | int }}"
+  unit_of_measurement: "%"
+- platform: mqtt
+  state_topic: "/speeldoos/gpio2"
+  name: "Speeldoos LEDs"
+  value_template: "{{ value | int }}"
+- platform: mqtt
+  state_topic: "/speeldoos/pushmereactiontime"
+  name: "Speeldoos PushMe Reaction time"
+  value_template: "{{ value | int }}"
+  unit_of_measurement: 'ms'
+
+#Zigbee2MQTT
+- platform: mqtt
+  name: Zigbee2mqtt Bridge state
+  state_topic: "zigbee2mqtt/bridge/state"
+  icon: mdi:router-wireless
+# Sensor for Showing the Zigbee2mqtt Version
+- platform: mqtt
+  name: Zigbee2mqtt Version
+  state_topic: "zigbee2mqtt/bridge/config"
+  value_template: "{{ value_json.version }}"
+  icon: mdi:zigbee
+# Sensor for Showing the Coordinator Version
+- platform: mqtt
+  name: Coordinator Version
+  state_topic: "zigbee2mqtt/bridge/config"
+  value_template: "{{ value_json.coordinator }}"
+  icon: mdi:chip

@@ -1,21 +1,79 @@
 
-- id: automation_26
+- id: automation_afzuiging_1a
   alias: Reset afzuiging
   trigger:
     platform: state
     entity_id: switch.afzuiging_low
     to: "off"
-    for: "01:00:00"
+    for: "01:30:00"
   action:
-    service: switch.turn_on
+  - service: switch.turn_on
     entity_id: switch.afzuiging_low
+
+- id: automation_afzuiging_1b
+  alias: Spiegelverwarming uit na timer of switch
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.spiegelverwarming
+  - platform: state
+    entity_id: switch.spiegelverwarming
+    to: "off"
+  action:
+  - service: switch.turn_off
+    entity_id: switch.spiegelverwarming
+  - service: timer.cancel
+    data:
+      entity_id: timer.spiegelverwarming
+
+- id: automation_afzuiging_1c
+  alias: Timer spiegelverwarming on
+  trigger: 
+    platform: state
+    entity_id: switch.spiegelverwarming
+    to: "on"
+  action:
+    service: timer.start
+    data:
+      entity_id: timer.spiegelverwarming
+    
 
 - id: automation_afzuiging_2
   alias: afzuiging aan bij douchen
   trigger:
-    platform: template
-    value_template: "{% if states('sensor.badkamer_humidity')|float - states('sensor.woonkamer_humidity')|float > 20 %}true{% endif %}"
+    platform: state
+    entity_id: binary_sensor.shower
+    to: "on"
   action:
-    service: switch.turn_on
-    entity_id: switch.afzuiging_med
-    
+  - service: switch.turn_on
+    entity_id: switch.afzuiging_med, switch.spiegelverwarming
+  - service: timer.start
+    entity_id: timer.spiegelverwarming
+
+- id: automation_afzuiging_3
+  alias: Radio badkamer aan met switch
+  trigger:
+    platform: state
+    entity_id: binary_sensor.spiegelverwarming_button1
+    to: "on"
+  condition:
+    condition: template
+    value_template: "{% if state_attr('media_player.badkamer', 'sonos_group') | count == 1 %} true {% else %} false {% endif %}"
+  action:
+    service: sonos.join
+    data:
+      master: media_player.kitchen
+      entity_id: media_player.badkamer
+- id: automation_afzuiging_4
+  alias: Radio badkamer uit met switch
+  trigger:
+    platform: state
+    entity_id: binary_sensor.spiegelverwarming_button1
+    to: "on"
+  condition:
+    condition: template
+    value_template: "{% if state_attr('media_player.badkamer', 'sonos_group') | count > 1 %} true {% else %} false {% endif %}"
+  action:
+    service: sonos.unjoin
+    entity_id: media_player.badkamer

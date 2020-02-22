@@ -63,5 +63,79 @@ early_heating:
         temperature: 20
         operation_mode: Manual
 
+lights_during_day:
+  alias: Turn on Lights during day
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.woonkamer
+        brightness: 75
+        kelvin: 2700
+    - service: light.turn_on
+      data:
+        entity_id: light.lamp_keukeneiland
+        brightness: 75
+        kelvin: 2700
+    - service: light.turn_on
+      data:
+        entity_id: light.keuken
+        brightness: 35
+        kelvin: 2700
 
-    
+woonkamerverlichting_avond:
+  alias: Woonkamer lampen avond
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.woonkamer
+        brightness: 25
+        kelvin: 2500
+    - service: light.turn_on
+      data:
+        entity_id: light.lamp_keukeneiland
+        brightness: 10
+        kelvin: 2500
+    - service: light.turn_on
+      data:
+        entity_id: light.keuken
+        brightness: 5
+        kelvin: 2500
+
+verlichting_niet_thuis:
+  alias: Woonkamer lampen afwezig
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.bank_kamer, light.livingcolors_1
+        brightness: 50
+        kelvin: 2700
+    - service: light.turn_on
+      data:
+        entity_id: light.lamp_keukeneiland
+        brightness: 5
+        kelvin: 2700
+    - service: light.turn_on
+      data:
+        entity_id: light.keuken
+        brightness: 5
+        kelvin: 2500
+
+#Zigbee2MQTT
+zigbee2mqtt_rename:
+  alias: Zigbee2mqtt Rename
+  sequence:
+    service: mqtt.publish
+    data_template:
+      topic: zigbee2mqtt/bridge/config/rename
+      payload_template: >-
+        {
+          "old": "{{ states.input_text.zigbee2mqtt_old_name.state | string }}",
+          "new": "{{ states.input_text.zigbee2mqtt_new_name.state | string }}"
+        }
+zigbee2mqtt_remove:
+  alias: Zigbee2mqtt Remove
+  sequence:
+    service: mqtt.publish
+    data_template:
+      topic: zigbee2mqtt/bridge/config/remove
+      payload_template: "{{ states.input_text.zigbee2mqtt_remove.state | string }}"

@@ -1,3 +1,11 @@
 sprinkler_pump:
   name: 'Sprinkler Duration Timer'
   icon: mdi:timer
+
+zigbee_permit_join:
+  name: Time remaining
+  duration: 120
+
+spiegelverwarming:
+  name: 'Spiegelverwarming Timer'
+  duration: 1200  #20minutes

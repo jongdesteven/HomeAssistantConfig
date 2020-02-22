@@ -1,36 +1,4 @@
-- id: automation_1
-  alias: Diner Lights
-  trigger:
-    platform: state
-    entity_id: input_boolean.diner_lights
-    to: 'on'
-  action:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: Woonkamer
-      scene_name: Diner
-  - service: input_boolean.turn_off
-    data:
-      entity_id: input_boolean.diner_lights
-- id: automation_2
-  alias: Avond Lights
-  trigger:
-    platform: state
-    entity_id: input_boolean.avond_lights
-    to: 'on'
-  action:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: Woonkamer
-      scene_name: Avond
-  - service: light.turn_on
-    data:
-      entity_id: light.lamp_keukeneiland
-      brightness: 10
-      color_temp: 431
-  - service: input_boolean.turn_off
-    data:
-      entity_id: input_boolean.avond_lights
+  
 - id: automation_6a
   alias: Carport lights on at sunset
   trigger:
@@ -50,6 +18,7 @@
   action:
   - service: light.turn_off
     entity_id: light.carport, light.lamp_voordeur
+
 - id: automation_11
   alias: All indoor lights off when holding off button
   trigger:
@@ -83,8 +52,9 @@
     data:
       brightness: 254
       color_temp: 200
+
 - id: automation_13a
-  alias: All indoor lights off when leaving the house
+  alias: leaving in daylight, lights off
   trigger:
     platform: state
     entity_id: group.family
@@ -102,7 +72,7 @@
     - light.overloop
     - light.tuinkamer
 - id: automation_13b
-  alias: Woonkamer on when coming home after dark
+  alias: coming home in darkness, lights on
   trigger:
     platform: state
     entity_id: group.family
@@ -111,12 +81,7 @@
     condition: sun
     after: sunset
   action:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: Woonkamer
-      scene_name: Avond
-  - service: light.turn_on
-    entity_id: light.lamp_keukeneiland, light.keuken
+    - service: script.lights_during_day
 - id: automation_13c
   alias: Woonkamer on at sunset when not home
   trigger:
@@ -127,13 +92,7 @@
     entity_id: group.family
     state: not_home
   action:
-  - service: light.turn_on
-    entity_id:
-    - light.bank_kamer
-    - light.livingcolors_1
-    data:
-      brightness: 50
-      color_temp: 366
+    - service: script.verlichting_niet_thuis
 - id: automation_13d
   alias: All off at sunrise when not home
   trigger:
@@ -146,14 +105,6 @@
     state: not_home
   action:
   - service: light.turn_off
-    entity_id:
-    - light.slaapkamer
-    - light.keuken
-    - light.badkamer
-    - light.lamp_keukeneiland
-    - light.woonkamer
-    - light.overloop
-    - light.tuinkamer
 - id: automation_13e
   alias: All off at night when not home
   trigger:
@@ -173,25 +124,50 @@
     - light.woonkamer
     - light.overloop
     - light.tuinkamer
+
 - id: automation_20a
-  alias: Turn On keuken lampen with hue remote
+  alias: Turn On other lights with hue woonkamer remote
   trigger:
   - entity_id: sensor.woonkamer_dimmer_switch_1
     platform: state
     to: 1_click_up
   action:
-  - entity_id: light.lamp_keukeneiland
+  - entity_id: light.lamp_keukeneiland, light.tuinkamer
     service: light.turn_on
-  - service: switch.turn_on
-    entity_id: switch.kerstboom
+    #- service: switch.turn_on
+    #entity_id: switch.kerstboom
 - id: automation_20b
-  alias: Turn Off keuken lampen with hue remote
+  alias: Turn Off other lights with woonkamer hue remote
   trigger:
   - entity_id: sensor.woonkamer_dimmer_switch_1
     platform: state
     to: 4_click_up
   action:
-  - entity_id: light.lamp_keukeneiland
+  - entity_id: light.lamp_keukeneiland, light.tuinkamer
     service: light.turn_off
-  - service: switch.turn_off
-    entity_id: switch.kerstboom
+    #  - service: switch.turn_off
+    #entity_id: switch.kerstboom
+
+- id: automation_lights_21
+  alias: Slaapkamer lights on with bed button
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_onoff_button_click
+    to: 'on'
+  action:
+  - service: light.turn_on
+    entity_id: light.slaapkamer
+    data_template:
+      brightness: "{% if now().hour < 22 and now().hour >= 6 %} 25 {% else %} 1 {% endif %}" 
+      color_temp: "{% if now().hour < 22 and now().hour >= 6 %} 370 {% else %} 500 {% endif %}" # Bright and  Nightlight imitation 2700K & 2000K  
+- id: automation_lights_22
+  alias: Slaapkamer lights off with bed button
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_onoff_button_click
+    to: 'off'
+  action:
+  - service: light.turn_off
+    entity_id: light.slaapkamer, light.overloop
+
+

@@ -35,6 +35,10 @@
           hide-thumbnail: false
         push:
           sound: doorbell-sound-effect.wav
+  - service: light.turn_on
+    data:
+      entity_id: light.bank_kamer
+      flash: short
   - condition: state
     entity_id: light.trap_spot
     state: 'off'

@@ -9,3 +9,14 @@ alarm_clock_time:
     - "06:30"
     - "16:55"
     - "17:00" 
+
+#Zigbee2MQTT
+zigbee2mqtt_log_level:
+  name: Zigbee2mqtt Log Level
+  options:
+    - debug
+    - info
+    - warn
+    - error
+  initial: info
+  icon: mdi:format-list-bulleted

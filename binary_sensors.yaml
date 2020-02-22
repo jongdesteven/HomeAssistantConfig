@@ -37,3 +37,42 @@
       name: "CO Detector"
       device_class: gas
       off_delay: 5
+
+
+- platform: trend
+  sensors:
+    shower:
+      entity_id: sensor.badkamer_humidity
+      min_gradient: 0.015
+      device_class: moisture
+
+- platform: mqtt
+  state_topic: "/speeldoos/button/0"
+  name: "Speeldoos Button 0"
+- platform: mqtt
+  state_topic: "/speeldoos/button/1"
+  name: "Speeldoos Button 1"
+- platform: mqtt
+  state_topic: "/speeldoos/button/2"
+  name: "Speeldoos Button 2"
+- platform: mqtt
+  state_topic: "/speeldoos/button/3"
+  name: "Speeldoos Button 3"
+- platform: mqtt
+  state_topic: "/speeldoos/button/4"
+  name: "Speeldoos Button 4"
+- platform: mqtt
+  state_topic: "/speeldoos/button/5"
+  name: "Speeldoos Button 5"
+- platform: mqtt
+  state_topic: "/speeldoos/button/6"
+  name: "Speeldoos Button 6"
+- platform: mqtt
+  state_topic: "/speeldoos/button/7"
+  name: "Speeldoos Button 7"
+- platform: mqtt
+  state_topic: "/speeldoos/button/8"
+  name: "Speeldoos Button 8"
+- platform: mqtt
+  state_topic: "/speeldoos/button/9"
+  name: "Speeldoos Button 9"

@@ -1,0 +1,117 @@
+#
+#- id: automation_speeldoos_1
+#  alias: Speeldoos Potmeter volume
+#  trigger:
+#    platform: numeric_state
+#    entity_id: sensor.speeldoos_potmeter_1
+#    below: 30
+#  action:
+#  - service: media_player.volume_set
+#    data_template:
+#      entity_id: media_player.kitchen
+#      volume_level: "{{states('sensor.speeldoos_potmeter_1') | int / 100}}"
+- id: automation_speeldoos_2
+  alias: speeldoos blue 0
+  trigger:
+    platform: state
+    entity_id: binary_sensor.speeldoos_button_0
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.tafel
+      color_name: blue
+- id: automation_speeldoos_3
+  alias: speeldoos green 0
+  trigger:
+    platform: state
+    entity_id: binary_sensor.speeldoos_button_1
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.tafel
+      color_name: green
+- id: automation_speeldoos_3
+  alias: speeldoos yellow
+  trigger:
+    platform: state
+    entity_id: binary_sensor.speeldoos_button_2
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.tafel
+      color_name: orange
+- id: automation_speeldoos_4
+  alias: speeldoos green 1
+  trigger:
+    platform: state
+    entity_id: binary_sensor.speeldoos_button_3
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.tafel
+      color_name: green
+- id: automation_speeldoos_5
+  alias: speeldoos blue 1
+  trigger:
+    platform: state
+    entity_id: binary_sensor.speeldoos_button_4
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.tafel
+      color_name: blue
+- id: automation_speeldoos_6
+  alias: speeldoos red 1
+  trigger:
+    platform: state
+    entity_id: binary_sensor.speeldoos_button_7
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.tafel
+      color_name: red
+- id: automation_speeldoos_7
+  alias: speeldoos red 2
+  trigger:
+    platform: state
+    entity_id: binary_sensor.speeldoos_button_8
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.tafel
+      color_name: red

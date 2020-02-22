@@ -69,7 +69,7 @@ zone 3:
 conversation:
 
 recorder:
-  #  db_url: !secret recorder_mysql_url
+  db_url: !secret recorder_mysql_url
 
 system_health:
 
@@ -108,7 +108,7 @@ logger:
   logs:
     homeassistant.loader: info
     #rflink: debug
-    homeassistant.components.rflink: debug
+    #homeassistant.components.rflink: debug
 
 tado:
   username: !secret tado_username
@@ -122,6 +122,12 @@ mqtt:
   client_id: home_assistant_tinysrv
   discovery: true
   discovery_prefix: homeassistant
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
 
 apple_tv:
   - host: 10.1.1.24
@@ -187,3 +193,5 @@ input_number: !include input_numbers.yaml
 camera: !include cameras.yaml
 timer: !include timers.yaml
 input_datetime: !include input_datetimes.yaml
+input_text: !include input_text.yaml
+input_select: !include input_selects.yaml
