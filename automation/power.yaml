@@ -9,11 +9,11 @@
   - service: input_number.set_value
     data_template:
       entity_id: input_number.power_usage_previous_hour
-      value: '{{ states.sensor.energieverbruik_totaal.state }}'
+      value: "{{ states('sensor.energieverbruik_totaal') }}"
   - service: input_number.set_value
     data_template:
       entity_id: input_number.gas_usage_previous_hour
-      value: '{{ states.sensor.gasverbruik_totaal.state }}'
+      value: "{{ states('sensor.gasverbruik_totaal') }}"
 - id: automation_19a
   alias: Save power_consumption dayly
   trigger:
@@ -23,8 +23,8 @@
   - service: input_number.set_value
     data_template:
       entity_id: input_number.power_usage_previous_day
-      value: '{{ states.sensor.energieverbruik_totaal.state }}'
+      value: "{{ states('sensor.energieverbruik_totaal') }}"
   - service: input_number.set_value
     data_template:
       entity_id: input_number.gas_usage_previous_day
-      value: '{{ states.sensor.gasverbruik_totaal.state }}'
+      value: "{{ states('sensor.gasverbruik_totaal') }}"

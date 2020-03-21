@@ -170,4 +170,30 @@
   - service: light.turn_off
     entity_id: light.slaapkamer, light.overloop
 
+- id: automation_lights_23
+  alias: Slaapkamer Hannah lights on with bed button
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_hannah_button_click
+    to: 'on'
+  action:
+  - service: light.turn_on
+    data_template:
+      entity_id: >
+        {% if is_state('light.slaapkamer_hannah2_light', 'on') %}
+        light.slaapkamer_hannah3_light
+        {% elif is_state('light.slaapkamer_hannah1_light', 'on') %}
+        light.slaapkamer_hannah2_light 
+        {% else %}
+        light.slaapkamer_hannah1_light
+        {% endif %}
+- id: automation_lights_24
+  alias: Slaapkamer Hannah lights off with bed button
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_hannah_button_click
+    to: 'off'
+  action:
+  - service: light.turn_off
+    entity_id: light.slaapkamer_hannah1_light, light.slaapkamer_hannah2_light, light.slaapkamer_hannah3_light
 

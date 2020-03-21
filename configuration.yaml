@@ -103,7 +103,7 @@ rflink:
 #  - f007_th_45151_*
 
 logger:
-  default: info
+  default: error
   #default: warning 
   logs:
     homeassistant.loader: info
@@ -168,18 +168,6 @@ notify:
     services:
       - service: mobile_app_iphone_steven
       - service: mobile_app_marcha_s_iphone
-
-weblink:
-  entities:
-    - name: Voordeur Live
-      url: !secret url_voordeur_live
-      icon: mdi:video
-    - name: Transmission
-      url: !secret url_transmission
-      icon: mdi:download
-    - name: Babykamer Live
-      url: !secret url_babykamer_live
-      icon: mdi:video
 
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
