@@ -39,7 +39,7 @@
       entity_id: timer.spiegelverwarming
     
 
-- id: automation_afzuiging_2
+- id: automation_afzuiging_2a
   alias: afzuiging aan bij douchen
   trigger:
     platform: state
@@ -47,9 +47,24 @@
     to: "on"
   action:
   - service: switch.turn_on
-    entity_id: switch.afzuiging_med, switch.spiegelverwarming
+    entity_id: switch.afzuiging_med
+
+- id: automation_afzuiging_2b
+  alias: spiegelverwarming aan bij douchen
+  trigger:
+    platform: state
+    entity_id: binary_sensor.shower
+    to: "on"
+  condition:
+    condition: numeric_state
+    entity_id: sensor.badkamer_temperature
+    below: 21
+  action:
+  - service: switch.turn_on
+    entity_id: switch.spiegelverwarming
   - service: timer.start
     entity_id: timer.spiegelverwarming
+
 
 - id: automation_afzuiging_3
   alias: Radio badkamer aan met switch

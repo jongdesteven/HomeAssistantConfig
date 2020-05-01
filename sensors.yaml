@@ -1,4 +1,3 @@
-- platform: huesensor
 
 - platform: fritzbox_netmonitor
   host: 10.1.1.2
@@ -27,7 +26,6 @@
   unit_of_measurement: "°C"
   icon: mdi:thermometer
 
-
 - platform: template
   sensors:
     energieverbruik_totaal:
@@ -38,29 +36,46 @@
 - platform: template
   sensors:
     energieverbruik_per_uur:
-      entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
+      entity_id: sensor.energieverbruik_totaal
       value_template: >
-       {{ (states('sensor.energieverbruik_totaal') | float - states('input_number.power_usage_previous_hour') | float) | round(2) }}
+        {% if states('sensor.energieverbruik_totaal') != 'unknown' %}  
+          {{ (states('sensor.energieverbruik_totaal') | float - states('input_number.power_usage_previous_hour') | float) | round(2) }}
+        {% else %}
+          0
+        {% endif %}
       unit_of_measurement: 'kWh'
 - platform: template
   sensors:
     gasverbruik_per_uur:
+      entity_id: sensor.gasverbruik_totaal
       value_template: >
-        {{ (states('sensor.gasverbruik_totaal') | float - states('input_number.gas_usage_previous_hour') | float) | round(2) }}
+        {% if states('sensor.gasverbruik_totaal') != 'unknown' %}  
+          {{ (states('sensor.gasverbruik_totaal') | float - states('input_number.gas_usage_previous_hour') | float) | round(2) }}
+        {% else %}
+          0
+        {% endif %}
       unit_of_measurement: 'm3'
 - platform: template
   sensors:
     energieverbruik_per_dag:
-      entity_id: sensor.energieverbruik_totaal_hoog, sensor.energieverbruik_totaal_laag
+      entity_id: sensor.energieverbruik_totaal
       value_template: >
-        {{ (states('sensor.energieverbruik_totaal') | float - states('input_number.power_usage_previous_day') | float) | round(2) }}
+        {% if states('sensor.energieverbruik_totaal') != 'unknown' %}  
+          {{ (states('sensor.energieverbruik_totaal') | float - states('input_number.power_usage_previous_day') | float) | round(2) }}
+        {% else %}
+          0
+        {% endif %}
       unit_of_measurement: 'kWh'
 - platform: template
   sensors:
     gasverbruik_per_dag:
       entity_id: sensor.gasverbruik_totaal
       value_template: >
-       {{ (states('sensor.gasverbruik_totaal') | float - states('input_number.gas_usage_previous_day') | float) | round(2) }}
+        {% if states('sensor.gasverbruik_totaal') != 'unknown' %}  
+          {{ (states('sensor.gasverbruik_totaal') | float - states('input_number.gas_usage_previous_day') | float) | round(2) }}
+        {% else %}
+          0
+        {% endif %}
       unit_of_measurement: 'm3'
 
 - platform: template
@@ -82,6 +97,23 @@
           0
         {% endif %}
       unit_of_measurement: "kB/s"
+    internet_data_sent:
+      value_template: >-
+        {% if state_attr('sensor.router_netmonitor', 'bytes_sent') > 0 %}
+          {{ (state_attr('sensor.router_netmonitor', 'bytes_sent') /1000000000 ) | round(2)  }}
+        {% else %}
+          0
+        {% endif %}
+      unit_of_measurement: "GB"
+    internet_data_received:
+      value_template: >-
+        {% if state_attr('sensor.router_netmonitor', 'bytes_received') > 0 %}
+          {{ (state_attr('sensor.router_netmonitor', 'bytes_received') /1000000000 ) | round(2)  }}
+        {% else %}
+          0
+        {% endif %}
+      unit_of_measurement: "GB"
+
 
 - platform: mqtt
   state_topic: "home/smartmeter/electricity_tariff"
@@ -299,3 +331,11 @@
   state_topic: "zigbee2mqtt/bridge/config"
   value_template: "{{ value_json.coordinator }}"
   icon: mdi:chip
+
+- platform: p2000
+  regios: 22
+  scan_interval: 30
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  radius: 1000
+    

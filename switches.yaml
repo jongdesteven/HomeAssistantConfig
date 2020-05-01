@@ -13,57 +13,6 @@
   payload_on: "1"
   payload_off: "0"
 
-- platform: mqtt
-  name: "Camera Yellow LED"
-  state_topic: "home/dafangbaby/leds/yellow"
-  command_topic: "home/dafangbaby/leds/yellow/set"
-  payload_on: "on"
-  payload_off: "off"
-  retain: true
-  optimistic: false
-- platform: mqtt
-  name: "Camera Blue LED"
-  state_topic: "home/dafangbaby/leds/blue"
-  command_topic: "home/dafangbaby/leds/blue/set"
-  payload_on: "on"
-  payload_off: "off"
-  retain: true
-  optimistic: false
-- platform: mqtt
-  name: "Camera Night Mode"
-  state_topic: "home/dafangbaby/night_mode"
-  command_topic: "home/dafangbaby/night_mode/set"
-  payload_on: "on"
-  payload_off: "off"
-  retain: true
-  optimistic: false
-
-- platform: mqtt
-  name: "Sprinklers Gazon"
-  icon: mdi:water
-  state_topic: "home/sonoff-sprinkler/stat/POWER"
-  command_topic: "home/sonoff-sprinkler/cmnd/POWER"
-  availability_topic: "home/sonoff-sprinkler/tele/LWT"
-  qos: 1
-  payload_on: "ON"
-  payload_off: "OFF"
-  payload_available: "Online"
-  payload_not_available: "Offline"
-  retain: true
-
-- platform: mqtt
-  name: "Waterpomp"
-  icon: mdi:water-pump
-  state_topic: "home/sonoff_pomp/stat/POWER"
-  command_topic: "home/sonoff_pomp/cmnd/POWER"
-  availability_topic: "home/sonoff_pomp/tele/LWT"
-  qos: 1
-  payload_on: "ON"
-  payload_off: "OFF"
-  payload_available: "Online"
-  payload_not_available: "Offline"
-  retain: true
-
 - platform: rflink
   devices:
     ev1527_0ec667_02:

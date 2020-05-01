@@ -1,0 +1,26 @@
+- id: p2000_1
+  alias: P2000  Notification
+  trigger:
+    platform: state
+    entity_id: sensor.p2000
+    #  condition: 
+    #    condition: template
+    #    value_template: >
+    #      {% if '5581' in states('sensor.p2000') %}
+    #        True
+    #      {% else %}
+    #        False
+    #      {% endif %}
+  action:
+    - service: notify.all_iphones
+      data_template:
+        title: P2000
+        message: "{{ states('sensor.p2000') + state_attr('sensor.p2000', 'capcodes') }}"
+        data:
+          url: ""
+          push:
+            category: map
+          action_data:
+            latitude:   "{{ state_attr('sensor.p2000', 'latitude') }}"
+            longitude: "{{ state_attr('sensor.p2000', 'longitude') }}"
+  
