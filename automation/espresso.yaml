@@ -1,0 +1,13 @@
+
+- id: espresso_1
+  alias: Espresso ready
+  trigger:
+    platform: state
+    to: "on"
+    for: "00:20:00"
+
+  action:
+    service: notify.mobile_app_iphone_steven
+    data:
+      title: Espresso
+      message: "Espresso is opgewarmd"

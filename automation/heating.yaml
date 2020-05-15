@@ -4,7 +4,7 @@
   trigger:
     platform: numeric_state
     entity_id: sensor.slaapkamer_sjors_temperature
-    below: 16.5
+    below: 14.5
   action:
   - service: notify.all_iphones
     data:
@@ -22,7 +22,7 @@
   - service: notify.all_iphones
     data:
       title: "De Molenbeemd Alerts"
-      message: "Kinderkamer klein te koud: {{ states('sensor.slaapkamer_klein_temperature') }}°C"
+      message: "Kamer Hannah te koud: {{ states('sensor.slaapkamer_klein_temperature') }}°C"
 
 #- id: automation_heating_1
 #  alias: Raam nog open
