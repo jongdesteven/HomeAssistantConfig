@@ -36,7 +36,7 @@ http:
   # Uncomment this if you are using SSL or running in Docker etc
   ssl_certificate: !secret ssl_certificate_path
   ssl_key: !secret ssl_key_path
-  base_url: stevenmarcha.duckdns.org:8123
+  #  base_url: stevenmarcha.duckdns.org:8123
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -139,6 +139,10 @@ apple_tv:
 ios:
 
     #stream:
+
+home_connect:
+  client_id: !secret home_connect_clientid
+  client_secret: !secret home_connect_clientsecret
 
 hue:
   bridges:

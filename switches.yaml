@@ -35,6 +35,18 @@
           message: Kan afzuiging niet uitzetten
           entity_id: switch.afuizing_low
 
+    link_sonos_woonkamer_keuken:
+      value_template: "{% if 'woonkamer' in state_attr('media_player.kitchen', 'sonos_group')[1] %} true {% else %} false {% endif %}"
+      turn_off:
+        service: sonos.unjoin
+        data: 
+          entity_id: media_player.woonkamer
+      turn_on:
+        service: sonos.join
+        data:
+          master: media_player.kitchen
+          entity_id: media_player.woonkamer
+
 - platform: mqtt
   name: "Zigbee2mqtt Main join"
   state_topic: "zigbee2mqtt/bridge/config/permit_join"
