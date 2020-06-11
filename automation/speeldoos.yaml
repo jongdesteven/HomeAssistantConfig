@@ -40,7 +40,7 @@
     data:
       entity_id: light.tafel
       color_name: green
-- id: automation_speeldoos_3
+- id: automation_speeldoos_3a
   alias: speeldoos yellow
   trigger:
     platform: state

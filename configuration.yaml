@@ -109,6 +109,7 @@ logger:
     homeassistant.loader: info
     #rflink: debug
     #homeassistant.components.rflink: debug
+    homeassistant.components.home_connect: debug
 
 tado:
   username: !secret tado_username
