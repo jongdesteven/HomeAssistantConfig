@@ -114,9 +114,6 @@ logger:
 tado:
   username: !secret tado_username
   password: !secret tado_password
-
-#climate:
-#  platform: tado  
     
 mqtt:
   broker: localhost

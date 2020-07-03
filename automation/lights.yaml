@@ -128,7 +128,7 @@
 - id: automation_20a
   alias: Turn On other lights with hue woonkamer remote
   trigger:
-  - entity_id: remote.woonkamer_dimmer_switch
+  - entity_id: sensor.woonkamer_dimmer_switch
     platform: state
     to: 1_click_up
   action:
@@ -139,7 +139,7 @@
 - id: automation_20b
   alias: Turn Off other lights with woonkamer hue remote
   trigger:
-  - entity_id: remote.woonkamer_dimmer_switch
+  - entity_id: sensor.woonkamer_dimmer_switch
     platform: state
     to: 4_click_up
   action:
