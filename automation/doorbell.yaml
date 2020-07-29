@@ -19,6 +19,7 @@
           sound: doorbell-sound-effect.wav
 - id: automation_4
   alias: Doorbell pressed
+  mode: single
   trigger:
     platform: state
     entity_id: binary_sensor.doorbell
@@ -39,17 +40,20 @@
     data:
       entity_id: light.bank_kamer
       flash: short
-  - condition: state
-    entity_id: light.trap_spot
-    state: 'off'
-  - service: light.turn_on
-    data:
-      entity_id: light.trap_spot
-      brightness: 63
-      color_temp: 330
-  - delay: 00:05:00
-  - service: light.turn_off
-    entity_id: light.trap_spot
+  - delay:
+      seconds: 10
+  
+      #  - condition: state
+      #    entity_id: light.trap_spot
+      #    state: 'off'
+      #  - service: light.turn_on
+      #    data:
+      #      entity_id: light.trap_spot
+      #      brightness: 63
+      #      color_temp: 330
+      #  - delay: 00:05:00
+      #  - service: light.turn_off
+      #    entity_id: light.trap_spot
 - id: automation_5b
   alias: Doorbell ring time set
   trigger:
