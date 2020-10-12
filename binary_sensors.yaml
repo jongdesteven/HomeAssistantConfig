@@ -4,15 +4,6 @@
   device_class: sound
   off_delay: 1
 
-- platform: template
-  sensors: 
-    washing_machine_status:
-      friendly_name: "Washing Machine Status"
-      value_template: "{{ states.sensor.washing_machine_power_now.state|int > 10 }}"
-      delay_off:
-        seconds: 30
-      device_class: power
-
 - platform: rflink
   devices:
     ev1527_0ec667_02:

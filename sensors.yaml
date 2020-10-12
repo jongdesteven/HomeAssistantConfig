@@ -220,24 +220,6 @@
       entity_id:  binary_sensor.doorbell
       icon_template: 'mdi:clock-alert'
       value_template: '{{ as_timestamp(states.binary_sensor.doorbell.last_changed) | timestamp_custom("%a %d %b %H:%M") }}'
-    overloop_lux_level:
-      friendly_name: 'Overloop Lux Level'
-      entity_id: binary_sensor.overloop_motion_sensor
-      icon_template: 'mdi:white-balance-sunny'
-      unit_of_measurement: 'lx'
-      value_template: '{{ states.binary_sensor.overloop_motion_sensor.attributes.lx | float }}'
-    overloop_light_level:
-      friendly_name: 'Overloop Light Level'
-      entity_id: binary_sensor.overloop_motion_sensor
-      icon_template: 'mdi:white-balance-sunny'
-      unit_of_measurement: 'll'
-      value_template: '{{ states.binary_sensor.overloop_motion_sensor.attributes.light_level | int }}'
-    overloop_temperature:
-      friendly_name: 'Overloop Sensor Temperature'
-      entity_id: binary_sensor.overloop_motion_sensor
-      icon_template: 'mdi:temperature-celsius'
-      value_template: '{{ states.binary_sensor.overloop_motion_sensor.attributes.temperature | float }}'
-      unit_of_measurement: "°C"
     bbq_meat_set_temp:
       friendly_name: 'BBQ Meat Set Temperature'
       unit_of_measurement: "°C"

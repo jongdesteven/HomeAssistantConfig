@@ -24,8 +24,8 @@ homeassistant:
 # introduction:
 
 # Enables the frontend
-frontend:
-  javascript_version: latest
+#frontend:
+#  javascript_version: latest
 
 # Enables configuration UI
 config:
@@ -136,7 +136,8 @@ apple_tv:
 
 ios:
 
-    #stream:
+#stream:
+ffmpeg:
 
 home_connect:
   client_id: !secret home_connect_clientid

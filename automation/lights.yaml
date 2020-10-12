@@ -60,13 +60,16 @@
     entity_id: group.family
     to: not_home
   condition:
-    condition: sun
-    after: sunrise
+    condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: -6.0 #0 to -6 is dusk
   action:
   - service: light.turn_off
     entity_id:
     - light.slaapkamer
     - light.woonkamer
+    - light.badkamer
     - light.keuken
     - light.lamp_keukeneiland
     - light.overloop
@@ -78,33 +81,39 @@
     entity_id: group.family
     to: home
   condition:
-    condition: sun
-    after: sunset
+    condition: state
+    entity_id: sun.sun
+    state: 'below_horizon'
   action:
     - service: script.lights_during_day
 - id: automation_13c
   alias: Woonkamer on at sunset when not home
   trigger:
-    platform: sun
-    event: sunset
+    platform: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    below: 0.0 #0 to -6 is dusk
   condition:
     condition: state
     entity_id: group.family
     state: not_home
   action:
     - service: script.verlichting_niet_thuis
+
 - id: automation_13d
   alias: All off at sunrise when not home
   trigger:
-    platform: sun
-    event: sunrise
-    offset: 00:30:00
+    platform: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: -4.0 #0 to -6 is dusk
   condition:
     condition: state
     entity_id: group.family
     state: not_home
   action:
-  - service: light.turn_off
+  - service: light.turn_off #all off
+
 - id: automation_13e
   alias: All off at night when not home
   trigger:

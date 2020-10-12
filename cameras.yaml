@@ -1,16 +1,22 @@
 - platform: generic
-  name: Babykamer
-  still_image_url: !secret camera_babykamer_still_url
-  stream_source: !secret camera_babykamer_stream_url
+  name: Camera Sjors
+  still_image_url: !secret camera_sjors_still_url
+  stream_source: !secret camera_sjors_stream_url
   verify_ssl: false
 
 - platform: generic
-  name: Woonkamer
-  still_image_url: !secret camera_woonkamer_still_url
-  stream_source: !secret camera_woonkamer_stream_url
+  name: Camera Hannah
+  still_image_url: !secret camera_hannah_still_url
+  stream_source: !secret camera_hannah_stream_url
   verify_ssl: false
 
 - platform: generic
   name: Voordeur
   still_image_url: !secret url_voordeur_snapshot
+
+- platform: generic
+  name: Camera Voordeur
+  still_image_url: !secret camera_voordeur_still_url
+  stream_source: !secret camera_voordeur_stream_url
+  verify_ssl: false
 

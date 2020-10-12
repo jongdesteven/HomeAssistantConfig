@@ -8,7 +8,8 @@
     for: "00:20:00"
 
   action:
-    service: notify.mobile_app_iphone_steven
+    #    service: notify.mobile_app_iphone_steven
+    service: notify.all_iphones
     data:
       title: Espresso
       message: "Espresso is opgewarmd"

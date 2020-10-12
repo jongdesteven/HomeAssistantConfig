@@ -57,8 +57,8 @@
     to: "on"
   condition:
     condition: numeric_state
-    entity_id: sensor.badkamer_temperature
-    below: 21
+    entity_id: sensor.waalre_temperature
+    below: 22
   action:
   - service: switch.turn_on
     entity_id: switch.spiegelverwarming

@@ -3,7 +3,7 @@
   alias: Sprinkler Automation
   trigger:
     platform: state
-    entity_id: switch.sprinklers_gazon
+    entity_id: switch.waterpomp
     from: 'off'
     to: 'on'
   action:
@@ -23,13 +23,12 @@
   action:
   - service: switch.turn_off
     entity_id:
-    - switch.sprinklers_gazon
     - switch.waterpomp
 - id: automation_16b
   alias: Cancel timer on manual pump switch off
   trigger:
     platform: state
-    entity_id: switch.sprinklers_gazon
+    entity_id: switch.waterpomp
     to: 'off'
   condition:
   - condition: state
@@ -97,5 +96,5 @@
           - condition: time
             weekday: sun
   action:
-    - service: switch.turn_on
-      entity_id: switch.waterpomp, switch.sprinklers_gazon
+  - service: switch.turn_on
+    entity_id: switch.waterpomp
