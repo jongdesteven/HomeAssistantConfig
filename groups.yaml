@@ -10,3 +10,4 @@ motion_sensors:
     - binary_sensor.overloop_sensor_motion
     - binary_sensor.dafang2_motion_sensor
     - binary_sensor.dafangbaby_motion_sensor
+    - binary_sensor.motion_garage_occupancy

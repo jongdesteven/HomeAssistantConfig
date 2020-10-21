@@ -139,3 +139,38 @@ zigbee2mqtt_remove:
     data_template:
       topic: zigbee2mqtt/bridge/config/remove
       payload_template: "{{ states.input_text.zigbee2mqtt_remove.state | string }}"
+
+
+#Lights brightness loop
+light_slaapkamer_brightness_change_up:
+  alias: Lights brightness change down
+  sequence:
+    repeat:
+      sequence:
+        - delay:
+            milliseconds: 200
+        - service: light.turn_on
+          data:
+            entity_id: light.slaapkamer
+            brightness_step_pct: 5
+      until:
+        - condition: state
+          entity_id: input_boolean.slaapkamer_light_change
+          state: 'off'
+light_slaapkamer_brightness_change_down:
+  alias: Lights brightness change down
+  sequence:
+    repeat:
+      sequence:
+        - delay:
+            milliseconds: 200
+        - service: light.turn_on
+          data:
+            entity_id: light.slaapkamer
+            brightness_step_pct: -5
+      until:
+        - condition: state
+          entity_id: input_boolean.slaapkamer_light_change
+          state: 'off'
+          #- condition: template
+          #template: '{{ repeat.index <= 25 }}' #safeguard

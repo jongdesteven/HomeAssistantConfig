@@ -1,4 +1,4 @@
-  
+# Carport
 - id: automation_6a
   alias: Carport lights on at sunset
   trigger:
@@ -19,6 +19,7 @@
   - service: light.turn_off
     entity_id: light.carport, light.lamp_voordeur
 
+# Emergency alle lampen aan / uit
 - id: automation_11
   alias: All indoor lights off when holding off button
   trigger:
@@ -34,6 +35,7 @@
     - light.woonkamer
     - light.overloop
     - light.tuinkamer
+    - light.kartent
 - id: automation_12
   alias: All indoor lights bright on when holding buttons
   trigger:
@@ -49,10 +51,12 @@
     - light.woonkamer
     - light.overloop
     - light.tuinkamer
+    - light.kartent
     data:
       brightness: 254
       color_temp: 200
 
+# Leaving house
 - id: automation_13a
   alias: leaving in daylight, lights off
   trigger:
@@ -74,6 +78,7 @@
     - light.lamp_keukeneiland
     - light.overloop
     - light.tuinkamer
+    - light.kartent
 - id: automation_13b
   alias: coming home in darkness, lights on
   trigger:
@@ -133,7 +138,9 @@
     - light.woonkamer
     - light.overloop
     - light.tuinkamer
+    - light.kartent
 
+# Woonkamer remote
 - id: automation_20a
   alias: Turn On other lights with hue woonkamer remote
   trigger:
@@ -143,6 +150,10 @@
   action:
   - entity_id: light.lamp_keukeneiland, light.tuinkamer
     service: light.turn_on
+  - service: light.turn_on
+    data:
+      entity_id: light.kartent
+      white_value: 100
     #- service: switch.turn_on
     #entity_id: switch.kerstboom
 - id: automation_20b
@@ -152,11 +163,12 @@
     platform: state
     to: 4_click_up
   action:
-  - entity_id: light.lamp_keukeneiland, light.tuinkamer
+  - entity_id: light.lamp_keukeneiland, light.tuinkamer, light.kartent
     service: light.turn_off
     #  - service: switch.turn_off
     #entity_id: switch.kerstboom
 
+# Slaapkamer
 - id: automation_lights_21
   alias: Slaapkamer lights on with bed button
   trigger:
@@ -178,7 +190,42 @@
   action:
   - service: light.turn_off
     entity_id: light.slaapkamer, light.overloop
+# slaapkamer brightness up
+- id: automation_lights_22a
+  alias: Slaapkamer brightness change up
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_onoff_button_click
+    to: 'brightness_up'
+  action:
+  - service: input_boolean.turn_on
+    entity_id: input_boolean.slaapkamer_light_change
+  - service: script.turn_on
+    entity_id: script.light_slaapkamer_brightness_change_up
+# slaapkamer brightness down
+- id: automation_lights_22a
+  alias: Slaapkamer brightness change down
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_onoff_button_click
+    to: 'brightness_down'
+  action:
+  - service: input_boolean.turn_on
+    entity_id: input_boolean.slaapkamer_light_change
+  - service: script.turn_on
+    entity_id: script.light_slaapkamer_brightness_change_down
+# slaapkamer stop
+- id: automation_lights_22b
+  alias: Slaapkamer brightness change stop
+  trigger:
+  - platform: state
+    entity_id: sensor.slaapkamer_onoff_button_click
+    to: 'brightness_stop'
+  action:
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.slaapkamer_light_change
 
+# Slaapkamer Hannah
 - id: automation_lights_23
   alias: Slaapkamer Hannah lights on with bed button
   trigger:
@@ -206,3 +253,67 @@
   - service: light.turn_off
     entity_id: light.slaapkamer_hannah1_light, light.slaapkamer_hannah2_light, light.slaapkamer_hannah3_light
 
+# Kartent
+- id: automation_lights_24a
+  alias: Kartent lights switch single
+  trigger:
+  - platform: state
+    entity_id: sensor.kartent_button_action
+    to: 'single' #'double' 'long'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.kartent
+      hs_color: [ "{{range(0,360) | random}}", 75 ] #random color(hue)
+
+- id: automation_lights_24b
+  alias: Kartent lights switch long
+  trigger:
+  - platform: state
+    entity_id: sensor.kartent_button_action
+    to: 'long' # 'single' double' 'long'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.kartent
+      brightness: 255
+      color_name: "red"
+  - delay:
+      milliseconds: 500
+  - service: light.turn_on
+    data:
+      entity_id: light.kartent
+      effect: "{{range(2,4) | random}}" #random effect
+
+- id: automation_lights_24c
+  alias: Kartent lights switch long
+  trigger:
+  - platform: state
+    entity_id: sensor.kartent_button_action
+    to: 'double' # 'single' double' 'long'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.kartent
+      white_value: 200
+
+- id: automation_lights_24d
+  alias: Reset kartents lights after 2 minutes
+  trigger:
+    - platform: state
+      entity_id: light.kartent
+      attribute: white_value
+      to: 0
+      for:
+        seconds: 30
+    - platform: state
+      entity_id: light.kartent
+      attribute: effect
+      from: 0
+      for:
+        seconds: 30
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.kartent
+        white_value: 100
