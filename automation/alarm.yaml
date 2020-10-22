@@ -1,0 +1,44 @@
+- id: alarm_1a
+  alias: Trigger Alarm while armed away
+  trigger:
+    - platform: state
+      entity_id: group.motion_sensors #all sensors
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm_system
+      state: 'armed_away'
+  action:
+    - service: alarm_control_panel.alarm_trigger
+      entity_id: alarm_control_panel.alarm_system
+- id: alarm_1b
+  alias: Trigger Alarm while armed home
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.motion_garage_occupancy
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.alarm_system
+      state: 'armed_home'
+  action:
+    - service: alarm_control_panel.alarm_trigger
+      entity_id: alarm_control_panel.alarm_system
+
+- id: alarm_2
+  alias: Send Notification when alarm triggered
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.alarm_system
+      to: 'triggered'
+  action:
+    - service: notify.all_iphones
+      data:
+        title: Alarm!
+        message: Alarm Triggered
+        data:
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1

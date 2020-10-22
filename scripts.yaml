@@ -142,35 +142,22 @@ zigbee2mqtt_remove:
 
 
 #Lights brightness loop
-light_slaapkamer_brightness_change_up:
+light_slaapkamer_brightness_change:
   alias: Lights brightness change down
   sequence:
     repeat:
       sequence:
         - delay:
-            milliseconds: 200
+          #milliseconds: 200
+            milliseconds: "{{ speed_ms }}"
         - service: light.turn_on
           data:
             entity_id: light.slaapkamer
-            brightness_step_pct: 5
-      until:
+            #brightness_step_pct: 10
+            brightness_step_pct: "{{ step_pct }}"
+      while:
         - condition: state
           entity_id: input_boolean.slaapkamer_light_change
-          state: 'off'
-light_slaapkamer_brightness_change_down:
-  alias: Lights brightness change down
-  sequence:
-    repeat:
-      sequence:
-        - delay:
-            milliseconds: 200
-        - service: light.turn_on
-          data:
-            entity_id: light.slaapkamer
-            brightness_step_pct: -5
-      until:
-        - condition: state
-          entity_id: input_boolean.slaapkamer_light_change
-          state: 'off'
+          state: 'on'
           #- condition: template
           #template: '{{ repeat.index <= 25 }}' #safeguard
