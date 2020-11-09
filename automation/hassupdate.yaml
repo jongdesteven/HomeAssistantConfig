@@ -1,10 +1,12 @@
 
-- id: automation_15
+- id: hassupdate_1
   alias: Update Available Notifications
   trigger:
     platform: state
     entity_id: updater.updater
+    from: 'off'
+    to: 'on'
   action:
     service: notify.notify
     data:
-      message: Update for Home Assistant is available.
+      message: "Home assistant {{ state_attr('binary_sensor.updater', 'newest_version')  }} is available."

@@ -147,17 +147,17 @@ light_slaapkamer_brightness_change:
   sequence:
     repeat:
       sequence:
-        - delay:
-          #milliseconds: 200
-            milliseconds: "{{ speed_ms }}"
         - service: light.turn_on
           data:
             entity_id: light.slaapkamer
-            #brightness_step_pct: 10
+            #brightness_step_pct: 5
             brightness_step_pct: "{{ step_pct }}"
+        - delay:
+          #milliseconds: 250
+            milliseconds: "{{ speed_ms }}"
       while:
         - condition: state
           entity_id: input_boolean.slaapkamer_light_change
           state: 'on'
-          #- condition: template
-          #template: '{{ repeat.index <= 25 }}' #safeguard
+        - condition: template
+          value_template: '{{ repeat.index <= 20 }}' #safeguard

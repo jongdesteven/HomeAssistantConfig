@@ -188,7 +188,8 @@ alarm_control_panel:
 
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
-automation: !include_dir_merge_list automation
+automation: !include automations.yaml
+automation old: !include_dir_merge_list automation
 script: !include scripts.yaml
 group: !include groups.yaml
 light: !include lights.yaml

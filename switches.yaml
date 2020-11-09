@@ -1,18 +1,3 @@
-- platform: mqtt
-  name: "Doorbell Ringer"
-  state_topic: "home/doorbell/ringer"
-  command_topic: "home/doorbell/ringer/set"
-  payload_on: "1"
-  payload_off: "0"
-  retain: true
-  qos: 1
-- platform: mqtt
-  name: "Doorbell button"
-  state_topic: "home/doorbell/button"
-  command_topic: "home/doorbell/ringer/ring"
-  payload_on: "1"
-  payload_off: "0"
-
 - platform: rflink
   devices:
     ev1527_0ec667_02:

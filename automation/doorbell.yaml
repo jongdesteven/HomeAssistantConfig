@@ -1,28 +1,9 @@
-
-- id: automation_4a
-  alias: Doorbell pressed Test
-  trigger:
-    platform: state
-    entity_id: input_boolean.alarm_toggle
-    to: 'on'
-  action:
-  - service: shell_command.grab_frontdoor_image
-  - service: notify.all_iphones
-    data:
-      message: Doorbell pressed test
-      data:
-        attachment:
-          url: https://stevenmarcha.duckdns.org/frontdoor.jpg
-          content-type: jpg
-          hide-thumbnail: false
-        push:
-          sound: doorbell-sound-effect.wav
 - id: automation_4
   alias: Doorbell pressed
   mode: single
   trigger:
     platform: state
-    entity_id: binary_sensor.doorbell
+    entity_id: binary_sensor.doorbell_button
     to: 'on'
   action:
   - service: shell_command.grab_frontdoor_image
@@ -54,14 +35,3 @@
       #  - delay: 00:05:00
       #  - service: light.turn_off
       #    entity_id: light.trap_spot
-- id: automation_5b
-  alias: Doorbell ring time set
-  trigger:
-    platform: state
-    entity_id: input_number.doorbell_ring_time
-  action:
-    service: mqtt.publish
-    data_template:
-      topic: home/doorbell/ringer/time/set
-      retain: true
-      payload: '{{ states(''input_number.doorbell_ring_time'') | int }}'

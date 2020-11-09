@@ -36,6 +36,9 @@
     - light.overloop
     - light.tuinkamer
     - light.kartent
+  - service: switch.turn_off
+    entity_id:
+    - switch.staande_lamp
 - id: automation_12
   alias: All indoor lights bright on when holding buttons
   trigger:
@@ -55,6 +58,9 @@
     data:
       brightness: 254
       color_temp: 200
+  - service: switch.turn_on
+    entity_id:
+    - switch.staande_lamp
 
 # Leaving house
 - id: automation_13a
@@ -139,6 +145,9 @@
     - light.overloop
     - light.tuinkamer
     - light.kartent
+  - service: switch.turn_off
+    entity_id:
+    - switch.staande_lamp
 
 # Woonkamer remote
 - id: automation_20a
@@ -156,6 +165,9 @@
       white_value: 100
     #- service: switch.turn_on
     #entity_id: switch.kerstboom
+  - service: switch.turn_on
+    entity_id:
+    - switch.staande_lamp
 - id: automation_20b
   alias: Turn Off other lights with woonkamer hue remote
   trigger:
@@ -167,6 +179,9 @@
     service: light.turn_off
     #  - service: switch.turn_off
     #entity_id: switch.kerstboom
+  - service: switch.turn_off
+    entity_id:
+    - switch.staande_lamp
 
 # Slaapkamer
 - id: automation_lights_21a
@@ -202,8 +217,8 @@
     entity_id: input_boolean.slaapkamer_light_change
   - service: script.light_slaapkamer_brightness_change
     data:
-      speed_ms: 200
-      step_pct: 10
+      speed_ms: 250
+      step_pct: 5
 
 # slaapkamer brightness down
 - id: automation_lights_22b
@@ -217,8 +232,8 @@
     entity_id: input_boolean.slaapkamer_light_change
   - service: script.light_slaapkamer_brightness_change
     data:
-      speed_ms: 200
-      step_pct: -10
+      speed_ms: 250
+      step_pct: -5
 # slaapkamer stop
 - id: automation_lights_22c
   alias: Slaapkamer brightness change stop

@@ -1,0 +1,21 @@
+- id: '1603906497133'
+  alias: BME zolder Voltage Low
+  description: ''
+  trigger:
+  - type: value
+    platform: device
+    device_id: 4761824a184511ebb21b759019f14b60
+    entity_id: sensor.vcc_voltage
+    domain: sensor
+    below: 3.6
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      title: Zolder BME280 Battery Low
+      message: Voltage below 2.6V for 5minutes
+  mode: single

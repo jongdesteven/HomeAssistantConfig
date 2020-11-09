@@ -15,10 +15,6 @@
   value_template: '{{ value_json.temperature }}'
 
 - platform: mqtt
-  state_topic: "home/doorbell/ringer/time"
-  name: "Doorbell Ring Time"
-  unit_of_measurement: "ms"
-- platform: mqtt
   state_topic: "home/bbq/update"
   value_template: "{{ value_json.p2 }}"
   name: "BBQ Sensor 2"
@@ -219,7 +215,7 @@
       friendly_name: 'Last Doorbell Press'
       entity_id:  binary_sensor.doorbell
       icon_template: 'mdi:clock-alert'
-      value_template: '{{ as_timestamp(states.binary_sensor.doorbell.last_changed) | timestamp_custom("%a %d %b %H:%M") }}'
+      value_template: '{{ as_timestamp(states.binary_sensor.doorbell_button.last_changed) | timestamp_custom("%a %d %b %H:%M") }}'
     bbq_meat_set_temp:
       friendly_name: 'BBQ Meat Set Temperature'
       unit_of_measurement: "°C"
