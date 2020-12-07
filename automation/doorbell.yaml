@@ -19,10 +19,10 @@
           sound: doorbell-sound-effect.wav
   - service: light.turn_on
     data:
-      entity_id: light.bank_kamer
+      entity_id: light.bank_kamer, light.lampje_zolder
       flash: short
   - delay:
-      seconds: 10
+      seconds: 5
   
       #  - condition: state
       #    entity_id: light.trap_spot

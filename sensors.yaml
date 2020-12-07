@@ -335,5 +335,7 @@
   #  resource: "https://www.canyon.com/en-nl/outlet/mountain-bikes/?cgid=outlet-mountain&prefn1=pc_outlet&prefn2=pc_rahmengroesse&prefv1=true&prefv2=XL"
   #  select: ".js-productCount"
   #  unit_of_measurement: "items"
-
    
+- platform: mqtt
+  state_topic: "wodtimer/display"
+  name: "WODTimer Display"

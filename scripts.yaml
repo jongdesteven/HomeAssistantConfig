@@ -73,14 +73,12 @@ lights_during_day:
         kelvin: 2700
     - service: light.turn_on
       data:
-        entity_id: light.lamp_keukeneiland
+        entity_id: light.keuken
         brightness: 75
         kelvin: 2700
-    - service: light.turn_on
-      data:
-        entity_id: light.keuken
-        brightness: 35
-        kelvin: 2700
+    - service: switch.turn_on
+      entity_id:
+      - switch.staande_lamp
 
 woonkamerverlichting_avond:
   alias: Woonkamer lampen avond
@@ -92,27 +90,20 @@ woonkamerverlichting_avond:
         kelvin: 2500
     - service: light.turn_on
       data:
-        entity_id: light.lamp_keukeneiland
-        brightness: 10
-        kelvin: 2500
-    - service: light.turn_on
-      data:
         entity_id: light.keuken
         brightness: 5
         kelvin: 2500
+    - service: switch.turn_on
+      entity_id:
+      - switch.staande_lamp
 
 verlichting_niet_thuis:
   alias: Woonkamer lampen afwezig
   sequence:
     - service: light.turn_on
       data:
-        entity_id: light.bank_kamer, light.livingcolors_1
+        entity_id: light.hoek_kamer, light.livingcolors_1
         brightness: 50
-        kelvin: 2700
-    - service: light.turn_on
-      data:
-        entity_id: light.lamp_keukeneiland
-        brightness: 5
         kelvin: 2700
     - service: light.turn_on
       data:
@@ -120,44 +111,83 @@ verlichting_niet_thuis:
         brightness: 5
         kelvin: 2500
 
-#Zigbee2MQTT
-zigbee2mqtt_rename:
-  alias: Zigbee2mqtt Rename
+verlichting_binnen_uit:
+  alias: Alle Lampen binnen uit
   sequence:
-    service: mqtt.publish
-    data_template:
-      topic: zigbee2mqtt/bridge/config/rename
-      payload_template: >-
-        {
-          "old": "{{ states.input_text.zigbee2mqtt_old_name.state | string }}",
-          "new": "{{ states.input_text.zigbee2mqtt_new_name.state | string }}"
-        }
-zigbee2mqtt_remove:
-  alias: Zigbee2mqtt Remove
-  sequence:
-    service: mqtt.publish
-    data_template:
-      topic: zigbee2mqtt/bridge/config/remove
-      payload_template: "{{ states.input_text.zigbee2mqtt_remove.state | string }}"
+    - service: light.turn_off
+      entity_id:
+        - light.keuken
+        - light.woonkamer
+        - light.badkamer
+        - light.slaapkamer
+        - light.tuinkamer
 
-
-#Lights brightness loop
-light_slaapkamer_brightness_change:
-  alias: Lights brightness change down
+# Dimmer Script
+light_dimmer:
+  alias: Lights brightness Dimmer
+  description: Dim the Lights
+  fields:
+    direction:
+      description: "Direction of dimming: up or down"
+      example: up
+    light:
+      description: "Light entity_id"
+      example: light.slaapkamer
+  mode: restart
   sequence:
     repeat:
       sequence:
         - service: light.turn_on
           data:
-            entity_id: light.slaapkamer
-            #brightness_step_pct: 5
-            brightness_step_pct: "{{ step_pct }}"
+            entity_id: "{{ light }}"
+            brightness_step_pct: >
+              {% if direction == 'up' %}
+                {{ states( 'input_number.dimmer_step' ) | int }}
+              {% else %}
+                {{ (states( 'input_number.dimmer_step' )) | int * -1 }}
+              {% endif %}
         - delay:
-          #milliseconds: 250
-            milliseconds: "{{ speed_ms }}"
+            milliseconds: >
+              {{ states( 'input_number.dimmer_delay' ) | int }}
       while:
-        - condition: state
-          entity_id: input_boolean.slaapkamer_light_change
-          state: 'on'
         - condition: template
-          value_template: '{{ repeat.index <= 20 }}' #safeguard
+          value_template: >
+            {{ direction == 'up' and (state_attr( light, 'brightness') | int) < 250 or
+                direction == 'down' and (state_attr( light, 'brightness' ) | int) > 5 }}
+
+wodtimer_button_play:
+  alias: WodTimer button play
+  sequence:
+    service: mqtt.publish
+    data_template:
+      topic: wodtimer/buttons
+      payload: "1"
+wodtimer_button_menu:
+  alias: WodTimer button menu
+  sequence:
+    service: mqtt.publish
+    data_template:
+      topic: wodtimer/buttons
+      payload: "2"
+wodtimer_button_minus:
+  alias: WodTimer button -
+  sequence:
+    service: mqtt.publish
+    data_template:
+      topic: wodtimer/buttons
+      payload: "3"
+wodtimer_button_plus:
+  alias: WodTimer button +
+  sequence:
+    service: mqtt.publish
+    data_template:
+      topic: wodtimer/buttons
+      payload: "4"
+wodtimer_button_play_long_press:
+  alias: WodTimer button play-longPress
+  icon: mdi:backup-restore
+  sequence:
+    service: mqtt.publish
+    data_template:
+      topic: wodtimer/buttons
+      payload: "5"

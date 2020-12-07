@@ -70,6 +70,9 @@ conversation:
 
 recorder:
   db_url: !secret recorder_mysql_url
+  exclude:
+    entities:
+      - sensor.time
 
 system_health:
 
@@ -87,6 +90,11 @@ person:
 sun:
 
 map:
+
+counter:
+
+#Scene editor
+scene: !include scenes.yaml
 
 # Weather Prediction
 #sensor:
@@ -107,7 +115,7 @@ logger:
   #default: warning 
   logs:
     homeassistant.loader: info
-    #rflink: debug
+    rflink: debug
     #homeassistant.components.rflink: debug
     homeassistant.components.home_connect: debug
 
@@ -134,10 +142,16 @@ apple_tv:
     start_off: true
     credentials: !secret atv_credentials
 
-ios:
+ios: 
 
 #stream:
 ffmpeg:
+
+zha:
+  zigpy_config:
+    network:
+      channel: 15             # What channel the radio should try to use.
+      channels: [15, 20, 25]  # Channel mask
 
 home_connect:
   client_id: !secret home_connect_clientid

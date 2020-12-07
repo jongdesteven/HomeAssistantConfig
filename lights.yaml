@@ -1,8 +1,70 @@
 - platform: group
-  name: Keuken Lampen
+  name: Keuken
   entities:
-    - light.keuken
+    #- light.keuken_hanglampen_zha_group_0x0007
     - light.lamp_keukeneiland
+    - light.keuken_hang_links
+    - light.keuken_hang_rechts
+
+- platform: group
+  name: Tafel
+  entities:
+    #- light.tafel_zha_group_0x0002
+    - light.tafel1
+    - light.tafel2
+    - light.tafel3
+
+- platform: group
+  name: Woonkamer
+  entities:
+    #- light.woonkamer_zha_group_0x0003
+    - light.tafel
+    - light.hoek_kamer
+    - light.woonkamer_bloom
+
+- platform: group
+  name: Carport
+  entities:
+    - light.carport1
+    - light.carport2
+    - light.carport3
+    - light.lamp_voordeur
+
+- platform: group
+  name: Slaapkamer
+  entities:
+     #- light.slaapkamer_zha_group_0x0006
+     - light.slaapkamer_spot1
+     - light.slaapkamer_spot2
+     - light.slaapkamer_spot3
+     - light.slaapkamer_spot4
+     - light.slaapkamer_spot5
+
+- platform: group
+  name: Overloop
+  entities:
+    #- light.overloop_zha_group_0x0006
+    - light.overloop_spot_1
+    - light.overloop_spot_2
+    - light.overloop_spot_trap
+
+- platform: group
+  name: Badkamer
+  entities:
+    #- light.badkamer_zha_group_0x0004
+    - light.badkamer_spot_bad_1
+    - light.badkamer_spot_bad_2
+    - light.badkamer_spot_bad_3
+    - light.badkamer_spot_haakjes
+    - light.badkamer_spot_douche
+    - light.badkamer_spiegel_links
+    - light.badkamer_spiegel_rechts
+
+- platform: group
+  name: Tuinkamer
+  entities:
+    - light.bol_tuinkamer
+    - light.kartent
 
 - platform: rflink
   automatic_add: false
@@ -43,9 +105,3 @@
   payload_not_available: "Offline"
   retain: false
 
-- platform: group
-  name: Tafel Lampen
-  entities:
-    - light.tafel_1
-    - light.tafel_2
-    - light.tafel_3

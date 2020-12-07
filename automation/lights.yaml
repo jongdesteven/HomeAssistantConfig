@@ -1,6 +1,5 @@
 # Carport
-- id: automation_6a
-  alias: Carport lights on at sunset
+- alias: Carport lights on at sunset
   trigger:
     platform: sun
     event: sunset
@@ -8,59 +7,14 @@
   - service: light.turn_on
     data:
       entity_id: light.carport
-  - service: light.turn_on
-    entity_id: light.lamp_voordeur
-- id: automation_6b
-  alias: Carport lights off at sunrise
+
+- alias: Carport lights off at sunrise
   trigger:
     platform: sun
     event: sunrise
   action:
   - service: light.turn_off
-    entity_id: light.carport, light.lamp_voordeur
-
-# Emergency alle lampen aan / uit
-- id: automation_11
-  alias: All indoor lights off when holding off button
-  trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
-    to: 4_hold
-  action:
-  - service: light.turn_off
-    entity_id:
-    - light.keuken
-    - light.lamp_keukeneiland
-    - light.slaapkamer
-    - light.woonkamer
-    - light.overloop
-    - light.tuinkamer
-    - light.kartent
-  - service: switch.turn_off
-    entity_id:
-    - switch.staande_lamp
-- id: automation_12
-  alias: All indoor lights bright on when holding buttons
-  trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_dimmer_switch_2, sensor.woonkamer_dimmer_switch_1
-    to: 1_hold
-  action:
-  - service: light.turn_on
-    entity_id:
-    - light.slaapkamer
-    - light.keuken
-    - light.lamp_keukeneiland
-    - light.woonkamer
-    - light.overloop
-    - light.tuinkamer
-    - light.kartent
-    data:
-      brightness: 254
-      color_temp: 200
-  - service: switch.turn_on
-    entity_id:
-    - switch.staande_lamp
+    entity_id: light.carport
 
 # Leaving house
 - id: automation_13a
@@ -80,25 +34,30 @@
     - light.slaapkamer
     - light.woonkamer
     - light.badkamer
-    - light.keuken
-    - light.lamp_keukeneiland
+    - light.keuken_lampen
     - light.overloop
     - light.tuinkamer
     - light.kartent
-- id: automation_13b
-  alias: coming home in darkness, lights on
+  - service: switch.turn_off
+    entity_id:
+    - switch.staande_lamp
+
+#Coming Home
+- alias: coming home in darkness, lights on
   trigger:
     platform: state
     entity_id: group.family
     to: home
   condition:
-    condition: state
+    condition: numeric_state
     entity_id: sun.sun
-    state: 'below_horizon'
+    attribute: elevation
+    below: -6.0 #0 to -6 is dusk
   action:
-    - service: script.lights_during_day
-- id: automation_13c
-  alias: Woonkamer on at sunset when not home
+    - service: scene.turn_on
+      entity_id: scene.lampen_beneden_dag
+
+- alias: Woonkamer on at sunset when not home
   trigger:
     platform: numeric_state
     entity_id: sun.sun
@@ -111,13 +70,14 @@
   action:
     - service: script.verlichting_niet_thuis
 
+# Auto Off when not home
 - id: automation_13d
   alias: All off at sunrise when not home
   trigger:
     platform: numeric_state
     entity_id: sun.sun
     attribute: elevation
-    above: -4.0 #0 to -6 is dusk
+    above: 0.0 #0 to -6 is dusk
   condition:
     condition: state
     entity_id: group.family
@@ -140,151 +100,216 @@
     - light.slaapkamer
     - light.keuken
     - light.badkamer
-    - light.lamp_keukeneiland
     - light.woonkamer
     - light.overloop
     - light.tuinkamer
     - light.kartent
-  - service: switch.turn_off
-    entity_id:
-    - switch.staande_lamp
 
 # Woonkamer remote
-- id: automation_20a
-  alias: Turn On other lights with hue woonkamer remote
+- alias: Turn On other lights with hue woonkamer remote
   trigger:
-  - entity_id: sensor.woonkamer_dimmer_switch
-    platform: state
-    to: 1_click_up
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:0f:9a:13"
+      command: "on_press"
   action:
-  - entity_id: light.lamp_keukeneiland, light.tuinkamer
-    service: light.turn_on
   - service: light.turn_on
-    data:
-      entity_id: light.kartent
-      white_value: 100
-    #- service: switch.turn_on
-    #entity_id: switch.kerstboom
-  - service: switch.turn_on
-    entity_id:
-    - switch.staande_lamp
-- id: automation_20b
-  alias: Turn Off other lights with woonkamer hue remote
-  trigger:
-  - entity_id: sensor.woonkamer_dimmer_switch
-    platform: state
-    to: 4_click_up
-  action:
-  - entity_id: light.lamp_keukeneiland, light.tuinkamer, light.kartent
-    service: light.turn_off
-    #  - service: switch.turn_off
-    #entity_id: switch.kerstboom
-  - service: switch.turn_off
-    entity_id:
-    - switch.staande_lamp
+    entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.lamp_keukeneiland
 
-# Slaapkamer
-- id: automation_lights_21a
-  alias: Slaapkamer lights on with bed button
+- alias: Turn On other lights with hue woonkamer remote
   trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_onoff_button_action
-    to: 'on'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:0f:9a:13"
+      command: "on_double_press"
   action:
-  - service: light.turn_on
-    entity_id: light.slaapkamer
-    data_template:
-      brightness: "{% if now().hour < 22 and now().hour >= 6 %} 25 {% else %} 1 {% endif %}" 
-      color_temp: "{% if now().hour < 22 and now().hour >= 6 %} 370 {% else %} 500 {% endif %}" # Bright and  Nightlight imitation 2700K & 2000K  
-- id: automation_lights_21b
-  alias: Slaapkamer lights off with bed button
+  - service: scene.turn_on
+    entity_id: scene.lampen_beneden_dag
+
+- alias: Turn Off woonkamer with remote
   trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_onoff_button_action
-    to: 'off'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:0f:9a:13"
+      command: "off_press"
   action:
   - service: light.turn_off
-    entity_id: light.slaapkamer, light.overloop
-# slaapkamer brightness up
+    entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.lamp_keukeneiland
+    # - service: switch.turn_off
+    #entity_id:
+    #- switch.staande_lamp
+
+# Slaapkamer remote
+- alias: Slaapkamer lights on with remote
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:1b:47:e8"
+      command: "on_press"
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
+      command: "on"
+  action:
+  - service: light.turn_on
+    entity_id: light.slaapkamer_zha_group_0x0006
+    data_template:
+      brightness: "{% if now().hour < 21 and now().hour >= 6 %} 50 {% else %} 1 {% endif %}"
+      color_temp: "{% if now().hour < 21 and now().hour >= 6 %} 370 {% else %} 500 {% endif %}" # Bright and  Nightlight imitation 2700K & 2000K  
+
+- alias: Slaapkamer lights off with remote
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:1b:47:e8"
+      command: "off_press"
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
+      command: "off"
+  action:
+  - service: light.turn_off
+    entity_id: light.slaapkamer_zha_group_0x0006, light.overloop_zha_group_0x0005
+
+# slaapkamer Dimmer Up
 - id: automation_lights_22a
   alias: Slaapkamer brightness change up
   trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_onoff_button_action
-    to: 'brightness_move_up'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
+      command: "move_with_on_off"
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:1b:47:e8"
+      command: "up_hold"
   action:
-  - service: input_boolean.turn_on
-    entity_id: input_boolean.slaapkamer_light_change
-  - service: script.light_slaapkamer_brightness_change
+  - service: script.light_dimmer
     data:
-      speed_ms: 250
-      step_pct: 5
+      direction: up
+      light: light.slaapkamer_zha_group_0x0006
 
-# slaapkamer brightness down
-- id: automation_lights_22b
-  alias: Slaapkamer brightness change down
+- alias: Slaapkamer brightness change down
   trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_onoff_button_action
-    to: 'brightness_move_down'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
+      command: "move"
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:1b:47:e8"
+      command: "down_hold"
   action:
-  - service: input_boolean.turn_on
-    entity_id: input_boolean.slaapkamer_light_change
-  - service: script.light_slaapkamer_brightness_change
+  - service: script.light_dimmer
     data:
-      speed_ms: 250
-      step_pct: -5
-# slaapkamer stop
-- id: automation_lights_22c
-  alias: Slaapkamer brightness change stop
+      direction: down
+      light: light.slaapkamer_zha_group_0x0006
+
+# Dimmer Stop
+- alias: Slaapkamer brightness change stop
   trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_onoff_button_action
-    to: 'brightness_stop'
-  - platform: state
-    entity_id: input_boolean.slaapkamer_light_change
-    to: 'on'
-    for:
-      seconds: 5
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:04:f1:7a:5d"
+      command: "stop"
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
+      command: "stop"
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:02:1b:47:e8"
+      command: "stop"
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
+      command: "stop"
   action:
-  - service: input_boolean.turn_off
-    entity_id: input_boolean.slaapkamer_light_change
+  - service: script.turn_off
+    entity_id: script.light_dimmer
 
 # Slaapkamer Hannah
 - id: automation_lights_23
-  alias: Slaapkamer Hannah lights on with bed button
+  alias: Slaapkamer Hannah lights on with remote
   trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_hannah_button_action
-    to: 'on'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
+      command: "on"
   action:
   - service: light.turn_on
     data_template:
       entity_id: >
-        {% if is_state('light.slaapkamer_hannah2_light', 'on') %}
-        light.slaapkamer_hannah3_light
-        {% elif is_state('light.slaapkamer_hannah1_light', 'on') %}
-        light.slaapkamer_hannah2_light 
+        {% if is_state('light.plafond_hannah2', 'on') %}
+        light.plafond_hannah3
+        {% elif is_state('light.plafond_hannah1', 'on') %}
+        light.plafond_hannah2 
         {% else %}
-        light.slaapkamer_hannah1_light
+        light.plafond_hannah1
         {% endif %}
-- id: automation_lights_24
-  alias: Slaapkamer Hannah lights off with bed button
+
+- alias: Slaapkamer Hannah lights off with remote
   trigger:
-  - platform: state
-    entity_id: sensor.slaapkamer_hannah_button_action
-    to: 'off'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
+      command: "off"
   action:
   - service: light.turn_off
-    entity_id: light.slaapkamer_hannah1_light, light.slaapkamer_hannah2_light, light.slaapkamer_hannah3_light
+    entity_id: light.plafond_hannah1, light.plafond_hannah2, light.plafond_hannah3
 
-# Kartent
+- alias: Slaapkamer hannah brightness dim up
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
+      command: "move_up"
+  action:
+  - service: script.light_dimmer
+    data:
+      direction: up
+      light: light.slaapkamer_hannah1, light.slaapkamer_hannah2, light.slaapkamer_hannah3
+
+- alias: Slaapkamer hannah brightness dim down
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
+      command: "move"
+  action:
+  - service: script.light_dimmer
+    data:
+      direction: down
+      light: light.slaapkamer_hannah1, light.slaapkamer_hannah2, light.slaapkamer_hannah3
+
+# Kartent Button
 - id: automation_lights_24a
   alias: Kartent lights switch single
   trigger:
-  - platform: state
-    entity_id: sensor.kartent_button_action
-    to: 'single' #'double' 'long'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:12:4b:00:1f:91:57:fd"
+      command: "toggle"
   action:
   - service: light.turn_on
     data:
@@ -294,9 +319,11 @@
 - id: automation_lights_24b
   alias: Kartent lights switch long
   trigger:
-  - platform: state
-    entity_id: sensor.kartent_button_action
-    to: 'double' # 'single' double' 'long'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:12:4b:00:1f:91:57:fd"
+      command: "on"
   action:
   - service: light.turn_on
     data:
@@ -313,9 +340,11 @@
 - id: automation_lights_24c
   alias: Kartent lights switch long
   trigger:
-  - platform: state
-    entity_id: sensor.kartent_button_action
-    to: 'long' # 'single' double' 'long'
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:12:4b:00:1f:91:57:fd"
+      command: "off"
   action:
   - service: light.turn_on
     data:
@@ -328,7 +357,7 @@
     - platform: state
       entity_id: light.kartent
       attribute: white_value
-      to: 0
+      to: 'none'
       for:
         seconds: 30
     - platform: state
@@ -342,3 +371,75 @@
       data:
         entity_id: light.kartent
         white_value: 100
+        effect: 0
+
+# Badkamer Remote
+- alias: Turn Off badkamer with remote
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:04:f1:7a:5d"
+      command: "off_press"
+  action:
+  - service: light.turn_off
+    entity_id: light.badkamer_zha_group_0x0004
+
+- alias: Turn On badkamer with remote
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:04:f1:7a:5d"
+      command: "on_press"
+  action:
+  - service: light.turn_on
+    entity_id: light.badkamer_zha_group_0x0004
+
+- alias: Turn On badkamer scene dag
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:04:f1:7a:5d"
+      command: "on_triple_press"
+  action:
+  - service: scene.turn_on
+    entity_id: scene.badkamer_dag
+
+- alias: Turn On badkamer scene gedimd
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:04:f1:7a:5d"
+      command: "on_double_press"
+  action:
+  - service: scene.turn_on
+    entity_id: scene.badkamer_gedimd
+
+- alias: Badkamer brightness change up
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:04:f1:7a:5d"
+      command: "up_hold"
+  action:
+  - service: script.light_dimmer
+    data:
+      direction: up
+      light: light.badkamer_zha_group_0x0004
+
+- alias: Slaapkamer brightness change down
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "00:17:88:01:04:f1:7a:5d"
+      command: "down_hold"
+  action:
+  - service: script.light_dimmer
+    data:
+      direction: down
+      light: light.badkamer_zha_group_0x0004

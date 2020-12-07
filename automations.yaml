@@ -19,3 +19,189 @@
       title: Zolder BME280 Battery Low
       message: Voltage below 2.6V for 5minutes
   mode: single
+- id: '1605296475663'
+  alias: Maan uit na 2uur
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 079de496222bbccf69214d26c554e716
+    entity_id: light.maan
+    domain: light
+    for:
+      hours: 2
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    data:
+      transition: 300
+    entity_id: light.maan
+  mode: single
+- id: '1606904473909'
+  alias: Stoplicht Sjors onbereikbaar
+  description: ''
+  trigger:
+  - device_id: caa868c0c10b31e0516b85abcacd3394
+    domain: zha
+    platform: device
+    type: device_offline
+    subtype: device_offline
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      title: Stoplicht Sjors onbereikbaar
+      message: Iemand heeft het stoplicht uitgezet
+  mode: single
+- id: '1606904633525'
+  alias: Stoplicht Sjors Aan Rood
+  description: ''
+  trigger:
+  - platform: time
+    at: 05:15
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness: 1
+      color_name: red
+    entity_id: light.stoplicht_sjors
+  mode: single
+- id: '1606905199462'
+  alias: Stoplicht Sjors Aan Groen
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:00
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness: 1
+      color_name: green
+    entity_id: light.stoplicht_sjors
+  mode: single
+- id: '1606921959287'
+  alias: Overloop Auto on Day
+  description: ''
+  trigger:
+  - type: occupied
+    platform: device
+    device_id: 7256b65004773e0b5af456c53f6eb611
+    entity_id: binary_sensor.overloop_motion_occupancy
+    domain: binary_sensor
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.overloop_motion_illuminance
+    below: input_number.overloop_min_lux_level
+  - condition: time
+    before: '22:00'
+    after: 06:00
+  action:
+  - service: light.turn_on
+    data:
+      brightness: 100
+      color_temp: 370
+      transition: 1
+    entity_id: light.overloop_zha_group_0x0005
+  mode: single
+- id: '1606922022104'
+  alias: Overloop Auto on Night
+  description: ''
+  trigger:
+  - type: occupied
+    platform: device
+    device_id: 7256b65004773e0b5af456c53f6eb611
+    entity_id: binary_sensor.overloop_motion_occupancy
+    domain: binary_sensor
+  condition:
+  - condition: time
+    before: 06:00
+    after: '22:00'
+  action:
+  - service: light.turn_on
+    data:
+      brightness: 1
+      color_temp: 500
+      transition: 1
+    entity_id: light.overloop_zha_group_0x0005
+  mode: single
+- id: '1606922188780'
+  alias: Overloop Auto Off
+  description: ''
+  trigger:
+  - type: not_occupied
+    platform: device
+    device_id: 7256b65004773e0b5af456c53f6eb611
+    entity_id: binary_sensor.overloop_motion_occupancy
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    data:
+      transition: 2
+    entity_id: light.overloop_zha_group_0x0005
+  mode: single
+- id: '1606923541899'
+  alias: Badkamer Remote On
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:04:f1:7a:5d
+      command:
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.badkamer
+  mode: single
+- id: '1606923572562'
+  alias: Badkamer Remote Off
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:04:f1:7a:5d
+      command:
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.badkamer
+  mode: single
+- id: '1606925683072'
+  alias: beweging in garage
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 205042c8383826b3301bd948db8cb8b0
+    entity_id: binary_sensor.garage_motion_ias_zone
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      flash: short
+    entity_id: light.hoek_kamer
+  mode: single
+- id: '1607009247154'
+  alias: Stoplicht Sjors Uit
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00
+  condition: []
+  action:
+  - service: light.turn_off
+    entity_id: light.stoplicht_sjors
+  mode: single

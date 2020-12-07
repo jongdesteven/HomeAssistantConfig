@@ -1,0 +1,126 @@
+- id: '1607066316688'
+  name: Badkamer Dag
+  entities:
+    light.badkamer:
+      min_mireds: 153
+      max_mireds: 454
+      brightness: 121
+      color_temp: 350
+      entity_id:
+      - light.badkamer_zha_group_0x0004
+      friendly_name: Badkamer
+      icon: mdi:lightbulb-group
+      supported_features: 43
+      state: 'on'
+- id: '1607071623635'
+  name: Lampen Beneden Dag
+  entities:
+    light.woonkamer:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      brightness: 66
+      color_temp: 370
+      hs_color:
+      - 33.627
+      - 48.705
+      rgb_color:
+      - 255
+      - 200
+      - 130
+      xy_color:
+      - 0.456
+      - 0.393
+      entity_id:
+      - light.woonkamer_zha_group_0x0003
+      friendly_name: Woonkamer
+      icon: mdi:lightbulb-group
+      supported_features: 63
+      state: 'on'
+    light.woonkamer_bloom:
+      effect_list:
+      - colorloop
+      brightness: 75
+      hs_color:
+      - 13.973
+      - 28.627
+      rgb_color:
+      - 255
+      - 199
+      - 182
+      xy_color:
+      - 0.41
+      - 0.341
+      off_brightness:
+      friendly_name: Woonkamer Bloom
+      supported_features: 61
+      state: 'on'
+    light.keuken:
+      min_mireds: 153
+      max_mireds: 500
+      brightness: 64
+      color_temp: 370
+      entity_id:
+      - light.keuken_hanglampen_zha_group_0x0007
+      - light.lamp_keukeneiland
+      friendly_name: Keuken
+      icon: mdi:lightbulb-group
+      supported_features: 43
+      state: 'on'
+    light.lamp_keukeneiland:
+      min_mireds: 153
+      max_mireds: 500
+      brightness: 64
+      color_temp: 370
+      friendly_name: Lamp Keukeneiland
+      supported_features: 3
+      state: 'on'
+    light.bol_tuinkamer:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      brightness: 64
+      color_temp: 350
+      hs_color:
+      - 36.727
+      - 64.706
+      rgb_color:
+      - 255
+      - 190
+      - 89
+      xy_color:
+      - 0.497
+      - 0.414
+      off_brightness:
+      friendly_name: Bol Tuinkamer
+      supported_features: 63
+      state: 'on'
+    light.kartent:
+      effect_list:
+      - '0'
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      brightness: 99
+      white_value: 99
+      effect: '0'
+      friendly_name: Kartent
+      supported_features: 149
+      state: 'on'
+- id: '1607071687472'
+  name: Badkamer Gedimd
+  entities:
+    light.badkamer:
+      min_mireds: 153
+      max_mireds: 454
+      brightness: 13
+      color_temp: 416
+      entity_id:
+      - light.badkamer_zha_group_0x0004
+      friendly_name: Badkamer
+      icon: mdi:lightbulb-group
+      supported_features: 43
+      state: 'on'

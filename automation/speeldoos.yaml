@@ -23,7 +23,7 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.tafel
+      entity_id: light.woonkamer_bloom
       color_name: blue
 - id: automation_speeldoos_3
   alias: speeldoos green 0
@@ -38,7 +38,7 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.tafel
+      entity_id: light.woonkamer_bloom
       color_name: green
 - id: automation_speeldoos_3a
   alias: speeldoos yellow
@@ -53,7 +53,7 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.tafel
+      entity_id: light.woonkamer_bloom
       color_name: orange
 - id: automation_speeldoos_4
   alias: speeldoos green 1
@@ -68,7 +68,7 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.tafel
+      entity_id: light.woonkamer_bloom
       color_name: green
 - id: automation_speeldoos_5
   alias: speeldoos blue 1
@@ -83,7 +83,7 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.tafel
+      entity_id: light.woonkamer_bloom
       color_name: blue
 - id: automation_speeldoos_6
   alias: speeldoos red 1
@@ -98,7 +98,7 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.tafel
+      entity_id: light.woonkamer_bloom
       color_name: red
 - id: automation_speeldoos_7
   alias: speeldoos red 2
@@ -113,5 +113,5 @@
   action:
   - service: light.turn_on
     data:
-      entity_id: light.tafel
+      entity_id: light.woonkamer_bloom
       color_name: red
