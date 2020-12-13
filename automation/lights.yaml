@@ -115,7 +115,7 @@
       command: "on_press"
   action:
   - service: light.turn_on
-    entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.lamp_keukeneiland
+    entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.keukeneiland
 
 - alias: Turn On other lights with hue woonkamer remote
   trigger:
@@ -137,7 +137,7 @@
       command: "off_press"
   action:
   - service: light.turn_off
-    entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.lamp_keukeneiland
+    entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.keukeneiland
     # - service: switch.turn_off
     #entity_id:
     #- switch.staande_lamp

@@ -1,6 +1,5 @@
 
-- id: automation_afzuiging_1a
-  alias: Reset afzuiging
+- alias: Reset afzuiging
   trigger:
     platform: state
     entity_id: switch.afzuiging_low
@@ -10,8 +9,7 @@
   - service: switch.turn_on
     entity_id: switch.afzuiging_low
 
-- id: automation_afzuiging_1b
-  alias: Spiegelverwarming uit na timer of switch
+- alias: Spiegelverwarming uit na timer of switch
   trigger:
   - platform: event
     event_type: timer.finished
@@ -38,7 +36,6 @@
     data:
       entity_id: timer.spiegelverwarming
     
-
 - id: automation_afzuiging_2a
   alias: afzuiging aan bij douchen
   trigger:
@@ -47,7 +44,7 @@
     to: "on"
   action:
   - service: switch.turn_on
-    entity_id: switch.afzuiging_med
+    entity_id: switch.afzuiging_mid
 
 - id: automation_afzuiging_2b
   alias: spiegelverwarming aan bij douchen
@@ -70,7 +67,7 @@
   alias: Radio badkamer aan met switch
   trigger:
     platform: state
-    entity_id: binary_sensor.spiegelverwarming_button1
+    entity_id: binary_sensor.spiegelverwarming_schakelaar
     to: "on"
   condition:
     condition: template
@@ -84,7 +81,7 @@
   alias: Radio badkamer uit met switch
   trigger:
     platform: state
-    entity_id: binary_sensor.spiegelverwarming_button1
+    entity_id: binary_sensor.spiegelverwarming_schakelaar
     to: "on"
   condition:
     condition: template

@@ -15,66 +15,23 @@
 - id: '1607071623635'
   name: Lampen Beneden Dag
   entities:
-    light.woonkamer:
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      brightness: 66
-      color_temp: 370
-      hs_color:
-      - 33.627
-      - 48.705
-      rgb_color:
-      - 255
-      - 200
-      - 130
-      xy_color:
-      - 0.456
-      - 0.393
-      entity_id:
-      - light.woonkamer_zha_group_0x0003
-      friendly_name: Woonkamer
-      icon: mdi:lightbulb-group
-      supported_features: 63
-      state: 'on'
     light.woonkamer_bloom:
       effect_list:
       - colorloop
-      brightness: 75
+      brightness: 173
       hs_color:
-      - 13.973
-      - 28.627
+      - 21.6
+      - 39.216
       rgb_color:
       - 255
-      - 199
-      - 182
+      - 190
+      - 154
       xy_color:
-      - 0.41
-      - 0.341
+      - 0.443
+      - 0.358
       off_brightness:
       friendly_name: Woonkamer Bloom
       supported_features: 61
-      state: 'on'
-    light.keuken:
-      min_mireds: 153
-      max_mireds: 500
-      brightness: 64
-      color_temp: 370
-      entity_id:
-      - light.keuken_hanglampen_zha_group_0x0007
-      - light.lamp_keukeneiland
-      friendly_name: Keuken
-      icon: mdi:lightbulb-group
-      supported_features: 43
-      state: 'on'
-    light.lamp_keukeneiland:
-      min_mireds: 153
-      max_mireds: 500
-      brightness: 64
-      color_temp: 370
-      friendly_name: Lamp Keukeneiland
-      supported_features: 3
       state: 'on'
     light.bol_tuinkamer:
       min_mireds: 153
@@ -82,9 +39,9 @@
       effect_list:
       - colorloop
       brightness: 64
-      color_temp: 350
+      color_temp: 436
       hs_color:
-      - 36.727
+      - 36.364
       - 64.706
       rgb_color:
       - 255
@@ -109,6 +66,69 @@
       effect: '0'
       friendly_name: Kartent
       supported_features: 149
+      state: 'on'
+    light.keukeneiland:
+      min_mireds: 153
+      max_mireds: 500
+      brightness: 181
+      color_temp: 381
+      friendly_name: keukeneiland
+      supported_features: 3
+      state: 'on'
+    light.hoek_kamer:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      brightness: 156
+      color_temp: 350
+      hs_color:
+      - 27.067
+      - 42.117
+      rgb_color:
+      - 255
+      - 196
+      - 147
+      xy_color:
+      - 0.445
+      - 0.372
+      off_brightness:
+      friendly_name: Hoek Kamer
+      supported_features: 63
+      state: 'on'
+    light.tafel:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      brightness: 66
+      color_temp: 350
+      hs_color:
+      - 34.732
+      - 47.422
+      rgb_color:
+      - 255
+      - 204
+      - 134
+      xy_color:
+      - 0.449
+      - 0.394
+      entity_id:
+      - light.tafel1
+      - light.tafel2
+      - light.tafel3
+      friendly_name: Tafel
+      icon: mdi:lightbulb-group
+      supported_features: 63
+      state: 'on'
+    light.keuken_hang_rechts:
+      min_mireds: 250
+      max_mireds: 454
+      brightness: 103
+      color_temp: 381
+      off_brightness:
+      friendly_name: Keuken Hang Rechts
+      supported_features: 43
       state: 'on'
 - id: '1607071687472'
   name: Badkamer Gedimd

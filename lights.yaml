@@ -2,7 +2,7 @@
   name: Keuken
   entities:
     #- light.keuken_hanglampen_zha_group_0x0007
-    - light.lamp_keukeneiland
+    - light.keukeneiland
     - light.keuken_hang_links
     - light.keuken_hang_rechts
 
@@ -28,7 +28,7 @@
     - light.carport1
     - light.carport2
     - light.carport3
-    - light.lamp_voordeur
+    - light.voordeur_lamp
 
 - platform: group
   name: Slaapkamer
@@ -66,42 +66,4 @@
     - light.bol_tuinkamer
     - light.kartent
 
-- platform: rflink
-  automatic_add: false
-  devices: 
-    newkaku_5177344_1:
-      name: Buiten Lamp
-      signal_repetitions: 2
-
-- platform: mqtt
-  name: "Lamp Voordeur"
-  state_topic: "home/sonoff_voordeur/stat/POWER"
-  command_topic: "home/sonoff_voordeur/cmnd/POWER"
-  availability_topic: "home/sonoff_voordeur/tele/LWT"
-  qos: 1
-  payload_on: "ON"
-  payload_off: "OFF"
-  payload_available: "Online"
-  payload_not_available: "Offline"
-  retain: true
-
-- platform: mqtt
-  name: "Lamp Keukeneiland"
-  state_topic: "home/keukeneiland/stat/RESULT"
-  state_value_template: "{{ value_json.POWER }}"
-  command_topic: "home/keukeneiland/cmnd/POWER"
-  brightness_command_topic: "home/keukeneiland/cmnd/Dimmer"
-  brightness_scale: 100
-  brightness_state_topic: "home/keukeneiland/stat/RESULT"
-  brightness_value_template: "{{ value_json.Dimmer }}"
-  color_temp_command_topic : "home/keukeneiland/cmnd/CT" 
-  color_temp_state_topic: "home/keukeneiland/stat/RESULT"
-  color_temp_value_template: "{{ value_json.CT }}" 
-  availability_topic: "home/keukeneiland/tele/LWT"
-  qos: 1
-  payload_on: "ON"
-  payload_off: "OFF"
-  payload_available: "Online"
-  payload_not_available: "Offline"
-  retain: false
 

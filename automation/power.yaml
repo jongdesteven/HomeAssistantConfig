@@ -13,7 +13,7 @@
   - service: input_number.set_value
     data_template:
       entity_id: input_number.gas_usage_previous_hour
-      value: "{{ states('sensor.gasverbruik_totaal') }}"
+      value: "{{ states('sensor.water_meter_m3_sensor') }}"
 - id: automation_19a
   alias: Save power_consumption dayly
   trigger:
@@ -27,4 +27,4 @@
   - service: input_number.set_value
     data_template:
       entity_id: input_number.gas_usage_previous_day
-      value: "{{ states('sensor.gasverbruik_totaal') }}"
+      value: "{{ states('sensor.water_meter_m3_sensor') }}"
