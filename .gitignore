@@ -3,5 +3,6 @@
 !automation/
 !scenes
 !.gitignore
+!blueprints/automation/poolcactus/
 secrets.yaml
 known_devices.yaml

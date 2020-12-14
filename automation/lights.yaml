@@ -142,107 +142,6 @@
     #entity_id:
     #- switch.staande_lamp
 
-# Slaapkamer remote
-- alias: Slaapkamer lights on with remote
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:02:1b:47:e8"
-      command: "on_press"
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
-      command: "on"
-  action:
-  - service: light.turn_on
-    entity_id: light.slaapkamer_zha_group_0x0006
-    data_template:
-      brightness: "{% if now().hour < 21 and now().hour >= 6 %} 50 {% else %} 1 {% endif %}"
-      color_temp: "{% if now().hour < 21 and now().hour >= 6 %} 370 {% else %} 500 {% endif %}" # Bright and  Nightlight imitation 2700K & 2000K  
-
-- alias: Slaapkamer lights off with remote
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:02:1b:47:e8"
-      command: "off_press"
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
-      command: "off"
-  action:
-  - service: light.turn_off
-    entity_id: light.slaapkamer_zha_group_0x0006, light.overloop_zha_group_0x0005
-
-# slaapkamer Dimmer Up
-- id: automation_lights_22a
-  alias: Slaapkamer brightness change up
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
-      command: "move_with_on_off"
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:02:1b:47:e8"
-      command: "up_hold"
-  action:
-  - service: script.light_dimmer
-    data:
-      direction: up
-      light: light.slaapkamer_zha_group_0x0006
-
-- alias: Slaapkamer brightness change down
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
-      command: "move"
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:02:1b:47:e8"
-      command: "down_hold"
-  action:
-  - service: script.light_dimmer
-    data:
-      direction: down
-      light: light.slaapkamer_zha_group_0x0006
-
-# Dimmer Stop
-- alias: Slaapkamer brightness change stop
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:04:f1:7a:5d"
-      command: "stop"
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
-      command: "stop"
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:02:1b:47:e8"
-      command: "stop"
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
-      command: "stop"
-  action:
-  - service: script.turn_off
-    entity_id: script.light_dimmer
-
 # Slaapkamer Hannah
 - id: automation_lights_23
   alias: Slaapkamer Hannah lights on with remote
@@ -274,32 +173,6 @@
   action:
   - service: light.turn_off
     entity_id: light.plafond_hannah1, light.plafond_hannah2, light.plafond_hannah3
-
-- alias: Slaapkamer hannah brightness dim up
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
-      command: "move_up"
-  action:
-  - service: script.light_dimmer
-    data:
-      direction: up
-      light: light.slaapkamer_hannah1, light.slaapkamer_hannah2, light.slaapkamer_hannah3
-
-- alias: Slaapkamer hannah brightness dim down
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "68:0a:e2:ff:fe:14:a2:3e"
-      command: "move"
-  action:
-  - service: script.light_dimmer
-    data:
-      direction: down
-      light: light.slaapkamer_hannah1, light.slaapkamer_hannah2, light.slaapkamer_hannah3
 
 # Kartent Button
 - id: automation_lights_24a
@@ -374,27 +247,6 @@
         effect: 0
 
 # Badkamer Remote
-- alias: Turn Off badkamer with remote
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:04:f1:7a:5d"
-      command: "off_press"
-  action:
-  - service: light.turn_off
-    entity_id: light.badkamer_zha_group_0x0004
-
-- alias: Turn On badkamer with remote
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:04:f1:7a:5d"
-      command: "on_press"
-  action:
-  - service: light.turn_on
-    entity_id: light.badkamer_zha_group_0x0004
 
 - alias: Turn On badkamer scene dag
   trigger:
@@ -418,28 +270,3 @@
   - service: scene.turn_on
     entity_id: scene.badkamer_gedimd
 
-- alias: Badkamer brightness change up
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:04:f1:7a:5d"
-      command: "up_hold"
-  action:
-  - service: script.light_dimmer
-    data:
-      direction: up
-      light: light.badkamer_zha_group_0x0004
-
-- alias: Slaapkamer brightness change down
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: "00:17:88:01:04:f1:7a:5d"
-      command: "down_hold"
-  action:
-  - service: script.light_dimmer
-    data:
-      direction: down
-      light: light.badkamer_zha_group_0x0004
