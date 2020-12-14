@@ -27,14 +27,24 @@
     energieverbruik_totaal:
       entity_id: sensor.consumption_low_tarif_sensor, sensor.consumption_high_tarif_sensor
       value_template: >
-        {{ (states('sensor.consumption_high_tarif_sensor') + states('sensor.consumption_low_tarif_sensor')) }}
+        {{ (states('sensor.consumption_high_tarif_sensor')|float + states('sensor.consumption_low_tarif_sensor')|float)| round(3) }}
       unit_of_measurement: 'kWh'
     
     energieverbruik_per_uur:
       entity_id: sensor.energieverbruik_totaal
       value_template: >
         {% if states('sensor.energieverbruik_totaal') != 'unknown' %}  
-          {{ (states('sensor.energieverbruik_totaal') - states('input_number.power_usage_previous_hour')) | round(3) }}
+          {{ (states('sensor.energieverbruik_totaal')|float - states('input_number.power_usage_previous_hour')| float) | round(3) }}
+        {% else %}
+          0
+        {% endif %}
+      unit_of_measurement: 'kWh'
+    
+    energieverbruik_per_dag:
+      entity_id: sensor.energieverbruik_totaal
+      value_template: >
+        {% if states('sensor.energieverbruik_totaal') != 'unknown' %}  
+          {{ (states('sensor.energieverbruik_totaal')|float - states('input_number.power_usage_previous_day')|float) | round(3) }}
         {% else %}
           0
         {% endif %}
@@ -44,27 +54,17 @@
       entity_id: sensor.water_meter_m3_sensor
       value_template: >
         {% if states('sensor.water_meter_m3_sensor') != 'unknown' %}  
-          {{ (states('sensor.water_meter_m3_sensor') - states('input_number.gas_usage_previous_hour') | float) | round(3) }}
+          {{ (states('sensor.water_meter_m3_sensor')|float - states('input_number.gas_usage_previous_hour') | float) | round(3) }}
         {% else %}
           0
         {% endif %}
       unit_of_measurement: 'm3'
     
-    energieverbruik_per_dag:
-      entity_id: sensor.energieverbruik_totaal
-      value_template: >
-        {% if states('sensor.energieverbruik_totaal') != 'unknown' %}  
-          {{ (states('sensor.energieverbruik_totaal') - states('input_number.power_usage_previous_day') | float) | round(3) }}
-        {% else %}
-          0
-        {% endif %}
-      unit_of_measurement: 'kWh'
-    
     gasverbruik_per_dag:
       entity_id: sensor.water_meter_m3_sensor
       value_template: >
         {% if states('sensor.water_meter_m3_sensor') != 'unknown' %}  
-          {{ (states('sensor.water_meter_m3_sensor') | float - states('input_number.gas_usage_previous_day') | float) | round(2) }}
+          {{ (states('sensor.water_meter_m3_sensor') | float - states('input_number.gas_usage_previous_day') | float) | round(3) }}
         {% else %}
           0
         {% endif %}
@@ -206,24 +206,6 @@
   name: "Speeldoos PushMe Reaction time"
   value_template: "{{ value | int }}"
   unit_of_measurement: 'ms'
-
-#Zigbee2MQTT
-- platform: mqtt
-  name: Zigbee2mqtt Bridge state
-  state_topic: "zigbee2mqtt/bridge/state"
-  icon: mdi:router-wireless
-# Sensor for Showing the Zigbee2mqtt Version
-- platform: mqtt
-  name: Zigbee2mqtt Version
-  state_topic: "zigbee2mqtt/bridge/config"
-  value_template: "{{ value_json.version }}"
-  icon: mdi:zigbee
-# Sensor for Showing the Coordinator Version
-- platform: mqtt
-  name: Coordinator Version
-  state_topic: "zigbee2mqtt/bridge/config"
-  value_template: "{{ value_json.coordinator }}"
-  icon: mdi:chip
 
 - platform: p2000
   regios: 22
