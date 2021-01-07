@@ -115,3 +115,19 @@
     data:
       entity_id: light.woonkamer_bloom
       color_name: red
+
+- id: automation_speeldoos_8
+  alias: speeldoos brightness
+  mode: restart
+  trigger:
+    platform: state
+    entity_id: sensor.speeldoos_potmeter_1
+  condition:
+    condition: state
+    entity_id: input_boolean.speeldoos_automations
+    state: 'on'
+  action:
+  - service: light.turn_on
+    data:
+      entity_id: light.woonkamer_bloom
+      brightness_pct:  "{{ states('sensor.speeldoos_potmeter_1') | int }}"

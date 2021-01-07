@@ -14,14 +14,6 @@
   icon: 'mdi:oil-temperature'
   value_template: '{{ value_json.temperature }}'
 
-- platform: mqtt
-  state_topic: "home/bbq/update"
-  value_template: "{{ value_json.p2 }}"
-  name: "BBQ Sensor 2"
-  availability_topic: "home/bbq/status"
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-
 - platform: template
   sensors:
     energieverbruik_totaal:
@@ -106,32 +98,6 @@
         {% endif %}
       unit_of_measurement: "GB"
 
-- platform: mqtt
-  state_topic: "home/sonoff_oven/tele/SENSOR"
-  name: "Oven Power Today"
-  value_template: '{{ value_json["ENERGY"]["Today"] }}'
-  icon: 'mdi:baguette'
-  unit_of_measurement: "KWh"
-- platform: mqtt
-  state_topic: "home/sonoff_oven/tele/SENSOR"
-  name: "Oven Power Now"
-  value_template: '{{ value_json["ENERGY"]["Power"] }}'
-  icon: 'mdi:baguette'
-  unit_of_measurement: "W"
-
-- platform: mqtt
-  state_topic: "home/sonoff_pomp/tele/SENSOR"
-  name: "Water pump Power Now"
-  value_template: '{{ value_json["ENERGY"]["Power"] }}'
-  icon: 'mdi:flash'
-  unit_of_measurement: "W"
-- platform: mqtt
-  state_topic: "home/sonoff_pomp/tele/SENSOR"
-  name: "Water pump Power Today"
-  value_template: '{{ value_json["ENERGY"]["Today"] }}'
-  icon: 'mdi:flash'
-  unit_of_measurement: "KWh"
-
 - platform: template
   sensors:
     alarm_clock_time:
@@ -190,12 +156,12 @@
 - platform: mqtt
   state_topic: "/speeldoos/ads1"
   name: "Speeldoos potmeter 1"
-  value_template: "{{ value | int }}"
+  value_template: "{{ ((value|int)/180)|int }}"
   unit_of_measurement: "%"
 - platform: mqtt
   state_topic: "/speeldoos/ads2"
   name: "Speeldoos potmeter 2"
-  value_template: "{{ value | int }}"
+  value_template: "{{ ((value|int)/180)|int }}"
   unit_of_measurement: "%"
 - platform: mqtt
   state_topic: "/speeldoos/gpio2"

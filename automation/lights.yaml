@@ -105,25 +105,41 @@
     - light.tuinkamer
     - light.kartent
 
+- alias: Slaapkamer remote overloop lampen uit
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: "68:0a:e2:ff:fe:12:36:f0"
+      command: "off"
+  action:
+    service: light.turn_off
+    entity_id: light.overloop_zha_group_0x0005
+
 # Woonkamer remote
-- alias: Turn On other lights with hue woonkamer remote
+- alias: Turn On  hue woonkamer remote
   trigger:
   - platform: event
     event_type: zha_event
     event_data:
       device_ieee: "00:17:88:01:02:0f:9a:13"
-      command: "on_press"
+      command: "on"
+      cluster_id: 6
+      endpoint_id: 1
+
   action:
   - service: light.turn_on
     entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.keukeneiland
 
-- alias: Turn On other lights with hue woonkamer remote
+- alias: Double click  hue woonkamer remote
   trigger:
   - platform: event
     event_type: zha_event
     event_data:
       device_ieee: "00:17:88:01:02:0f:9a:13"
       command: "on_double_press"
+      cluster_id: 6
+      endpoint_id: 1
   action:
   - service: scene.turn_on
     entity_id: scene.lampen_beneden_dag
@@ -134,7 +150,9 @@
     event_type: zha_event
     event_data:
       device_ieee: "00:17:88:01:02:0f:9a:13"
-      command: "off_press"
+      command: "off_with_effect"
+      cluster_id: 6
+      endpoint_id: 1
   action:
   - service: light.turn_off
     entity_id: light.woonkamer_zha_group_0x0003, light.tuinkamer, light.keuken_hanglampen_zha_group_0x0007, light.keukeneiland

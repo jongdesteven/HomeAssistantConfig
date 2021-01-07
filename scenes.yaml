@@ -20,15 +20,15 @@
       - colorloop
       brightness: 173
       hs_color:
-      - 21.6
-      - 39.216
+      - 20
+      - 38.824
       rgb_color:
       - 255
-      - 190
-      - 154
+      - 188
+      - 155
       xy_color:
-      - 0.443
-      - 0.358
+      - 0.444
+      - 0.355
       off_brightness:
       friendly_name: Woonkamer Bloom
       supported_features: 61
@@ -80,17 +80,17 @@
       max_mireds: 500
       effect_list:
       - colorloop
-      brightness: 156
-      color_temp: 350
+      brightness: 89
+      color_temp: 343
       hs_color:
-      - 27.067
-      - 42.117
+      - 27.222
+      - 42.353
       rgb_color:
       - 255
-      - 196
-      - 147
+      - 195
+      - 146
       xy_color:
-      - 0.445
+      - 0.447
       - 0.372
       off_brightness:
       friendly_name: Hoek Kamer
@@ -104,8 +104,8 @@
       brightness: 66
       color_temp: 350
       hs_color:
-      - 34.732
-      - 47.422
+      - 34.716
+      - 47.445
       rgb_color:
       - 255
       - 204
@@ -124,10 +124,19 @@
     light.keuken_hang_rechts:
       min_mireds: 250
       max_mireds: 454
-      brightness: 103
-      color_temp: 381
+      brightness: 64
+      color_temp: 377
       off_brightness:
       friendly_name: Keuken Hang Rechts
+      supported_features: 43
+      state: 'on'
+    light.keuken_hang_links:
+      min_mireds: 250
+      max_mireds: 454
+      brightness: 64
+      color_temp: 377
+      off_brightness:
+      friendly_name: Keuken Hang Links
       supported_features: 43
       state: 'on'
 - id: '1607071687472'

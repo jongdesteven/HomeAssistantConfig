@@ -1,8 +1,8 @@
 *
 !*.yaml
 !automation/
+!blueprints/automation/poolcactus/
 !scenes
 !.gitignore
-!blueprints/automation/poolcactus/
 secrets.yaml
 known_devices.yaml

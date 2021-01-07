@@ -36,7 +36,7 @@
   action:
   - service: light.turn_off
     data:
-      transition: 300
+      transition: 10
     entity_id: light.maan
   mode: single
 - id: '1606904473909'
@@ -60,7 +60,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 05:15
+    at: 05:30
   condition: []
   action:
   - service: light.turn_on
@@ -74,7 +74,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 06:00
+    at: 06:10
   condition: []
   action:
   - service: light.turn_on
@@ -214,7 +214,7 @@
       brightness: '100'
       remote: 5810c16759331b6c1621eff63caca4d8
       light:
-        area_id: c06eecbe189711eb8bd19d50c86ed43f
+        entity_id: light.slaapkamer_zha_group_0x0006
 - id: '1607949579082'
   alias: ZHA - Badkamer Remote
   description: ''
@@ -224,15 +224,14 @@
       brightness: '100'
       remote: cba041246d52b6a7710d11b343bfb999
       light:
-        area_id: bd4ee2df189711eba94e03b65dfaf544
-- id: '1607972215505'
-  alias: ZHA - IKEA Tradfri on/off switch Slaapkamer Overloop
+        entity_id: light.badkamer_zha_group_0x0004
+- id: '1607974266566'
+  alias: ZHA - IKEA Tradfri on/off switch slaapkamer overloop
   description: ''
   use_blueprint:
-    path: poolcactus/ZHA_IKEA_Tradfri_onoff.yaml
+    path: poolcactus/zha_ikea_tradfri_onoff_switch.yaml
     input:
       remote: 8b2806cf2927878c9211fb9b7ecc3334
       light:
-        area_id:
-        - c06eecbe189711eb8bd19d50c86ed43f
-        - 0ef8ee4b4e0dee217798fb4c81330c5b
+        entity_id:
+        - light.slaapkamer_zha_group_0x0006
