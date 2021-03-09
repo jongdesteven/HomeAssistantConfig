@@ -20,15 +20,15 @@
       - colorloop
       brightness: 173
       hs_color:
-      - 20
+      - 18.788
       - 38.824
       rgb_color:
       - 255
-      - 188
+      - 186
       - 155
       xy_color:
-      - 0.444
-      - 0.355
+      - 0.446
+      - 0.353
       off_brightness:
       friendly_name: Woonkamer Bloom
       supported_features: 61
@@ -38,22 +38,9 @@
       max_mireds: 500
       effect_list:
       - colorloop
-      brightness: 64
-      color_temp: 436
-      hs_color:
-      - 36.364
-      - 64.706
-      rgb_color:
-      - 255
-      - 190
-      - 89
-      xy_color:
-      - 0.497
-      - 0.414
-      off_brightness:
       friendly_name: Bol Tuinkamer
       supported_features: 63
-      state: 'on'
+      state: unavailable
     light.kartent:
       effect_list:
       - '0'
@@ -81,17 +68,7 @@
       effect_list:
       - colorloop
       brightness: 89
-      color_temp: 343
-      hs_color:
-      - 27.222
-      - 42.353
-      rgb_color:
-      - 255
-      - 195
-      - 146
-      xy_color:
-      - 0.447
-      - 0.372
+      color_temp: 388
       off_brightness:
       friendly_name: Hoek Kamer
       supported_features: 63
@@ -102,10 +79,9 @@
       effect_list:
       - colorloop
       brightness: 66
-      color_temp: 350
       hs_color:
-      - 34.716
-      - 47.445
+      - 34.714
+      - 47.447
       rgb_color:
       - 255
       - 204

@@ -14,9 +14,9 @@
   name: Voordeur
   still_image_url: !secret url_voordeur_snapshot
 
-- platform: generic
+- platform: mjpeg
   name: Camera Voordeur
   still_image_url: !secret camera_voordeur_still_url
-  stream_source: !secret camera_voordeur_stream_url
+  mjpeg_url: !secret camera_voordeur_stream_url
   verify_ssl: false
 

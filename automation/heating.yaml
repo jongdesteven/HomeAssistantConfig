@@ -96,7 +96,7 @@
   action:
   - service: notify.all_iphones
     data_template:
-      title: "rAAM OPEN"
+      title: "Raam Open"
       message: "De Verwarming gaat aan op onze slaapkamer en het raam staat open"
 
 

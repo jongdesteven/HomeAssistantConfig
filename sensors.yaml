@@ -100,14 +100,6 @@
 
 - platform: template
   sensors:
-    alarm_clock_time:
-      friendly_name: 'Alarm Time'
-      icon_template: 'mdi:alarm'
-      value_template: "{{ '%0.02d:%0.02d' | format( states('input_number.alarm_clock_hour') | int, states('input_number.alarm_clock_minute') | int ) }}"
-    alarm_clock_fade_in_minutes:
-      friendly_name: 'Fade In (Minutes)'
-      icon_template: 'mdi:gradient'
-      value_template: "{{ states('input_number.alarm_clock_fade_in_minutes') | int }}"
     doorbell_last_press:
       friendly_name: 'Last Doorbell Press'
       entity_id:  binary_sensor.doorbell
@@ -187,16 +179,16 @@
   command: "ssl-cert-check -b -c /etc/letsencrypt/live/stevenmarcha.duckdns.org/cert.pem | awk '{ print $NF }'" 
   
   #- platform: scrape
-  #  name: Canyon Neuron Outlet
-  #  resource: "https://www.canyon.com/en-nl/outlet/mountain-bikes/?cgid=outlet-mountain&prefn1=pc_familie&prefn2=pc_outlet&prefv1=Neuron&prefv2=true"
-  #  select: ".js-productCount"
-  #  unit_of_measurement: "items"
-  #
-  #- platform: scrape
   #  name: Canyon MTB XL Outlet
   #  resource: "https://www.canyon.com/en-nl/outlet/mountain-bikes/?cgid=outlet-mountain&prefn1=pc_outlet&prefn2=pc_rahmengroesse&prefv1=true&prefv2=XL"
   #  select: ".js-productCount"
   #  unit_of_measurement: "items"
+  
+- platform: scrape
+  name: Canyon Road outlet
+  resource: "https://www.canyon.com/nl-nl/outlet/road-bikes/?cgid=outlet-road&prefn1=pc_bremse_bremstyp&prefn2=pc_bremse_marke&prefn3=pc_rahmen_modifikation_werkstoff&prefn4=pc_rahmengroesse&prefv1=Schijfremmen&prefv2=Shimano&prefv3=CF&prefv4=L"
+  select: ".js-productCount"
+  unit_of_measurement: "items"
    
 - platform: mqtt
   state_topic: "wodtimer/display"

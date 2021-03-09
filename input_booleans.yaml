@@ -1,48 +1,25 @@
-diner_lights:
-  name: Lights in diner mode
-  initial: off
-  icon: mdi:lightbulb
-avond_lights:
-  name: Lights in avond mode
-  initial: off
-  icon: mdi:lightbulb
 alarm_toggle:
   name: sound the alarm
   initial: off
   icon: mdi:lightbulb
 alarm_clock_status:
   name: Alarm set (Weekdays)
-  initial: off
   icon: mdi:alarm-check
 alarm_clock_weekend_status:
   name: Alarm Set (Weekend)
-  initial: off
   icon: mdi:alarm-check
 
-sprinkler_program_run:
-  name: Sprinkler Run Program
-  initial: off
-sprinkler_program_maa:
-  name: Sprinkler Program Maandag
-  initial: off
-sprinkler_program_din:
-  name: Sprinkler Program Dinsdag
   initial: off
 sprinkler_program_woe:
   name: Sprinkler Program Woensdag
-  initial: off
 sprinkler_program_don:
   name: Sprinkler Program Donderdag
-  initial: off
 sprinkler_program_vri:
   name: Sprinkler Program Vrijdag
-  initial: off
 sprinkler_program_zat:
   name: Sprinkler Program Zaterdag
-  initial: off
 sprinkler_program_zon:
   name: Sprinkler Program Zondag
-  initial: off
 
 speeldoos_automations:
   name: Speeldoos Automations

@@ -27,6 +27,8 @@ homeassistant:
 #frontend:
 #  javascript_version: latest
 
+default_config:
+
 # Enables configuration UI
 config:
 
@@ -76,8 +78,6 @@ recorder:
 
 system_health:
 
-mobile_app:
-
 # Enables support for tracking state changes over time.
 history:
 
@@ -115,7 +115,7 @@ logger:
   #default: warning 
   logs:
     homeassistant.loader: info
-    rflink: debug
+    rflink: info
     #homeassistant.components.rflink: debug
     homeassistant.components.home_connect: debug
 

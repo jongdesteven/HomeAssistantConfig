@@ -20,23 +20,16 @@
       message: Voltage below 2.6V for 5minutes
   mode: single
 - id: '1605296475663'
-  alias: Maan uit na 2uur
+  alias: Maan uit in ochtend
   description: ''
   trigger:
-  - platform: device
-    type: turned_on
-    device_id: 079de496222bbccf69214d26c554e716
-    entity_id: light.maan
-    domain: light
-    for:
-      hours: 2
-      minutes: 0
-      seconds: 0
+  - platform: time
+    at: 07:00
   condition: []
   action:
   - service: light.turn_off
     data:
-      transition: 10
+      transition: 5
     entity_id: light.maan
   mode: single
 - id: '1606904473909'
@@ -60,7 +53,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 05:30
+    at: input_datetime.stoplicht_sjors_aan_rood
   condition: []
   action:
   - service: light.turn_on
@@ -74,7 +67,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 06:10
+    at: input_datetime.stoplicht_sjors_aan_groen
   condition: []
   action:
   - service: light.turn_on
@@ -199,7 +192,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 07:00
+    at: input_datetime.stoplicht_sjors_uit
   condition: []
   action:
   - service: light.turn_off
@@ -225,13 +218,335 @@
       remote: cba041246d52b6a7710d11b343bfb999
       light:
         entity_id: light.badkamer_zha_group_0x0004
-- id: '1607974266566'
-  alias: ZHA - IKEA Tradfri on/off switch slaapkamer overloop
+- id: '1611736009587'
+  alias: Maan in nachtstand
+  description: ''
+  trigger:
+  - platform: time
+    at: '21:00'
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 079de496222bbccf69214d26c554e716
+    entity_id: light.maan
+    domain: light
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 20
+      transition: 10
+    entity_id: light.maan
+  mode: single
+- id: '1612552464238'
+  alias: Werkplaats Afzuiging Aan
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 355533adb54b4bd5a028419a97535cb3
+    entity_id: binary_sensor.tool_power_status
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 8ae8a81046c669683881f152a7992108
+    entity_id: switch.werkplaats_afzuiging
+    domain: switch
+  mode: single
+- id: '1612552530752'
+  alias: Werkplaats Afzuiging Uit
+  description: ''
+  trigger:
+  - type: turned_off
+    platform: device
+    device_id: 355533adb54b4bd5a028419a97535cb3
+    entity_id: binary_sensor.tool_power_status
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8ae8a81046c669683881f152a7992108
+    entity_id: switch.werkplaats_afzuiging
+    domain: switch
+  mode: single
+- id: '1613631049735'
+  alias: ZHA - slaapkamer remote bed
   description: ''
   use_blueprint:
-    path: poolcactus/zha_ikea_tradfri_onoff_switch.yaml
+    path: poolcactus/zha_ikea_tradfri_onoff_switch_complx.yaml
     input:
+      step_delay: '500'
       remote: 8b2806cf2927878c9211fb9b7ecc3334
       light:
-        entity_id:
-        - light.slaapkamer_zha_group_0x0006
+        entity_id: light.slaapkamer_zha_group_0x0006
+- id: '1613734293672'
+  alias: Espresso opgewarmd
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: aa400d42ad7e7cc02177cfca0475d838
+    entity_id: switch.espresso_on_off
+    domain: switch
+    for:
+      hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - service: notify.all_iphones
+    data:
+      title: Espresso
+      message: Espresso is opgewarmd
+  mode: single
+- id: '1614593925186'
+  alias: Canyon Road outlet
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.doorbell_button
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state | int > trigger.from_state.state |
+      int }}'
+  action:
+  - service: notify.mobile_app_iphone_steven
+    data:
+      title: Canyon Road Outlet
+      message: Road outlet increase from {{trigger.from_state.state | int}} to {{trigger.to_state.state
+        | int}}
+      url: https://www.canyon.com/nl-nl/outlet/road-bikes/?cgid=outlet-road&prefn1=pc_bremse_bremstyp&prefn2=pc_bremse_marke&prefn3=pc_rahmen_modifikation_werkstoff&prefn4=pc_rahmengroesse&prefv1=Schijfremmen&prefv2=Shimano&pre
+        fv3=CF&prefv4=L
+  mode: single
+- id: '1614950923908'
+  alias: Leaving house, Radio Off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.family
+    to: away
+  condition: []
+  action:
+  - service: media_player.media_stop
+    target:
+      device_id: bbb039785bef4ccf9cca246b00b6d95a
+  mode: single
+- id: '1614951028020'
+  alias: Leaving house, Radio On
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.family
+    to: Home
+  condition: []
+  action:
+  - service: media_player.media_play
+    target:
+      entity_id:
+      - media_player.kitchen
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.1
+    target:
+      entity_id:
+      - media_player.woonkamer
+      - media_player.kitchen
+  mode: single
+- id: '1614951167813'
+  alias: 'Tv Lift: Radio Off, AppleTV On'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.tv_lift_up
+    to: 'on'
+  condition: []
+  action:
+  - service: media_player.media_pause
+    target:
+      entity_id: media_player.kitchen
+  - service: media_player.turn_on
+    target:
+      entity_id: media_player.appletv_woonkamer
+  mode: single
+- id: '1615274760723'
+  alias: 'Spiegelverwarming: Start Timer'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.spiegelverwarming
+    to: 'on'
+  condition: []
+  action:
+  - service: timer.start
+    data: {}
+    target:
+      entity_id: timer.spiegelverwarming
+  mode: single
+- id: '1615274912730'
+  alias: 'Spiegelverwarming: Aan bij douchen'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.shower
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.waalre_temperature
+    below: '22'
+  action:
+  - type: turn_on
+    device_id: 6a46b507a92546bd94b582d2e8f29ed3
+    entity_id: switch.spiegelverwarming
+    domain: switch
+  - service: timer.start
+    data:
+      duration: '0'
+    target:
+      entity_id: timer.spiegelverwarming
+  mode: single
+- id: '1615275081138'
+  alias: 'Spiegelverwarming: Uit na timer of switch'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.spiegelverwarming
+  - platform: state
+    entity_id: switch.spiegelverwarming
+    to: 'off'
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.spiegelverwarming
+  - service: timer.cancel
+    target:
+      entity_id: timer.spiegelverwarming
+  mode: single
+- id: '1615275171818'
+  alias: 'Afzuiging: Reset to Low after timer'
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 507c924ad2db4c75a0ec907cf634d232
+    entity_id: switch.afzuiging_low
+    domain: switch
+    for:
+      hours: 1
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 507c924ad2db4c75a0ec907cf634d232
+    entity_id: switch.afzuiging_low
+    domain: switch
+  mode: single
+- id: '1615275232810'
+  alias: 'Afzuiging: Aan bij douchen'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.shower
+    to: 'on'
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 507c924ad2db4c75a0ec907cf634d232
+    entity_id: switch.afzuiging_mid
+    domain: switch
+  mode: single
+- id: '1615275401098'
+  alias: 'Radio Badkamer: Koppel met Switch'
+  description: Koppel aan Sonos Keuken
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.spiegelverwarming_schakelaar
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: template
+    value_template: '{% if state_attr(''media_player.badkamer'', ''sonos_group'')
+      | count == 1 %} true {% else %} false {% endif %}'
+  action:
+  - service: sonos.join
+    data:
+      master: media_player.kitchen
+      entity_id: media_player.badkamer
+  mode: single
+- id: '1615275461824'
+  alias: 'Radio Badkamer: Ontkoppel met Switch'
+  description: Ontkoppel Sonos Badkamer
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.spiegelverwarming_schakelaar
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: template
+    value_template: '{% if state_attr(''media_player.badkamer'', ''sonos_group'')
+      | count > 1 %} true {% else %} false {% endif %}'
+  action:
+  - service: sonos.unjoin
+    data:
+      entity_id: media_player.badkamer
+  mode: single
+- id: '1615290642684'
+  alias: 'Doorbell: pressed'
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: f67fcb5916ee11eba662bf0f25b58f73
+    entity_id: binary_sensor.doorbell_button
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: shell_command.grab_frontdoor_image
+  - service: notify.all_iphones
+    data:
+      message: Doorbell pressed
+      data:
+        attachment:
+          url: https://stevenmarcha.duckdns.org/frontdoor.jpg
+          content-type: jpg
+          hide-thumbnail: false
+        push:
+          sound: doorbell-sound-effect.wav
+  - service: light.turn_on
+    data:
+      flash: short
+    target:
+      entity_id:
+      - light.lampje_zolder
+      - light.hoek_kamer
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  mode: single
+- id: '1615290804191'
+  alias: 'Hass Update: Notify'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.updater
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: notify.mobile_app_iphone_steven
+    data:
+      message: Home assistant {{ state_attr('binary_sensor.updater', 'newest_version')  }}
+        is available.
+  mode: single

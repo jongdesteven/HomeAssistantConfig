@@ -2,105 +2,85 @@
 - id: automation_7
   alias: Alarm clock fade in lights
   trigger:
-    platform: time_pattern
-    minutes: /1
+    platform: time
+    at: input_datetime.alarm_clock
   condition:
-    condition: and
+  - condition: or
     conditions:
-    - condition: template
-      value_template: "{{ now().strftime('%H:%M') == states('sensor.alarm_clock_time') }}"
-    - condition: or
+    - condition: and
       conditions:
-      - condition: and
-        conditions:
-        - condition: state
-          entity_id: input_boolean.alarm_clock_status
-          state: 'on'
-        - condition: time
-          weekday:
-          - mon
-          - tue
-          - wed
-          - thu
-          - fri
-      - condition: and
-        conditions:
-        - condition: state
-          entity_id: input_boolean.alarm_clock_weekend_status
-          state: 'on'
-        - condition: time
-          weekday:
-          - sat
-          - sun
+      - condition: state
+        entity_id: input_boolean.alarm_clock_status
+        state: 'on'
+      - condition: time
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.alarm_clock_weekend_status
+        state: 'on'
+      - condition: time
+        weekday:
+        - sat
+        - sun
   action:
   - service: light.turn_on
     data_template:
       entity_id: light.slaapkamer
-      transition: "{{ states('sensor.alarm_clock_fade_in_minutes') | int * 60 }}"
-      profile: energize
+      transition: "{{ states('input_number.alarm_clock_fade_in_minutes') | int * 60 }}"
+      brightness_pct: 50
 - id: automation_8
   alias: Set Sonos Alarm Weekday
   trigger:
   - platform: state
     entity_id: input_boolean.alarm_clock_status
-    to: 'on'
   action:
   - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 3
-      time: "{{ states('sensor.alarm_clock_time') }}"
-      enabled: true
+      time: "{{ state_attr('input_datetime.alarm_clock', 'timestamp') | timestamp_custom('%H:%M', false) }}"
+      enabled: >
+        {% if is_state('input_boolean.alarm_clock_status', 'on') %}
+          true
+        {% else %}
+          false
+        {% endif %}
 - id: automation_8a
   alias: Set Sonos Alarm Weekend
   trigger:
   - platform: state
     entity_id: input_boolean.alarm_clock_weekend_status
-    to: 'on'
   action:
   - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 61
-      time: "{{ states('sensor.alarm_clock_time') }}"
-      enabled: true
-- id: automation_9
-  alias: Disable Sonos Alarm Weekdays
-  trigger:
-  - platform: state
-    entity_id: input_boolean.alarm_clock_status
-    to: 'off'
-  action:
-  - service: sonos.update_alarm
-    data_template:
-      entity_id: media_player.bedroom
-      alarm_id: 3
-      enabled: false
-- id: automation_9a
-  alias: Disable Sonos Alarm Weekend
-  trigger:
-  - platform: state
-    entity_id: input_boolean.alarm_clock_weekend_status
-    to: 'off'
-  action:
-  - service: sonos.update_alarm
-    data_template:
-      entity_id: media_player.bedroom
-      alarm_id: 61
-      enabled: false
+      time: "{{ state_attr('input_datetime.alarm_clock', 'timestamp') | timestamp_custom('%H:%M', false) }}"
+      enabled: >
+        {% if is_state('input_boolean.alarm_clock_weekend_status', 'on') %}
+          true
+        {% else %}
+          false
+        {% endif %}
 - id: automation_10
   alias: Change Alarm Clock time
   trigger:
   - platform: state
-    entity_id: sensor.alarm_clock_time
+    entity_id: input_datetime.alarm_clock
   action:
   - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 3
-      time: "{{ states('sensor.alarm_clock_time') }}"
+      time: "{{ state_attr('input_datetime.alarm_clock', 'timestamp') | timestamp_custom('%H:%M', false) }}"
   - service: sonos.update_alarm
     data_template:
       entity_id: media_player.bedroom
       alarm_id: 61
-      time: "{{ states('sensor.alarm_clock_time') }}"
+      time: "{{ state_attr('input_datetime.alarm_clock', 'timestamp') | timestamp_custom('%H:%M', false) }}"

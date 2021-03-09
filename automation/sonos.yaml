@@ -1,37 +1,4 @@
 
-- id: automation_21
-  alias: React when Opening TV
-  trigger:
-    platform: state
-    entity_id: binary_sensor.tv_lift_up
-    to: 'on'
-  action:
-    - service: media_player.media_pause
-      entity_id: media_player.kitchen
-
-- id: automation_23a
-  alias: Radio on when coming home
-  trigger:
-    platform: state
-    entity_id: group.family
-    to: 'home'
-  action:
-  - service: media_player.media_play
-    entity_id: media_player.kitchen
-  - service: media_player.volume_set
-    data_template:
-      entity_id: media_player.woonkamer, media_player.kitchen
-      volume_level: 0.1
-- id: automation_23b
-  alias: Radio off when leaving home
-  trigger:
-    platform: state
-    entity_id: group.family
-    to: 'not_home'
-  action:
-  - service: media_player.media_stop
-    entity_id: media_player.kitchen
-
 - id: automation_sonos_1
   alias: Sonos Slaapkamer off with remote
   trigger:
