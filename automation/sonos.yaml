@@ -10,9 +10,9 @@
   condition:
     condition: and
     conditions:
-      - condition: state
-        entity_id: light.slaapkamer
-        state: 'off'
+      #    - condition: state
+      #      entity_id: light.slaapkamer
+      #      state: 'off'
       - condition: state
         entity_id: media_player.bedroom
         state: 'playing'

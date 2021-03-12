@@ -242,27 +242,6 @@
       entity_id: light.kartent
       white_value: 200
 
-- id: automation_lights_24d
-  alias: Reset kartents lights after 2 minutes
-  trigger:
-    - platform: state
-      entity_id: light.kartent
-      attribute: white_value
-      to: 'none'
-      for:
-        seconds: 30
-    - platform: state
-      entity_id: light.kartent
-      attribute: effect
-      from: 0
-      for:
-        seconds: 30
-  action:
-    - service: light.turn_on
-      data:
-        entity_id: light.kartent
-        white_value: 100
-        effect: 0
 
 # Badkamer Remote
 

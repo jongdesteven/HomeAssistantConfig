@@ -310,19 +310,19 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.doorbell_button
+    entity_id: sensor.canyon_road_outlet
   condition:
   - condition: template
-    value_template: '{{ trigger.to_state.state | int > trigger.from_state.state |
+    value_template: '{{ trigger.from_state.state | int < trigger.to_state.state |
       int }}'
   action:
   - service: notify.mobile_app_iphone_steven
     data:
-      title: Canyon Road Outlet
       message: Road outlet increase from {{trigger.from_state.state | int}} to {{trigger.to_state.state
         | int}}
-      url: https://www.canyon.com/nl-nl/outlet/road-bikes/?cgid=outlet-road&prefn1=pc_bremse_bremstyp&prefn2=pc_bremse_marke&prefn3=pc_rahmen_modifikation_werkstoff&prefn4=pc_rahmengroesse&prefv1=Schijfremmen&prefv2=Shimano&pre
-        fv3=CF&prefv4=L
+      title: Canyon Road Outlet
+      data:
+        url: https://www.canyon.com/nl-nl/outlet-bicycles/?cgid=Outlet_all_bikes&prefn1=pc_familie&prefn2=pc_rahmengroesse&prefn3=pc_welt&prefv1=Ultimate%7CAeroad%7CEndurace&prefv2=L
   mode: single
 - id: '1614950923908'
   alias: Leaving house, Radio Off
@@ -434,22 +434,15 @@
   alias: 'Afzuiging: Reset to Low after timer'
   description: ''
   trigger:
-  - platform: device
-    type: turned_off
-    device_id: 507c924ad2db4c75a0ec907cf634d232
+  - platform: state
     entity_id: switch.afzuiging_low
-    domain: switch
-    for:
-      hours: 1
-      minutes: 30
-      seconds: 0
-      milliseconds: 0
+    to: 'off'
+    for: 01:30:00
   condition: []
   action:
-  - type: turn_on
-    device_id: 507c924ad2db4c75a0ec907cf634d232
-    entity_id: switch.afzuiging_low
-    domain: switch
+  - service: switch.turn_on
+    target:
+      entity_id: switch.afzuiging_low
   mode: single
 - id: '1615275232810'
   alias: 'Afzuiging: Aan bij douchen'
@@ -549,4 +542,144 @@
     data:
       message: Home assistant {{ state_attr('binary_sensor.updater', 'newest_version')  }}
         is available.
+  mode: single
+- id: '1615304007014'
+  alias: 'Kartent: Reset to white'
+  description: Reset to white after 2 min
+  trigger:
+  - platform: state
+    entity_id: light.kartent
+    attribute: white_value
+    to: None
+    for: 00:00:30
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      white_value: 100
+      brightness: 100
+    target:
+      entity_id: light.kartent
+  mode: single
+- id: '1615385659393'
+  alias: 'DSMR: Save Power Hourly'
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: '0'
+    seconds: '0'
+  condition: []
+  action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.power_usage_previous_hour
+    data_template:
+      value: '{{ states(''sensor.energieverbruik_totaal'') |float }}
+
+        '
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.gas_usage_previous_hour
+    data_template:
+      value: '{{ states(''sensor.water_meter_m3_sensor'') | float }}
+
+        '
+  mode: single
+- id: '1615385707569'
+  alias: 'DSMR: Save Power Daily'
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: '0'
+    seconds: '0'
+    hours: '0'
+  condition: []
+  action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.power_usage_previous_day
+    data_template:
+      value: '{{ states(''sensor.energieverbruik_totaal'') |float }}
+
+        '
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.gas_usage_previous_day
+    data_template:
+      value: '{{ states(''sensor.water_meter_m3_sensor'') | float }}
+
+        '
+  mode: single
+- id: '1615386151942'
+  alias: 'Smoke Sensor: Notify People'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.smoke_detector_1,  binary_sensor.smoke_detector_2
+    to: 'on'
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.badkamer
+  - service: notify.all_iphones
+    data:
+      title: Alarm! Rook in huis
+      message: Ga nu het huis uit!
+      data:
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
+  mode: single
+- id: '1615386197209'
+  alias: 'CO Sensor: Notify People '
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.co_detector
+    to: 'on'
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.badkamer
+  - service: notify.all_iphones
+    data:
+      title: Alarm! CO in huis
+      message: Ga nu het huis uit, er is koolmonoxide gedetecteerd.
+      data:
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
+  mode: single
+- id: '1615470843982'
+  alias: 'Afval: Notify'
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00
+  condition:
+  - condition: template
+    value_template: '{{ ''Today'' in states(''sensor.waalre_gft'') or ''Today'' in
+      states(''sensor.waalre_papier'') or ''Today'' in states(''sensor.waalre_pmd'')
+      or ''Today'' in states(''sensor.waalre_restafval'') }}'
+  action:
+  - service: notify.all_iphones
+    data:
+      title: Afval
+      message: 'Vandaag wordt opgehaald: {% if ''Today'' in states(''sensor.waalre_pmd'')
+        %} Plastic, Metaal, Drinkpakken {% endif %} {% if ''Today'' in states(''sensor.waalre_papier'')
+        %} Papier {% endif %} {% if ''Today'' in states(''sensor.waalre_restafval'')
+        %} Restafval {% endif %} {% if ''Today'' in states(''sensor.waalre_gft'')
+        %} GFT {% endif %}
+
+        '
   mode: single

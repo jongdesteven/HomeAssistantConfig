@@ -17,13 +17,16 @@
 - platform: template
   sensors:
     energieverbruik_totaal:
-      entity_id: sensor.consumption_low_tarif_sensor, sensor.consumption_high_tarif_sensor
       value_template: >
-        {{ (states('sensor.consumption_high_tarif_sensor')|float + states('sensor.consumption_low_tarif_sensor')|float)| round(3) }}
+        {% if states('sensor.consumption_high_tarif_sensor') != 'unknown' and states('sensor.consumption_low_tarif_sensor') != 'unknown' %}
+          {{ (states('sensor.consumption_high_tarif_sensor')|float + states('sensor.consumption_low_tarif_sensor')|float)| round(3) }}
+        {% else %}
+          {{ states('sensor.energieverbruik_totaal') }}
+        {% endif %}
+        
       unit_of_measurement: 'kWh'
     
     energieverbruik_per_uur:
-      entity_id: sensor.energieverbruik_totaal
       value_template: >
         {% if states('sensor.energieverbruik_totaal') != 'unknown' %}  
           {{ (states('sensor.energieverbruik_totaal')|float - states('input_number.power_usage_previous_hour')| float) | round(3) }}
@@ -33,7 +36,6 @@
       unit_of_measurement: 'kWh'
     
     energieverbruik_per_dag:
-      entity_id: sensor.energieverbruik_totaal
       value_template: >
         {% if states('sensor.energieverbruik_totaal') != 'unknown' %}  
           {{ (states('sensor.energieverbruik_totaal')|float - states('input_number.power_usage_previous_day')|float) | round(3) }}
@@ -43,7 +45,6 @@
       unit_of_measurement: 'kWh'
     
     gasverbruik_per_uur:
-      entity_id: sensor.water_meter_m3_sensor
       value_template: >
         {% if states('sensor.water_meter_m3_sensor') != 'unknown' %}  
           {{ (states('sensor.water_meter_m3_sensor')|float - states('input_number.gas_usage_previous_hour') | float) | round(3) }}
@@ -53,7 +54,6 @@
       unit_of_measurement: 'm3'
     
     gasverbruik_per_dag:
-      entity_id: sensor.water_meter_m3_sensor
       value_template: >
         {% if states('sensor.water_meter_m3_sensor') != 'unknown' %}  
           {{ (states('sensor.water_meter_m3_sensor') | float - states('input_number.gas_usage_previous_day') | float) | round(3) }}
@@ -62,8 +62,7 @@
         {% endif %}
       unit_of_measurement: 'm3'
 
-- platform: template
-  sensors:
+# Internet sensors
     internet_transmission_up:
       value_template: >-
         {% if state_attr('sensor.router_netmonitor', 'transmission_rate_up') > 0 %}
@@ -186,7 +185,8 @@
   
 - platform: scrape
   name: Canyon Road outlet
-  resource: "https://www.canyon.com/nl-nl/outlet/road-bikes/?cgid=outlet-road&prefn1=pc_bremse_bremstyp&prefn2=pc_bremse_marke&prefn3=pc_rahmen_modifikation_werkstoff&prefn4=pc_rahmengroesse&prefv1=Schijfremmen&prefv2=Shimano&prefv3=CF&prefv4=L"
+  #  resource: "https://www.canyon.com/nl-nl/outlet/road-bikes/?cgid=outlet-road&prefn1=pc_bremse_bremstyp&prefn2=pc_bremse_marke&prefn3=pc_rahmen_modifikation_werkstoff&prefn4=pc_rahmengroesse&prefv1=Schijfremmen&prefv2=Shimano&prefv3=CF&prefv4=L"
+  resource: "https://www.canyon.com/nl-nl/outlet-bicycles/?cgid=Outlet_all_bikes&prefn1=pc_familie&prefn2=pc_rahmengroesse&prefn3=pc_welt&prefv1=Ultimate%7CAeroad%7CEndurace&prefv2=L"
   select: ".js-productCount"
   unit_of_measurement: "items"
    
