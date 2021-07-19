@@ -10,16 +10,6 @@ alarm_clock_weekend_status:
   icon: mdi:alarm-check
 
   initial: off
-sprinkler_program_woe:
-  name: Sprinkler Program Woensdag
-sprinkler_program_don:
-  name: Sprinkler Program Donderdag
-sprinkler_program_vri:
-  name: Sprinkler Program Vrijdag
-sprinkler_program_zat:
-  name: Sprinkler Program Zaterdag
-sprinkler_program_zon:
-  name: Sprinkler Program Zondag
 
 speeldoos_automations:
   name: Speeldoos Automations

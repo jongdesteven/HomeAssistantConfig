@@ -1,8 +1,8 @@
 family:
   name: Family
   entities:
-  - device_tracker.iphone_steven
-  - device_tracker.marcha_s_iphone
+  - person.marcha
+  - person.steven
 
 motion_sensors:
   name: Motion Sensors

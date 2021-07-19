@@ -178,18 +178,18 @@
   command: "ssl-cert-check -b -c /etc/letsencrypt/live/stevenmarcha.duckdns.org/cert.pem | awk '{ print $NF }'" 
   
   #- platform: scrape
-  #  name: Canyon MTB XL Outlet
-  #  resource: "https://www.canyon.com/en-nl/outlet/mountain-bikes/?cgid=outlet-mountain&prefn1=pc_outlet&prefn2=pc_rahmengroesse&prefv1=true&prefv2=XL"
+  #  name: Canyon Road outlet
+  #  resource: "https://www.canyon.com/nl-nl/outlet-bicycles/?cgid=Outlet_all_bikes&prefn1=pc_rahmengroesse&prefn2=pc_welt&prefv1=L&prefv2=Road&srule=sort_last_added"
   #  select: ".js-productCount"
   #  unit_of_measurement: "items"
-  
-- platform: scrape
-  name: Canyon Road outlet
-  #  resource: "https://www.canyon.com/nl-nl/outlet/road-bikes/?cgid=outlet-road&prefn1=pc_bremse_bremstyp&prefn2=pc_bremse_marke&prefn3=pc_rahmen_modifikation_werkstoff&prefn4=pc_rahmengroesse&prefv1=Schijfremmen&prefv2=Shimano&prefv3=CF&prefv4=L"
-  resource: "https://www.canyon.com/nl-nl/outlet-bicycles/?cgid=Outlet_all_bikes&prefn1=pc_familie&prefn2=pc_rahmengroesse&prefn3=pc_welt&prefv1=Ultimate%7CAeroad%7CEndurace&prefv2=L"
-  select: ".js-productCount"
-  unit_of_measurement: "items"
    
+- platform: scrape
+  name: Canyon Endurace WMN 7 Disc Availability
+  resource: "https://www.canyon.com/nl-nl/road-bikes/endurance-bikes/endurace-wmn/endurace-7-wmn-disc/2956.html?dwvar_2956_pv_rahmenfarbe=VT%2FWH"
+  #resource: "https://www.canyon.com/nl-nl/road-bikes/race-bikes/aeroad/aeroad-cf-sl-7-disc/2447.html?dwvar_2447_pv_rahmenfarbe=BK%2FGY"
+  select: ".productConfiguration__availabilityMessage"
+  index: 4
+
 - platform: mqtt
   state_topic: "wodtimer/display"
   name: "WODTimer Display"

@@ -1,10 +1,1 @@
-sprinkler_program:
-  name: sprinkler timer
-  has_date: false
-  has_time: true
-
-sprinkler_program_time_input:
-  name: Sprinkler Program time
-  has_date: false
-  has_time: true
 

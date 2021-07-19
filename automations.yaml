@@ -58,9 +58,10 @@
   action:
   - service: light.turn_on
     data:
-      brightness: 1
       color_name: red
-    entity_id: light.stoplicht_sjors
+      brightness_pct: 1
+    target:
+      entity_id: light.stoplicht_sjors
   mode: single
 - id: '1606905199462'
   alias: Stoplicht Sjors Aan Groen
@@ -72,9 +73,10 @@
   action:
   - service: light.turn_on
     data:
-      brightness: 1
       color_name: green
-    entity_id: light.stoplicht_sjors
+      brightness_pct: 1
+    target:
+      entity_id: light.stoplicht_sjors
   mode: single
 - id: '1606921959287'
   alias: Overloop Auto on Day
@@ -116,10 +118,10 @@
   action:
   - service: light.turn_on
     data:
-      brightness: 1
       color_temp: 500
-      transition: 1
-    entity_id: light.overloop_zha_group_0x0005
+      brightness_pct: 1
+    target:
+      entity_id: light.overloop_zha_group_0x0005
   mode: single
 - id: '1606922188780'
   alias: Overloop Auto Off
@@ -243,7 +245,7 @@
   trigger:
   - type: turned_on
     platform: device
-    device_id: 355533adb54b4bd5a028419a97535cb3
+    device_id: aa400d42ad7e7cc02177cfca0475d838
     entity_id: binary_sensor.tool_power_status
     domain: binary_sensor
   condition: []
@@ -259,7 +261,7 @@
   trigger:
   - type: turned_off
     platform: device
-    device_id: 355533adb54b4bd5a028419a97535cb3
+    device_id: aa400d42ad7e7cc02177cfca0475d838
     entity_id: binary_sensor.tool_power_status
     domain: binary_sensor
     for:
@@ -274,24 +276,14 @@
     entity_id: switch.werkplaats_afzuiging
     domain: switch
   mode: single
-- id: '1613631049735'
-  alias: ZHA - slaapkamer remote bed
-  description: ''
-  use_blueprint:
-    path: poolcactus/zha_ikea_tradfri_onoff_switch_complx.yaml
-    input:
-      step_delay: '500'
-      remote: 8b2806cf2927878c9211fb9b7ecc3334
-      light:
-        entity_id: light.slaapkamer_zha_group_0x0006
 - id: '1613734293672'
-  alias: Espresso opgewarmd
+  alias: 'Espresso: opgewarmd'
   description: ''
   trigger:
   - platform: device
     type: turned_on
-    device_id: aa400d42ad7e7cc02177cfca0475d838
-    entity_id: switch.espresso_on_off
+    device_id: afb9ba9a32b44698c5a370115d24c71f
+    entity_id: switch.espresso_switch
     domain: switch
     for:
       hours: 0
@@ -322,7 +314,7 @@
         | int}}
       title: Canyon Road Outlet
       data:
-        url: https://www.canyon.com/nl-nl/outlet-bicycles/?cgid=Outlet_all_bikes&prefn1=pc_familie&prefn2=pc_rahmengroesse&prefn3=pc_welt&prefv1=Ultimate%7CAeroad%7CEndurace&prefv2=L
+        url: https://www.canyon.com/nl-nl/outlet-bicycles/?cgid=Outlet_all_bikes&prefn1=pc_rahmengroesse&prefn2=pc_welt&prefv1=L&prefv2=Road&srule=sort_last_added
   mode: single
 - id: '1614950923908'
   alias: Leaving house, Radio Off
@@ -330,20 +322,21 @@
   trigger:
   - platform: state
     entity_id: group.family
-    to: away
+    to: not_home
   condition: []
   action:
   - service: media_player.media_stop
     target:
-      device_id: bbb039785bef4ccf9cca246b00b6d95a
+      entity_id:
+      - media_player.kitchen
   mode: single
 - id: '1614951028020'
-  alias: Leaving house, Radio On
+  alias: Coming Home, Radio On
   description: ''
   trigger:
   - platform: state
     entity_id: group.family
-    to: Home
+    to: home
   condition: []
   action:
   - service: media_player.media_play
@@ -682,4 +675,442 @@
         %} GFT {% endif %}
 
         '
+  mode: single
+- id: '1615624511039'
+  alias: 'Wasmachine: Finished'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasmachine_power
+    for: 00:02:00
+    below: '5'
+  condition:
+  - condition: state
+    entity_id: input_boolean.wasmachine_status
+    state: 'on'
+  action:
+  - service: notify.all_iphones
+    data:
+      message: '{% set duration_min = ( as_timestamp(now()) - as_timestamp(states.input_boolean.wasmachine_status.last_changed)
+        )  %} Wasmachine is klaar en duurde {{ duration_min | timestamp_custom(''%H:%M'',
+        false) }}
+
+        '
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.wasmachine_status
+  mode: single
+- id: '1615624553558'
+  alias: 'Wasdroger: Finished'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasdroger_power
+    for: 00:00:30
+    below: '150'
+  condition:
+  - condition: state
+    entity_id: input_boolean.wasdroger_status
+    state: 'on'
+  action:
+  - service: notify.all_iphones
+    data:
+      message: '{% set duration_min = ( as_timestamp(now()) - as_timestamp(states.input_boolean.wasdroger_status.last_changed)
+        )  %} Wasdroger is klaar en duurde {{ duration_min | timestamp_custom(''%H:%M'',
+        false) }}
+
+        '
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.wasdroger_status
+  mode: single
+- id: '1615806795265'
+  alias: ZHA - slaapkamer bed
+  description: ''
+  use_blueprint:
+    path: poolcactus/zha_ikea_tradfri_onoff_switch_complx.yaml
+    input:
+      night_time_start: '22:00:00'
+      night_time_end: '6:00:00'
+      remote: 8b2806cf2927878c9211fb9b7ecc3334
+      light:
+        entity_id: light.slaapkamer_zha_group_0x0006
+      forced_brightness: true
+      use_night_brightness: true
+- id: '1616098320166'
+  alias: 'Tuinverlichting: Aan bij zon onder'
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.tuinverlichting_switch
+  mode: single
+- id: '1616098367772'
+  alias: 'Tuinverlichting: Uit om 2200'
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:00:00'
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.tuinverlichting_switch
+  mode: single
+- id: '1616499989504'
+  alias: 'Canyon: Availability changed'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.canyon_endurace_wmn_7_disc_availability
+  condition: []
+  action:
+  - service: notify.mobile_app_iphone_steven
+    data:
+      title: '{{ trigger.from_state.name }}'
+      message: 'Availability changed to {{ trigger.to_state.state }} from {{ trigger.from_state.state
+        }}
+
+        '
+  mode: single
+- id: '1616568479787'
+  alias: 'Wasmachine: Starting'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasmachine_power
+    for: 00:00:02
+    above: '20'
+  condition:
+  - condition: state
+    entity_id: input_boolean.wasmachine_status
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.wasmachine_status
+  - service: counter.increment
+    target:
+      entity_id: counter.wasmachine_teller
+  mode: single
+- id: '1616568761014'
+  alias: 'Wasdroger: Starting'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasdroger_power
+    for: 00:00:10
+    above: '250'
+  condition:
+  - condition: state
+    entity_id: input_boolean.wasdroger_status
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.wasdroger_status
+  - service: counter.increment
+    target:
+      entity_id: counter.wasdroger_teller
+  - condition: not
+    conditions:
+    - condition: state
+      state: home
+      entity_id: person.marcha
+  - service: notify.mobile_app_marcha_s_iphone
+    data:
+      message: Wasdroger aangezet door iemand anders.. (Waarschijnlijk Steven)
+  mode: single
+- id: '1620112479173'
+  alias: 'Sprinkler: Timer End'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.sprinkler_pump
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.sprinklers_group_1
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: switch.turn_off
+    target:
+      entity_id:
+      - switch.sprinklers_pomp
+  mode: single
+- id: '1620112591139'
+  alias: 'Sprinkler: Cancel Timer'
+  description: ''
+  trigger:
+  - platform: state
+    to: 'off'
+    entity_id: switch.sprinklers_pomp
+  condition:
+  - condition: state
+    entity_id: timer.sprinkler_pump
+    state: active
+  action:
+  - service: timer.cancel
+    target:
+      entity_id: timer.sprinkler_pump
+  mode: single
+- id: '1620112884726'
+  alias: 'Sprinkler: Start timer for pump'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.sprinklers_pomp
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: timer.start
+    data:
+      duration: '{{ (states(''input_number.sprinkler_run_time'') | int *60) | int
+        }}'
+    entity_id: timer.sprinkler_pump
+  mode: single
+- id: '1620112997746'
+  alias: 'Sprinkler: Run Program'
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.sprinkler_program_time
+  condition:
+  - condition: or
+    conditions:
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.sprinkler_program_maandag
+        state: 'on'
+      - condition: time
+        weekday:
+        - mon
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.sprinkler_program_dinsdag
+        state: 'on'
+      - condition: time
+        weekday: tue
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.sprinkler_program_woensdag
+        state: 'on'
+      - condition: time
+        weekday: wed
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.sprinkler_program_donderdag
+        state: 'on'
+      - condition: time
+        weekday: thu
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.sprinkler_program_vrijdag
+        state: 'on'
+      - condition: time
+        weekday: fri
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.sprinkler_program_zaterdag
+        state: 'on'
+      - condition: time
+        weekday: sat
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: input_boolean.sprinkler_program_zondag
+        state: 'on'
+      - condition: time
+        weekday: sun
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.sprinklers_pomp
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: switch.turn_on
+    target:
+      entity_id: switch.sprinklers_group_1
+  mode: single
+- id: '1622015826606'
+  alias: 'Wasmachine: fasedetectie Verwarmen'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasmachine_power
+    for: 00:00:02
+    above: '1000'
+  condition:
+  - condition: state
+    entity_id: input_select.wasmachine_fase
+    state: Klaar
+  action:
+  - service: input_select.select_next
+    target:
+      entity_id: input_select.wasmachine_fase
+    data:
+      cycle: true
+  mode: single
+- id: '1622015871262'
+  alias: 'Wasmachine: fasedetectie Wassen'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasmachine_power
+    for: 00:00:30
+    below: '1000'
+  condition:
+  - condition: state
+    entity_id: input_select.wasmachine_fase
+    state: Verwarmen
+  action:
+  - service: input_select.select_next
+    target:
+      entity_id: input_select.wasmachine_fase
+  mode: single
+- id: '1622015941278'
+  alias: 'Wasmachine: fasedetectie Centrifugeren'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasmachine_power
+    for: 00:00:02
+    above: '300'
+  condition:
+  - condition: state
+    entity_id: input_select.wasmachine_fase
+    state: Wassen
+  action:
+  - service: input_select.select_next
+    target:
+      entity_id: input_select.wasmachine_fase
+  mode: single
+- id: '1622016011671'
+  alias: 'Wasmachine: fasedetectie Klaar'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasmachine_power
+    for: 00:00:10
+    below: '75'
+  condition:
+  - condition: state
+    entity_id: input_select.wasmachine_fase
+    state: Centrifugeren
+  action:
+  - service: input_select.select_next
+    target:
+      entity_id: input_select.wasmachine_fase
+  mode: single
+- id: '1623658827448'
+  alias: 'Boom woonkamer: humidity low'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.woonkamer_boom_moisture
+    below: '20'
+  condition: []
+  action:
+  - service: notify.all_iphones
+    data:
+      message: Boom heeft water nodig
+  mode: single
+- id: '1623765053051'
+  alias: 'Cube: Shake to start Radio'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:15:8d:00:01:14:72:c6
+      command: shake
+  condition: []
+  action:
+  - service: media_player.select_source
+    data:
+      source: NPO Radio 2
+    target:
+      entity_id: media_player.kitchen
+  mode: single
+- id: '1623765306248'
+  alias: 'Cube: Rotate to change Volume'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:15:8d:00:01:14:72:c6
+      command: rotate_right
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:15:8d:00:01:14:72:c6
+      command: rotate_left
+  condition:
+  - condition: state
+    entity_id: media_player.woonkamer
+    state: playing
+  action:
+  - service: media_player.volume_set
+    target:
+      entity_id:
+      - media_player.woonkamer
+      - media_player.kitchen
+    data_template:
+      volume_level: '{{ (state_attr(''media_player.kitchen'', ''volume_level'') +
+        trigger.event.data.args.relative_degrees/1000) | round(2) | float }}'
+  mode: single
+- id: '1623765419579'
+  alias: 'Cube: Flip 90 for next song'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:15:8d:00:01:14:72:c6
+      command: flip
+      args:
+        flip_degrees: 90
+  condition: []
+  action:
+  - service: media_player.media_next_track
+    target:
+      entity_id: media_player.kitchen
+  mode: single
+- id: '1623765472675'
+  alias: 'Cube: Flip 180 for Play / Pause'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:15:8d:00:01:14:72:c6
+      command: flip
+      args:
+        flip_degrees: 180
+  condition: []
+  action:
+  - service: media_player.media_play_pause
+    target:
+      entity_id: media_player.kitchen
   mode: single

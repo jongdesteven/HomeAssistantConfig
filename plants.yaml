@@ -1,0 +1,7 @@
+woonkamer_boom:
+  sensors:
+    moisture: sensor.woonkamer_boom_moisture
+    temperature: sensor.woonkamer_boom_temperature
+    conductivity: sensor.woonkamer_boom_soil_conductivity
+    brightness: sensor.woonkamer_boom_illuminance
+  min_moisture: 20
