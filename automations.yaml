@@ -1114,3 +1114,24 @@
     target:
       entity_id: media_player.kitchen
   mode: single
+- id: '1627545494458'
+  alias: 'Radio Woonkamer: On in morning'
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.radio_woonkamer_good_morning
+  condition: []
+  action:
+  - service: media_player.select_source
+    data:
+      source: NPO Radio 2
+    target:
+      device_id: bbb039785bef4ccf9cca246b00b6d95a
+  - service: media_player.volume_set
+    target:
+      device_id:
+      - bbb039785bef4ccf9cca246b00b6d95a
+      - d5cff61eaab847fd907204e8a00d7e9a
+    data:
+      volume_level: 0.1
+  mode: single
