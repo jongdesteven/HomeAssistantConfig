@@ -1,9 +1,3 @@
-doorbell_ring_time:
-  name: Doorbell Ring Time (Milliseconds)
-  icon: mdi:timer
-  min: 0
-  max: 2000
-  step: 100
 
 sprinkler_run_time:
   name: Sprinkler Run Time (Minutes)

@@ -8,7 +8,15 @@
 - platform: template
   switches:
     link_sonos_woonkamer_keuken:
-      value_template: "{% if 'woonkamer' in state_attr('media_player.kitchen', 'sonos_group')[1] %} true {% else %} false {% endif %}"
+      #value_template: "{% if 'woonkamer' in state_attr('media_player.kitchen', 'sonos_group')[1] %} true {% else %} false {% endif %}"
+      value_template: >
+        {% set ns = namespace(joined = false) %}
+        {% for player in state_attr('media_player.kitchen', 'sonos_group') %}
+          {% if 'woonkamer' in player %} 
+            {% set ns.joined = true %} 
+          {% endif %}
+        {% endfor %}
+        {{ ns.joined }}
       turn_off:
         service: sonos.unjoin
         data: 

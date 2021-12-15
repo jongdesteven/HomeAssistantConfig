@@ -18,29 +18,24 @@
     light.woonkamer_bloom:
       effect_list:
       - colorloop
+      supported_color_modes:
+      - hs
+      color_mode: hs
       brightness: 173
       hs_color:
-      - 18.788
+      - 17.576
       - 38.824
       rgb_color:
       - 255
-      - 186
+      - 184
       - 155
       xy_color:
-      - 0.446
-      - 0.353
+      - 0.447
+      - 0.35
       off_brightness:
       friendly_name: Woonkamer Bloom
       supported_features: 61
       state: 'on'
-    light.bol_tuinkamer:
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      friendly_name: Bol Tuinkamer
-      supported_features: 63
-      state: unavailable
     light.kartent:
       effect_list:
       - '0'
@@ -48,6 +43,10 @@
       - '2'
       - '3'
       - '4'
+      supported_color_modes:
+      - hs
+      - rgbw
+      color_mode: unknown
       brightness: 99
       white_value: 99
       effect: '0'
@@ -57,18 +56,45 @@
     light.keukeneiland:
       min_mireds: 153
       max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
       brightness: 181
       color_temp: 381
+      hs_color:
+      - 28.567
+      - 68.208
+      rgb_color:
+      - 255
+      - 163
+      - 81
+      xy_color:
+      - 0.534
+      - 0.387
       friendly_name: keukeneiland
-      supported_features: 3
+      supported_features: 0
       state: 'on'
     light.hoek_kamer:
       min_mireds: 153
       max_mireds: 500
       effect_list:
       - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
       brightness: 89
       color_temp: 388
+      hs_color:
+      - 28.679
+      - 69.803
+      rgb_color:
+      - 255
+      - 162
+      - 77
+      xy_color:
+      - 0.538
+      - 0.389
       off_brightness:
       friendly_name: Hoek Kamer
       supported_features: 63
@@ -78,10 +104,14 @@
       max_mireds: 500
       effect_list:
       - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: hs
       brightness: 66
       hs_color:
-      - 34.714
-      - 47.447
+      - 34.712
+      - 47.45
       rgb_color:
       - 255
       - 204
@@ -95,13 +125,26 @@
       - light.tafel3
       friendly_name: Tafel
       icon: mdi:lightbulb-group
-      supported_features: 63
+      supported_features: 44
       state: 'on'
     light.keuken_hang_rechts:
       min_mireds: 250
       max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
       brightness: 64
       color_temp: 377
+      hs_color:
+      - 28.502
+      - 67.279
+      rgb_color:
+      - 255
+      - 164
+      - 83
+      xy_color:
+      - 0.532
+      - 0.387
       off_brightness:
       friendly_name: Keuken Hang Rechts
       supported_features: 43
@@ -109,11 +152,49 @@
     light.keuken_hang_links:
       min_mireds: 250
       max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
       brightness: 64
       color_temp: 377
+      hs_color:
+      - 28.502
+      - 67.279
+      rgb_color:
+      - 255
+      - 164
+      - 83
+      xy_color:
+      - 0.532
+      - 0.387
       off_brightness:
       friendly_name: Keuken Hang Links
       supported_features: 43
+      state: 'on'
+    light.bol_woonkamer:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 150
+      color_temp: 410
+      hs_color:
+      - 29.04
+      - 74.777
+      rgb_color:
+      - 255
+      - 156
+      - 64
+      xy_color:
+      - 0.554
+      - 0.389
+      off_brightness:
+      friendly_name: Bol Woonkamer
+      supported_features: 63
       state: 'on'
 - id: '1607071687472'
   name: Badkamer Gedimd
@@ -128,4 +209,235 @@
       friendly_name: Badkamer
       icon: mdi:lightbulb-group
       supported_features: 43
+      state: 'on'
+- id: '1638120565901'
+  name: Lampen Beneden Avond
+  entities:
+    light.woonkamer_bloom:
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - hs
+      color_mode: hs
+      brightness: 173
+      hs_color:
+      - 17.576
+      - 38.824
+      rgb_color:
+      - 255
+      - 184
+      - 155
+      xy_color:
+      - 0.447
+      - 0.35
+      off_brightness:
+      friendly_name: Woonkamer Bloom
+      supported_features: 61
+      state: 'on'
+    light.kartent:
+      effect_list:
+      - '0'
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      supported_color_modes:
+      - hs
+      - rgbw
+      color_mode: unknown
+      brightness: 99
+      white_value: 99
+      effect: '0'
+      friendly_name: Kartent
+      supported_features: 149
+      state: 'on'
+    light.keukeneiland:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 89
+      color_temp: 400
+      hs_color:
+      - 28.874
+      - 72.522
+      rgb_color:
+      - 255
+      - 159
+      - 70
+      xy_color:
+      - 0.546
+      - 0.389
+      friendly_name: keukeneiland
+      supported_features: 0
+      state: 'on'
+    light.hoek_kamer:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 64
+      color_temp: 410
+      hs_color:
+      - 29.04
+      - 74.777
+      rgb_color:
+      - 255
+      - 156
+      - 64
+      xy_color:
+      - 0.554
+      - 0.389
+      off_brightness:
+      friendly_name: Hoek Kamer
+      supported_features: 63
+      state: 'on'
+    light.keuken_hang_rechts:
+      min_mireds: 250
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 26
+      color_temp: 375
+      hs_color:
+      - 28.47
+      - 66.821
+      rgb_color:
+      - 255
+      - 165
+      - 84
+      xy_color:
+      - 0.53
+      - 0.388
+      off_brightness:
+      friendly_name: Keuken Hang Rechts
+      supported_features: 43
+      state: 'on'
+    light.keuken_hang_links:
+      min_mireds: 250
+      max_mireds: 454
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 26
+      color_temp: 375
+      hs_color:
+      - 28.47
+      - 66.821
+      rgb_color:
+      - 255
+      - 165
+      - 84
+      xy_color:
+      - 0.53
+      - 0.388
+      off_brightness:
+      friendly_name: Keuken Hang Links
+      supported_features: 43
+      state: 'on'
+    light.tafel1:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 26
+      color_temp: 375
+      hs_color:
+      - 28.47
+      - 66.821
+      rgb_color:
+      - 255
+      - 165
+      - 84
+      xy_color:
+      - 0.53
+      - 0.388
+      off_brightness:
+      friendly_name: Tafel1
+      supported_features: 63
+      state: 'on'
+    light.tafel2:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 26
+      color_temp: 372
+      hs_color:
+      - 28.421
+      - 66.108
+      rgb_color:
+      - 255
+      - 166
+      - 86
+      xy_color:
+      - 0.527
+      - 0.388
+      off_brightness:
+      friendly_name: Tafel2
+      supported_features: 63
+      state: 'on'
+    light.tafel3:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 26
+      color_temp: 372
+      hs_color:
+      - 28.421
+      - 66.108
+      rgb_color:
+      - 255
+      - 166
+      - 86
+      xy_color:
+      - 0.527
+      - 0.388
+      off_brightness:
+      friendly_name: Tafel3
+      supported_features: 63
+      state: 'on'
+    light.bol_woonkamer:
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 51
+      color_temp: 431
+      hs_color:
+      - 29.393
+      - 79.466
+      rgb_color:
+      - 255
+      - 151
+      - 52
+      xy_color:
+      - 0.567
+      - 0.389
+      off_brightness:
+      friendly_name: Bol Woonkamer
+      supported_features: 63
       state: 'on'

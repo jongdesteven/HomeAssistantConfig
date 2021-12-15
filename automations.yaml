@@ -92,8 +92,8 @@
     entity_id: sensor.overloop_motion_illuminance
     below: input_number.overloop_min_lux_level
   - condition: time
-    before: '22:00'
-    after: 06:00
+    before: input_datetime.overloop_night_start
+    after: input_datetime.overloop_day_start
   action:
   - service: light.turn_on
     data:
@@ -113,8 +113,8 @@
     domain: binary_sensor
   condition:
   - condition: time
-    before: 06:00
-    after: '22:00'
+    before: input_datetime.overloop_day_start
+    after: input_datetime.overloop_night_start
   action:
   - service: light.turn_on
     data:
@@ -325,13 +325,12 @@
     to: not_home
   condition: []
   action:
-  - service: media_player.media_stop
+  - service: media_player.media_pause
     target:
-      entity_id:
-      - media_player.kitchen
+      device_id: bbb039785bef4ccf9cca246b00b6d95a
   mode: single
 - id: '1614951028020'
-  alias: Coming Home, Radio On
+  alias: 'Coming Home: Radio On'
   description: ''
   trigger:
   - platform: state
@@ -747,19 +746,19 @@
   action:
   - service: switch.turn_on
     target:
-      entity_id: switch.tuinverlichting_switch
+      area_id: achtertuin
   mode: single
 - id: '1616098367772'
   alias: 'Tuinverlichting: Uit om 2200'
   description: ''
   trigger:
   - platform: time
-    at: '22:00:00'
+    at: '22:00'
   condition: []
   action:
   - service: switch.turn_off
     target:
-      entity_id: switch.tuinverlichting_switch
+      area_id: achtertuin
   mode: single
 - id: '1616499989504'
   alias: 'Canyon: Availability changed'
@@ -1026,14 +1025,17 @@
   alias: 'Boom woonkamer: humidity low'
   description: ''
   trigger:
-  - platform: numeric_state
-    entity_id: sensor.woonkamer_boom_moisture
+  - platform: time
+    at: 09:00
+  condition:
+  - condition: numeric_state
     below: '20'
-  condition: []
+    entity_id: sensor.woonkamer_boom_moisture
   action:
   - service: notify.all_iphones
     data:
-      message: Boom heeft water nodig
+      message: Grond vochtigheid is {{ states('sensor.woonkamer_boom_moisture') }}%
+      title: Boom water geven
   mode: single
 - id: '1623765053051'
   alias: 'Cube: Shake to start Radio'
@@ -1115,23 +1117,330 @@
       entity_id: media_player.kitchen
   mode: single
 - id: '1627545494458'
-  alias: 'Radio Woonkamer: On in morning'
+  alias: 'Radio Woonkamer: On in morning when home'
   description: ''
   trigger:
   - platform: time
     at: input_datetime.radio_woonkamer_good_morning
-  condition: []
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
   action:
   - service: media_player.select_source
     data:
       source: NPO Radio 2
     target:
-      device_id: bbb039785bef4ccf9cca246b00b6d95a
+      entity_id:
+      - media_player.kitchen
   - service: media_player.volume_set
     target:
-      device_id:
-      - bbb039785bef4ccf9cca246b00b6d95a
-      - d5cff61eaab847fd907204e8a00d7e9a
+      entity_id:
+      - media_player.kitchen
+      - media_player.woonkamer
     data:
       volume_level: 0.1
+  mode: single
+- id: '1627894066119'
+  alias: 'Voordeur Camera: Motion Webhook (detect)'
+  description: ''
+  trigger:
+  - platform: webhook
+    webhook_id: motioneye-voordeur-motion-start
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.voordeur_camera_motion_detected
+  mode: single
+- id: '1627894088471'
+  alias: 'Voordeur Camera: Motion Webhook (ended)'
+  description: ''
+  trigger:
+  - platform: webhook
+    webhook_id: motioneye-voordeur-motion-end
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.voordeur_camera_motion_detected
+  mode: single
+- id: '1627906956305'
+  alias: 'Carport: Lights on at Sunset'
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      device_id:
+      - 8434a52e3f6352b16fd6ac4e7afe0dfc
+      - 59fe0f6252b289c4b7d561ebfa08fad2
+      - e7f108b8282c242cfa0e2c0e16a582e0
+      - 270eff3916c1339202e2810648a75fe4
+    data:
+      brightness_pct: 1
+  mode: single
+- id: '1627906991895'
+  alias: 'Carport: Lights off at Sunrise'
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      device_id:
+      - e7f108b8282c242cfa0e2c0e16a582e0
+      - 59fe0f6252b289c4b7d561ebfa08fad2
+      - 8434a52e3f6352b16fd6ac4e7afe0dfc
+      - 270eff3916c1339202e2810648a75fe4
+  mode: single
+- id: '1628576470323'
+  alias: 'Remote woonkamer: Turn Off'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:02:0f:9a:13
+      command: off_with_effect
+      cluster_id: 6
+      endpoint_id: 1
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      area_id:
+      - 935a8b7f189711eb8c95fdb435a11cc3
+      - 90ef33c8189711eb8b79a92c9e0149ae
+      - 980addb7189711eb8505890e1d3627ab
+  - type: turn_off
+    device_id: aa400d42ad7e7cc02177cfca0475d838
+    entity_id: switch.werkplaats_tool
+    domain: switch
+  mode: single
+- id: '1628576502981'
+  alias: 'Remote woonkamer: Turn On'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:02:0f:9a:13
+      command: 'on'
+      cluster_id: 6
+      endpoint_id: 1
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      area_id:
+      - 90ef33c8189711eb8b79a92c9e0149ae
+      - 935a8b7f189711eb8c95fdb435a11cc3
+      - 980addb7189711eb8505890e1d3627ab
+  - type: turn_on
+    device_id: aa400d42ad7e7cc02177cfca0475d838
+    entity_id: switch.werkplaats_tool
+    domain: switch
+  mode: single
+- id: '1628576632849'
+  alias: 'Remote woonkamer: Double Click (scene)'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:02:0f:9a:13
+      command: on_double_press
+      cluster_id: 6
+      endpoint_id: 1
+  condition: []
+  action:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.lampen_beneden_dag
+  mode: single
+- id: '1632403951317'
+  alias: 'Coming Home: Lights on'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.family
+    to: home
+  condition: []
+  action:
+  - scene: scene.lampen_beneden_dag
+  mode: single
+- id: '1632404054036'
+  alias: 'Leaving Home: Lights off (Daytime)'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.family
+    to: not_home
+  condition:
+  - condition: sun
+    before: sunset
+    after: sunrise
+  action:
+  - scene: scene.lampen_beneden_dag
+  mode: single
+- id: '1632404219229'
+  alias: 'Leaving Home: Lights off (Dark)'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.family
+    to: not_home
+  condition:
+  - condition: sun
+    after: sunset
+    before: sunrise
+  action:
+  - scene: scene.lampen_beneden_dag
+  mode: single
+- id: '1637756120335'
+  alias: 'Stopcontact voorkant: Aan in de morgen'
+  description: ''
+  trigger:
+  - platform: time
+    at: 05:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 8edba36b00761bdf6fd142daa6b87092
+    entity_id: switch.stopcontact_voorkant
+    domain: switch
+  mode: single
+- id: '1637756148595'
+  alias: 'Stopcontact voorkant: Uit in de nacht'
+  description: ''
+  trigger:
+  - platform: time
+    at: 01:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8edba36b00761bdf6fd142daa6b87092
+    entity_id: switch.stopcontact_voorkant
+    domain: switch
+  mode: single
+- id: '1638016389713'
+  alias: 'Espresso: Aan, niet thuis: stuur bericht'
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: afb9ba9a32b44698c5a370115d24c71f
+    entity_id: switch.espresso_switch
+    domain: switch
+    for:
+      hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: not_home
+  action:
+  - service: notify.all_iphones
+    data:
+      data:
+        actions:
+        - action: Turn Off
+          title: Zet Espresso uit!
+      message: Niemand thuis, espresso staat nog aan
+      title: Espresso uitzetten?
+  mode: single
+- id: '1638016958868'
+  alias: 'Espresso: Aan, niet thuis: acties'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: Turn Off
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.espresso_switch
+  mode: single
+- id: '1639390867701'
+  alias: 'P2000: Notify'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.p2000
+  condition:
+  - condition: template
+    value_template: "{% if 'Waalre' in states('sensor.p2000') %}\n  True\n{% else\
+      \ %}\n  False\n{% endif %}"
+  action:
+  - service: notify.all_iphones
+    data:
+      message: '"{{ states(''sensor.p2000'') + " " + state_attr(''sensor.p2000'',
+        ''discipline'') }}"'
+      data:
+        url: ''
+        push:
+          category: map
+        action_data:
+          latitude: '{{ state_attr(''sensor.p2000'', ''latitude'') }}'
+          longitude: '{{ state_attr(''sensor.p2000'', ''longitude'') }}'
+  mode: single
+- id: '1639490508119'
+  alias: 'Climate: To Auto when sleeping'
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:00'
+  condition: []
+  action:
+  - service: climate.set_hvac_mode
+    data:
+      hvac_mode: auto
+    target:
+      area_id:
+      - bd4ee2df189711eba94e03b65dfaf544
+      - c06eecbe189711eb8bd19d50c86ed43f
+      - 8d6b65ee189711ebb6693b165cd80de3
+      - 8857f173189711ebb9758bc5d708a1e7
+      - 90ef33c8189711eb8b79a92c9e0149ae
+      - 5e1fe43a185911eba15e73ac2b0dffeb
+      - 980addb7189711eb8505890e1d3627ab
+  mode: single
+- id: '1639508826844'
+  alias: 'Radio: On/Off with Apple Watch'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: RadioOnOff
+  condition: []
+  action:
+  - service: media_player.media_play_pause
+    target:
+      device_id: bbb039785bef4ccf9cca246b00b6d95a
+  mode: single
+- id: '1639568027295'
+  alias: 'Espresso: On with Apple Watch'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: Espresso On
+  condition: []
+  action:
+  - type: turn_on
+    device_id: afb9ba9a32b44698c5a370115d24c71f
+    entity_id: switch.espresso_switch
+    domain: switch
   mode: single

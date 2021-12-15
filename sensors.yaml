@@ -1,18 +1,7 @@
 
-- platform: fritzbox_netmonitor
-  host: 10.1.1.2
-  name: router_netmonitor
-
 - platform: time_date
   display_options:
     - 'time'
-
-- platform: mqtt
-  state_topic: "raspi/temp"
-  name: "Raspi Temperature"
-  unit_of_measurement: "°C"
-  icon: 'mdi:oil-temperature'
-  value_template: '{{ value_json.temperature }}'
 
 - platform: template
   sensors:
@@ -23,8 +12,8 @@
         {% else %}
           {{ states('sensor.energieverbruik_totaal') }}
         {% endif %}
-        
       unit_of_measurement: 'kWh'
+      device_class: energy
     
     energieverbruik_per_uur:
       value_template: >
@@ -34,6 +23,7 @@
           0
         {% endif %}
       unit_of_measurement: 'kWh'
+      device_class: energy
     
     energieverbruik_per_dag:
       value_template: >
@@ -43,6 +33,7 @@
           0
         {% endif %}
       unit_of_measurement: 'kWh'
+      device_class: energy
     
     gasverbruik_per_uur:
       value_template: >
@@ -52,6 +43,7 @@
           0
         {% endif %}
       unit_of_measurement: 'm3'
+      device_class: energy
     
     gasverbruik_per_dag:
       value_template: >
@@ -61,41 +53,7 @@
           0
         {% endif %}
       unit_of_measurement: 'm3'
-
-# Internet sensors
-    internet_transmission_up:
-      value_template: >-
-        {% if state_attr('sensor.router_netmonitor', 'transmission_rate_up') > 0 %}
-          {{ (state_attr('sensor.router_netmonitor', 'transmission_rate_up') /1000 ) | round(0)  }}
-        {% else %}
-          0
-        {% endif %}
-      unit_of_measurement: "kB/s"
-    internet_transmission_down:
-      #value_template: "{{ (state_attr('sensor.router_netmonitor', 'transmission_rate_down') /1000) | round(0) }}"
-      value_template: >-
-        {% if state_attr('sensor.router_netmonitor', 'transmission_rate_down') > 0 %}
-          {{ (state_attr('sensor.router_netmonitor', 'transmission_rate_down') /1000 ) | round(0)  }}
-        {% else %}
-          0
-        {% endif %}
-      unit_of_measurement: "kB/s"
-    internet_data_sent:
-      value_template: >-
-        {% if state_attr('sensor.router_netmonitor', 'bytes_sent') > 0 %}
-          {{ (state_attr('sensor.router_netmonitor', 'bytes_sent') /1000000000 ) | round(2)  }}
-        {% else %}
-          0
-        {% endif %}
-      unit_of_measurement: "GB"
-    internet_data_received:
-      value_template: >-
-        {% if state_attr('sensor.router_netmonitor', 'bytes_received') > 0 %}
-          {{ (state_attr('sensor.router_netmonitor', 'bytes_received') /1000000000 ) | round(2)  }}
-        {% else %}
-          0
-        {% endif %}
-      unit_of_measurement: "GB"
+      device_class: energy
 
 - platform: template
   sensors:
@@ -108,30 +66,6 @@
 
 - platform: rflink
   automatic_add: false
-
-- platform: buienradar
-  name: !secret weather_name
-  monitored_conditions:
-    - stationname
-    - conditioncode
-    - condition
-    - conditiondetailed
-    - conditionexact
-    - symbol
-    - humidity
-    - temperature
-    - groundtemperature
-    - windspeed
-    - windforce
-    - winddirection
-    - windazimuth
-    - pressure
-    - visibility
-    - windgust
-    - precipitation
-    - irradiance
-    - precipitation_forecast_average
-    - precipitation_forecast_total
 
 - platform: afvalbeheer
   wastecollector: Waalre
@@ -183,13 +117,19 @@
   #  select: ".js-productCount"
   #  unit_of_measurement: "items"
    
-- platform: scrape
-  name: Canyon Endurace WMN 7 Disc Availability
-  resource: "https://www.canyon.com/nl-nl/road-bikes/endurance-bikes/endurace-wmn/endurace-7-wmn-disc/2956.html?dwvar_2956_pv_rahmenfarbe=VT%2FWH"
-  #resource: "https://www.canyon.com/nl-nl/road-bikes/race-bikes/aeroad/aeroad-cf-sl-7-disc/2447.html?dwvar_2447_pv_rahmenfarbe=BK%2FGY"
-  select: ".productConfiguration__availabilityMessage"
-  index: 4
+  #- platform: scrape
+  #  name: Canyon Endurace WMN 7 Disc Availability
+  #  resource: "https://www.canyon.com/nl-nl/road-bikes/endurance-bikes/endurace-wmn/endurace-7-wmn-disc/2956.html?dwvar_2956_pv_rahmenfarbe=VT%2FWH"
+  #  #resource: "https://www.canyon.com/nl-nl/road-bikes/race-bikes/aeroad/aeroad-cf-sl-7-disc/2447.html?dwvar_2447_pv_rahmenfarbe=BK%2FGY"
+  #  select: ".productConfiguration__availabilityMessage"
+  #  index: 4
 
 - platform: mqtt
   state_topic: "wodtimer/display"
   name: "WODTimer Display"
+
+- platform: zwift
+  username: !secret my_zwift_username
+  password: !secret my_zwift_password
+  #players:
+  # - !secret my_friends_zwift_player_id
