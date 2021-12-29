@@ -54,7 +54,10 @@
   trigger:
   - platform: time
     at: input_datetime.stoplicht_sjors_aan_rood
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.stoplicht_aan_uit
+    state: 'on'
   action:
   - service: light.turn_on
     data:
@@ -69,7 +72,10 @@
   trigger:
   - platform: time
     at: input_datetime.stoplicht_sjors_aan_groen
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.stoplicht_aan_uit
+    state: 'on'
   action:
   - service: light.turn_on
     data:
@@ -195,7 +201,10 @@
   trigger:
   - platform: time
     at: input_datetime.stoplicht_sjors_uit
-  condition: []
+  condition:
+  - condition: state
+    entity_id: input_boolean.stoplicht_aan_uit
+    state: 'on'
   action:
   - service: light.turn_off
     entity_id: light.stoplicht_sjors
@@ -730,7 +739,7 @@
     path: poolcactus/zha_ikea_tradfri_onoff_switch_complx.yaml
     input:
       night_time_start: '22:00:00'
-      night_time_end: '6:00:00'
+      night_time_end: 07:00:00
       remote: 8b2806cf2927878c9211fb9b7ecc3334
       light:
         entity_id: light.slaapkamer_zha_group_0x0006
@@ -1070,7 +1079,7 @@
       command: rotate_left
   condition:
   - condition: state
-    entity_id: media_player.woonkamer
+    entity_id: media_player.kitchen
     state: playing
   action:
   - service: media_player.volume_set
@@ -1127,12 +1136,6 @@
     entity_id: group.family
     state: home
   action:
-  - service: media_player.select_source
-    data:
-      source: NPO Radio 2
-    target:
-      entity_id:
-      - media_player.kitchen
   - service: media_player.volume_set
     target:
       entity_id:
@@ -1140,6 +1143,12 @@
       - media_player.woonkamer
     data:
       volume_level: 0.1
+  - service: media_player.select_source
+    data:
+      source: NPO Radio 2
+    target:
+      entity_id:
+      - media_player.kitchen
   mode: single
 - id: '1627894066119'
   alias: 'Voordeur Camera: Motion Webhook (detect)'
@@ -1443,4 +1452,271 @@
     device_id: afb9ba9a32b44698c5a370115d24c71f
     entity_id: switch.espresso_switch
     domain: switch
+  mode: single
+- id: '1639649559177'
+  alias: 'Lights: All off at sunrise when not home'
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: '0'
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: not_home
+  action:
+  - service: light.turn_off
+  mode: single
+- id: '1639649682985'
+  alias: 'Slaapkamer: Remote zet overloop uit'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 68:0a:e2:ff:fe:12:36:f0
+      command: 'off'
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: light.overloop_zha_group_0x0005
+    data:
+      transition: 1
+  mode: single
+- id: '1639649809417'
+  alias: 'Slaapkamer Hannah: Remote zet lampen aan'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 68:0a:e2:ff:fe:14:a2:3e
+      command: 'on'
+  condition: []
+  action:
+  - service: light.turn_on
+    data_template:
+      entity_id: '{% if is_state(''light.plafond_hannah2'', ''on'') %} light.plafond_hannah3
+        {% elif is_state(''light.plafond_hannah1'', ''on'') %} light.plafond_hannah2
+        {% else %} light.plafond_hannah1 {% endif %}
+
+        '
+  mode: single
+- id: '1639649862241'
+  alias: 'Slaapkamer Hannah: Remote zet lampen uit'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 68:0a:e2:ff:fe:14:a2:3e
+      command: 'off'
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      area_id: 8d6b65ee189711ebb6693b165cd80de3
+    data:
+      transition: 1
+  mode: single
+- id: '1639649996016'
+  alias: 'Kartent: Single press'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:12:4b:00:1f:91:57:fd
+      command: toggle
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      device_id: ac4abeb3123611eb8f9ce1edd72e026f
+    data:
+      hs_color:
+      - '{{range(0,360) | random}}'
+      - 75
+  mode: single
+- id: '1639650221170'
+  alias: 'Kartent: Double press'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:12:4b:00:1f:91:57:fd
+      command: 'on'
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      device_id: ac4abeb3123611eb8f9ce1edd72e026f
+    data:
+      color_name: white
+      brightness_pct: 100
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: 200
+  - service: light.turn_on
+    target:
+      device_id: ac4abeb3123611eb8f9ce1edd72e026f
+    data:
+      effect: '{{range(2,4) | random}}'
+  mode: single
+- id: '1639650304577'
+  alias: 'Kartent: Long press'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:12:4b:00:1f:91:57:fd
+      command: 'off'
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      device_id: ac4abeb3123611eb8f9ce1edd72e026f
+    data:
+      white: 200
+  mode: single
+- id: '1639650372281'
+  alias: 'Badkamer: Remote triple press '
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:04:f1:7a:5d
+      command: on_triple_press
+  condition: []
+  action:
+  - scene: scene.badkamer_dag
+  mode: single
+- id: '1639650398187'
+  alias: 'Badkamer: Double press'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:04:f1:7a:5d
+      command: on_double_press
+  condition: []
+  action:
+  - scene: scene.badkamer_gedimd
+  mode: single
+- id: '1639650505114'
+  alias: 'Slaapkamer: Remote turns off Sonos'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 68:0a:e2:ff:fe:12:36:f0
+      command: 'off'
+  condition:
+  - condition: state
+    entity_id: media_player.bedroom
+    state: playing
+  action:
+  - service: media_player.media_pause
+    target:
+      device_id: 7c351f23705b4badb7b833baeb7d8cdc
+  mode: single
+- id: '1639650864185'
+  alias: 'Alarm: Trigger when away'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.motion_sensors
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarm_system
+    state: armed_away
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  action:
+  - service: alarm_control_panel.alarm_trigger
+    target:
+      entity_id: alarm_control_panel.alarm_system
+  mode: single
+- id: '1639650968994'
+  alias: 'Alarm: Sound alarm when triggered'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: alarm_control_panel.alarm_system
+    to: triggered
+    from: armed_away
+  condition: []
+  action:
+  - service: notify.all_iphones
+    data:
+      message: Alarm triggered, alarm gaat af
+      title: Alarm!
+      data:
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
+  - repeat:
+      until:
+      - condition: state
+        entity_id: alarm_control_panel.alarm_system
+        state: disarmed
+      sequence:
+      - service: media_player.play_media
+        target:
+          device_id:
+          - 68cc27f3b0114e3ba4fbadd74bd797d8
+          - 7c351f23705b4badb7b833baeb7d8cdc
+          - bbb039785bef4ccf9cca246b00b6d95a
+          - d5cff61eaab847fd907204e8a00d7e9a
+          - 8707d85e3773414ba1fffb72bff25d0f
+        data:
+          media_content_id: http://10.1.1.17/alarmsound.mp3
+          media_content_type: music
+      - service: media_player.volume_set
+        target:
+          device_id:
+          - 68cc27f3b0114e3ba4fbadd74bd797d8
+          - 7c351f23705b4badb7b833baeb7d8cdc
+          - bbb039785bef4ccf9cca246b00b6d95a
+          - 8707d85e3773414ba1fffb72bff25d0f
+          - d5cff61eaab847fd907204e8a00d7e9a
+        data:
+          volume_level: 0.75
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 14
+          milliseconds: 0
+  mode: single
+- id: '1640352167067'
+  alias: 'Maan: Aan als Sjors gaat slapen'
+  description: ''
+  trigger:
+  - platform: time
+    at: '18:45'
+  condition: []
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 75
+      transition: 10
+    target:
+      entity_id: light.maan
   mode: single

@@ -123,8 +123,8 @@
       - light.tafel1
       - light.tafel2
       - light.tafel3
-      friendly_name: Tafel
       icon: mdi:lightbulb-group
+      friendly_name: Tafel
       supported_features: 44
       state: 'on'
     light.keuken_hang_rechts:
@@ -133,7 +133,7 @@
       supported_color_modes:
       - color_temp
       color_mode: color_temp
-      brightness: 64
+      brightness: 38
       color_temp: 377
       hs_color:
       - 28.502
@@ -155,7 +155,7 @@
       supported_color_modes:
       - color_temp
       color_mode: color_temp
-      brightness: 64
+      brightness: 38
       color_temp: 377
       hs_color:
       - 28.502

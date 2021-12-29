@@ -7,7 +7,7 @@ family:
 motion_sensors:
   name: Motion Sensors
   entities:
-    - binary_sensor.overloop_sensor_motion
+    - binary_sensor.overloop_motion_occupancy
     - binary_sensor.dafang2_motion_sensor
     - binary_sensor.dafangbaby_motion_sensor
-    - binary_sensor.motion_garage_occupancy
+    - binary_sensor.garage_motion_ias_zone
