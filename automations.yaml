@@ -24,7 +24,7 @@
   description: ''
   trigger:
   - platform: time
-    at: 07:00
+    at: 07:30
   condition: []
   action:
   - service: light.turn_off
@@ -511,7 +511,7 @@
       message: Doorbell pressed
       data:
         attachment:
-          url: https://stevenmarcha.duckdns.org/frontdoor.jpg
+          url: https://stevenmarcha.duckdns.org/hass/frontdoor.jpg
           content-type: jpg
           hide-thumbnail: false
         push:
@@ -1533,7 +1533,7 @@
   action:
   - service: light.turn_on
     target:
-      device_id: ac4abeb3123611eb8f9ce1edd72e026f
+      device_id: 8cf9e4e0dd8c085ded6d9e797a23f244
     data:
       hs_color:
       - '{{range(0,360) | random}}'
@@ -1550,12 +1550,6 @@
       command: 'on'
   condition: []
   action:
-  - service: light.turn_on
-    target:
-      device_id: ac4abeb3123611eb8f9ce1edd72e026f
-    data:
-      color_name: white
-      brightness_pct: 100
   - delay:
       hours: 0
       minutes: 0
@@ -1563,9 +1557,10 @@
       milliseconds: 200
   - service: light.turn_on
     target:
-      device_id: ac4abeb3123611eb8f9ce1edd72e026f
+      device_id:
+      - 8cf9e4e0dd8c085ded6d9e797a23f244
     data:
-      effect: '{{range(2,4) | random}}'
+      effect: Random
   mode: single
 - id: '1639650304577'
   alias: 'Kartent: Long press'
@@ -1579,10 +1574,10 @@
   condition: []
   action:
   - service: light.turn_on
-    target:
-      device_id: ac4abeb3123611eb8f9ce1edd72e026f
     data:
       white: 200
+    target:
+      device_id: 8cf9e4e0dd8c085ded6d9e797a23f244
   mode: single
 - id: '1639650372281'
   alias: 'Badkamer: Remote triple press '
@@ -1719,4 +1714,133 @@
       transition: 10
     target:
       entity_id: light.maan
+  mode: single
+- id: '1643985061462'
+  alias: 'ZwiftWind: Turn on when online'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.zwift_online_4332193
+    to: 'True'
+  condition: []
+  action:
+  - service: fan.turn_on
+    data:
+      percentage: 20
+    target:
+      device_id: e612d2a3a9e4648e0e3dc20b667a3507
+  - service: select.select_option
+    data:
+      option: HR
+    target:
+      device_id: e612d2a3a9e4648e0e3dc20b667a3507
+  mode: single
+- id: '1644155037497'
+  alias: 'ZwiftWind: RideOn +20% Wind'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zwift_ride_on
+    event_data:
+      player_id: 4332193
+  condition: []
+  action:
+  - service: counter.increment
+    data: {}
+    target:
+      entity_id: counter.zwift_rideon_steven
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: select.zwiftwind_mode
+        state: HR
+      sequence:
+      - service: select.select_option
+        data:
+          option: Manual
+        target:
+          entity_id: select.zwiftwind_mode
+      - service: fan.increase_speed
+        data:
+          percentage_step: 20
+        target:
+          device_id: e612d2a3a9e4648e0e3dc20b667a3507
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 5
+          milliseconds: 0
+      - service: fan.decrease_speed
+        data:
+          percentage_step: 20
+        target:
+          device_id: e612d2a3a9e4648e0e3dc20b667a3507
+      - service: select.select_option
+        data:
+          option: HR
+        target:
+          device_id: e612d2a3a9e4648e0e3dc20b667a3507
+    default:
+    - service: fan.increase_speed
+      data:
+        percentage_step: 20
+      target:
+        device_id: e612d2a3a9e4648e0e3dc20b667a3507
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 5
+        milliseconds: 0
+    - service: fan.decrease_speed
+      data:
+        percentage_step: 20
+      target:
+        device_id: e612d2a3a9e4648e0e3dc20b667a3507
+  mode: single
+- id: '1644390946789'
+  alias: 'Broodoven: Warmup Start'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.broodoven_switch
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  condition:
+  - condition: state
+    entity_id: input_boolean.broodoven_warmup
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.broodoven_warmup
+  mode: single
+- id: '1644391035148'
+  alias: 'Broodoven: Warmup finished'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.broodoven_power
+    below: '1000'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+  condition:
+  - condition: state
+    entity_id: input_boolean.broodoven_warmup
+    state: 'on'
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.broodoven_warmup
+  - service: notify.mobile_app_iphone_steven
+    data:
+      title: Broodoven
+      message: Opgewarmd
   mode: single

@@ -23,56 +23,18 @@
       color_mode: hs
       brightness: 173
       hs_color:
-      - 17.576
-      - 38.824
+      - 15.918
+      - 38.431
       rgb_color:
       - 255
-      - 184
-      - 155
+      - 183
+      - 157
       xy_color:
-      - 0.447
-      - 0.35
+      - 0.446
+      - 0.347
       off_brightness:
       friendly_name: Woonkamer Bloom
       supported_features: 61
-      state: 'on'
-    light.kartent:
-      effect_list:
-      - '0'
-      - '1'
-      - '2'
-      - '3'
-      - '4'
-      supported_color_modes:
-      - hs
-      - rgbw
-      color_mode: unknown
-      brightness: 99
-      white_value: 99
-      effect: '0'
-      friendly_name: Kartent
-      supported_features: 149
-      state: 'on'
-    light.keukeneiland:
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - color_temp
-      color_mode: color_temp
-      brightness: 181
-      color_temp: 381
-      hs_color:
-      - 28.567
-      - 68.208
-      rgb_color:
-      - 255
-      - 163
-      - 81
-      xy_color:
-      - 0.534
-      - 0.387
-      friendly_name: keukeneiland
-      supported_features: 0
       state: 'on'
     light.hoek_kamer:
       min_mireds: 153
@@ -196,6 +158,27 @@
       friendly_name: Bol Woonkamer
       supported_features: 63
       state: 'on'
+    light.keukeneiland_lamp:
+      min_mireds: 142.8571
+      max_mireds: 357.1429
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 191
+      color_temp: 274
+      hs_color:
+      - 27.037
+      - 41.629
+      rgb_color:
+      - 255
+      - 196
+      - 148
+      xy_color:
+      - 0.444
+      - 0.371
+      friendly_name: Keukeneiland lamp
+      supported_features: 40
+      state: 'on'
 - id: '1607071687472'
   name: Badkamer Gedimd
   entities:
@@ -234,44 +217,6 @@
       friendly_name: Woonkamer Bloom
       supported_features: 61
       state: 'on'
-    light.kartent:
-      effect_list:
-      - '0'
-      - '1'
-      - '2'
-      - '3'
-      - '4'
-      supported_color_modes:
-      - hs
-      - rgbw
-      color_mode: unknown
-      brightness: 99
-      white_value: 99
-      effect: '0'
-      friendly_name: Kartent
-      supported_features: 149
-      state: 'on'
-    light.keukeneiland:
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - color_temp
-      color_mode: color_temp
-      brightness: 89
-      color_temp: 400
-      hs_color:
-      - 28.874
-      - 72.522
-      rgb_color:
-      - 255
-      - 159
-      - 70
-      xy_color:
-      - 0.546
-      - 0.389
-      friendly_name: keukeneiland
-      supported_features: 0
-      state: 'on'
     light.hoek_kamer:
       min_mireds: 153
       max_mireds: 500
@@ -303,18 +248,18 @@
       supported_color_modes:
       - color_temp
       color_mode: color_temp
-      brightness: 26
-      color_temp: 375
+      brightness: 38
+      color_temp: 377
       hs_color:
-      - 28.47
-      - 66.821
+      - 28.502
+      - 67.279
       rgb_color:
       - 255
-      - 165
-      - 84
+      - 164
+      - 83
       xy_color:
-      - 0.53
-      - 0.388
+      - 0.532
+      - 0.387
       off_brightness:
       friendly_name: Keuken Hang Rechts
       supported_features: 43
@@ -325,18 +270,18 @@
       supported_color_modes:
       - color_temp
       color_mode: color_temp
-      brightness: 26
-      color_temp: 375
+      brightness: 38
+      color_temp: 377
       hs_color:
-      - 28.47
-      - 66.821
+      - 28.502
+      - 67.279
       rgb_color:
       - 255
-      - 165
-      - 84
+      - 164
+      - 83
       xy_color:
-      - 0.53
-      - 0.388
+      - 0.532
+      - 0.387
       off_brightness:
       friendly_name: Keuken Hang Links
       supported_features: 43
@@ -399,19 +344,18 @@
       supported_color_modes:
       - color_temp
       - hs
-      color_mode: color_temp
-      brightness: 26
-      color_temp: 372
+      color_mode: hs
+      brightness: 66
       hs_color:
-      - 28.421
-      - 66.108
+      - 34.712
+      - 47.45
       rgb_color:
       - 255
-      - 166
-      - 86
+      - 204
+      - 134
       xy_color:
-      - 0.527
-      - 0.388
+      - 0.449
+      - 0.394
       off_brightness:
       friendly_name: Tafel3
       supported_features: 63
@@ -440,4 +384,25 @@
       off_brightness:
       friendly_name: Bol Woonkamer
       supported_features: 63
+      state: 'on'
+    light.keukeneiland_lamp:
+      min_mireds: 142.8571
+      max_mireds: 357.1429
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 99
+      color_temp: 310
+      hs_color:
+      - 27.492
+      - 51.104
+      rgb_color:
+      - 255
+      - 184
+      - 124
+      xy_color:
+      - 0.476
+      - 0.379
+      friendly_name: Keukeneiland lamp
+      supported_features: 40
       state: 'on'

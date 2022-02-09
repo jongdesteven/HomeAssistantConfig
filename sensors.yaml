@@ -133,3 +133,9 @@
   password: !secret my_zwift_password
   #players:
   # - !secret my_friends_zwift_player_id
+
+- platform: zwift
+  username: !secret my_zwift_username_m
+  password: !secret my_zwift_password_m
+  #players:
+  # - !secret my_friends_zwift_player_id

@@ -96,9 +96,9 @@ logger:
     #homeassistant.components.rflink: debug
     homeassistant.components.home_connect: debug
 
-tado:
-  username: !secret tado_username
-  password: !secret tado_password
+#tado:
+#  username: !secret tado_username
+#  password: !secret tado_password
     
 mqtt:
   broker: localhost
