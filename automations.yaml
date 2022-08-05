@@ -48,41 +48,55 @@
       title: Stoplicht Sjors onbereikbaar
       message: Iemand heeft het stoplicht uitgezet
   mode: single
-- id: '1606904633525'
-  alias: Stoplicht Sjors Aan Rood
-  description: ''
-  trigger:
-  - platform: time
-    at: input_datetime.stoplicht_sjors_aan_rood
-  condition:
-  - condition: state
-    entity_id: input_boolean.stoplicht_aan_uit
-    state: 'on'
-  action:
-  - service: light.turn_on
-    data:
-      color_name: red
-      brightness_pct: 1
-    target:
-      entity_id: light.stoplicht_sjors
-  mode: single
 - id: '1606905199462'
-  alias: Stoplicht Sjors Aan Groen
+  alias: Stoplicht Sjors Rood Groen Uit
   description: ''
   trigger:
   - platform: time
     at: input_datetime.stoplicht_sjors_aan_groen
+    id: groen
+  - platform: time
+    at: input_datetime.stoplicht_sjors_aan_rood
+    id: rood
+  - platform: time
+    at: input_datetime.stoplicht_sjors_uit
+    id: uit
   condition:
   - condition: state
     entity_id: input_boolean.stoplicht_aan_uit
     state: 'on'
   action:
-  - service: light.turn_on
-    data:
-      color_name: green
-      brightness_pct: 1
-    target:
-      entity_id: light.stoplicht_sjors
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: groen
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness: 1
+          color_name: green
+        target:
+          device_id: caa868c0c10b31e0516b85abcacd3394
+    - conditions:
+      - condition: trigger
+        id: rood
+      sequence:
+      - service: light.turn_on
+        data:
+          color_name: red
+          brightness: 1
+        target:
+          device_id: caa868c0c10b31e0516b85abcacd3394
+    - conditions:
+      - condition: trigger
+        id: uit
+      sequence:
+      - service: light.turn_off
+        target:
+          device_id: caa868c0c10b31e0516b85abcacd3394
+        data:
+          transition: 1
+    default: []
   mode: single
 - id: '1606921959287'
   alias: Overloop Auto on Day
@@ -195,40 +209,6 @@
       flash: short
     entity_id: light.hoek_kamer
   mode: single
-- id: '1607009247154'
-  alias: Stoplicht Sjors Uit
-  description: ''
-  trigger:
-  - platform: time
-    at: input_datetime.stoplicht_sjors_uit
-  condition:
-  - condition: state
-    entity_id: input_boolean.stoplicht_aan_uit
-    state: 'on'
-  action:
-  - service: light.turn_off
-    entity_id: light.stoplicht_sjors
-  mode: single
-- id: '1607949549945'
-  alias: ZHA - Slaapkamer dimmer
-  description: ''
-  use_blueprint:
-    path: vanstinator/zha-philips-hue-dimmer-switch.yaml
-    input:
-      brightness: '100'
-      remote: 5810c16759331b6c1621eff63caca4d8
-      light:
-        entity_id: light.slaapkamer_zha_group_0x0006
-- id: '1607949579082'
-  alias: ZHA - Badkamer Remote
-  description: ''
-  use_blueprint:
-    path: vanstinator/zha-philips-hue-dimmer-switch.yaml
-    input:
-      brightness: '100'
-      remote: cba041246d52b6a7710d11b343bfb999
-      light:
-        entity_id: light.badkamer_zha_group_0x0004
 - id: '1611736009587'
   alias: Maan in nachtstand
   description: ''
@@ -399,7 +379,7 @@
   condition:
   - condition: numeric_state
     entity_id: sensor.waalre_temperature
-    below: '22'
+    below: '20'
   action:
   - type: turn_on
     device_id: 6a46b507a92546bd94b582d2e8f29ed3
@@ -436,14 +416,18 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: switch.afzuiging_low
-    to: 'off'
-    for: 01:30:00
+    entity_id: fan.afzuiging
+    for:
+      hours: 1
+      minutes: 30
+      seconds: 0
+    to: 'on'
   condition: []
   action:
-  - service: switch.turn_on
+  - service: fan.turn_off
+    data: {}
     target:
-      entity_id: switch.afzuiging_low
+      device_id: 507c924ad2db4c75a0ec907cf634d232
   mode: single
 - id: '1615275232810'
   alias: 'Afzuiging: Aan bij douchen'
@@ -454,10 +438,10 @@
     to: 'on'
   condition: []
   action:
-  - type: turn_on
-    device_id: 507c924ad2db4c75a0ec907cf634d232
-    entity_id: switch.afzuiging_mid
-    domain: switch
+  - device_id: 507c924ad2db4c75a0ec907cf634d232
+    domain: fan
+    entity_id: fan.afzuiging
+    type: turn_on
   mode: single
 - id: '1615275401098'
   alias: 'Radio Badkamer: Koppel met Switch'
@@ -472,10 +456,11 @@
     value_template: '{% if state_attr(''media_player.badkamer'', ''sonos_group'')
       | count == 1 %} true {% else %} false {% endif %}'
   action:
-  - service: sonos.join
+  - service: media_player.join
     data:
-      master: media_player.kitchen
-      entity_id: media_player.badkamer
+      group_members: media_player.badkamer
+    target:
+      device_id: bbb039785bef4ccf9cca246b00b6d95a
   mode: single
 - id: '1615275461824'
   alias: 'Radio Badkamer: Ontkoppel met Switch'
@@ -490,9 +475,10 @@
     value_template: '{% if state_attr(''media_player.badkamer'', ''sonos_group'')
       | count > 1 %} true {% else %} false {% endif %}'
   action:
-  - service: sonos.unjoin
-    data:
-      entity_id: media_player.badkamer
+  - service: media_player.unjoin
+    data: {}
+    target:
+      device_id: 68cc27f3b0114e3ba4fbadd74bd797d8
   mode: single
 - id: '1615290642684'
   alias: 'Doorbell: pressed'
@@ -534,15 +520,16 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.updater
+    entity_id:
+    - binary_sensor.python_package_index_pypi_update_available
     to: 'on'
     from: 'off'
   condition: []
   action:
   - service: notify.mobile_app_iphone_steven
     data:
-      message: Home assistant {{ state_attr('binary_sensor.updater', 'newest_version')  }}
-        is available.
+      message: 'Home assistant {{ states(''sensor.python_package_index_pypi'')  }}
+        is available. Current version: {{ states(''sensor.current_version'') }}'
   mode: single
 - id: '1615304007014'
   alias: 'Kartent: Reset to white'
@@ -756,6 +743,11 @@
   - service: switch.turn_on
     target:
       area_id: achtertuin
+    data: {}
+  - service: light.turn_on
+    data: {}
+    target:
+      area_id: achtertuin
   mode: single
 - id: '1616098367772'
   alias: 'Tuinverlichting: Uit om 2200'
@@ -766,6 +758,11 @@
   condition: []
   action:
   - service: switch.turn_off
+    target:
+      area_id: achtertuin
+    data: {}
+  - service: light.turn_off
+    data: {}
     target:
       area_id: achtertuin
   mode: single
@@ -845,48 +842,57 @@
   action:
   - service: switch.turn_off
     target:
-      entity_id: switch.sprinklers_group_1
+      entity_id:
+      - switch.sprinklers_pomp
+    data: {}
   - delay:
       hours: 0
       minutes: 0
-      seconds: 2
+      seconds: 3
       milliseconds: 0
   - service: switch.turn_off
     target:
-      entity_id:
-      - switch.sprinklers_pomp
+      entity_id: switch.sprinklers_group_1
+    data: {}
   mode: single
 - id: '1620112591139'
-  alias: 'Sprinkler: Cancel Timer'
+  alias: 'Sprinkler: Timer with pump'
   description: ''
   trigger:
   - platform: state
     to: 'off'
     entity_id: switch.sprinklers_pomp
-  condition:
-  - condition: state
-    entity_id: timer.sprinkler_pump
-    state: active
-  action:
-  - service: timer.cancel
-    target:
-      entity_id: timer.sprinkler_pump
-  mode: single
-- id: '1620112884726'
-  alias: 'Sprinkler: Start timer for pump'
-  description: ''
-  trigger:
+    id: pump off
+    from: 'on'
   - platform: state
-    entity_id: switch.sprinklers_pomp
     to: 'on'
+    entity_id: switch.sprinklers_pomp
+    id: pump on
     from: 'off'
   condition: []
   action:
-  - service: timer.start
-    data:
-      duration: '{{ (states(''input_number.sprinkler_run_time'') | int *60) | int
-        }}'
-    entity_id: timer.sprinkler_pump
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pump off
+      - condition: state
+        entity_id: timer.sprinkler_pump
+        state: active
+      sequence:
+      - service: timer.cancel
+        data: {}
+        target:
+          entity_id: timer.sprinkler_pump
+    - conditions:
+      - condition: trigger
+        id: pump on
+      sequence:
+      - service: timer.start
+        data:
+          duration: '{{ (states(''input_number.sprinkler_run_time'') | int *60) |
+            int }}'
+        entity_id: timer.sprinkler_pump
+    default: []
   mode: single
 - id: '1620112997746'
   alias: 'Sprinkler: Run Program'
@@ -1046,87 +1052,71 @@
       message: Grond vochtigheid is {{ states('sensor.woonkamer_boom_moisture') }}%
       title: Boom water geven
   mode: single
-- id: '1623765053051'
-  alias: 'Cube: Shake to start Radio'
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: 00:15:8d:00:01:14:72:c6
-      command: shake
-  condition: []
-  action:
-  - service: media_player.select_source
-    data:
-      source: NPO Radio 2
-    target:
-      entity_id: media_player.kitchen
-  mode: single
-- id: '1623765306248'
-  alias: 'Cube: Rotate to change Volume'
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: 00:15:8d:00:01:14:72:c6
-      command: rotate_right
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: 00:15:8d:00:01:14:72:c6
-      command: rotate_left
-  condition:
-  - condition: state
-    entity_id: media_player.kitchen
-    state: playing
-  action:
-  - service: media_player.volume_set
-    target:
-      entity_id:
-      - media_player.woonkamer
-      - media_player.kitchen
-    data_template:
-      volume_level: '{{ (state_attr(''media_player.kitchen'', ''volume_level'') +
-        trigger.event.data.args.relative_degrees/1000) | round(2) | float }}'
-  mode: single
-- id: '1623765419579'
-  alias: 'Cube: Flip 90 for next song'
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_ieee: 00:15:8d:00:01:14:72:c6
-      command: flip
-      args:
-        flip_degrees: 90
-  condition: []
-  action:
-  - service: media_player.media_next_track
-    target:
-      entity_id: media_player.kitchen
-  mode: single
 - id: '1623765472675'
-  alias: 'Cube: Flip 180 for Play / Pause'
+  alias: 'Cube: Sonos Kitchen'
   description: ''
   trigger:
   - platform: event
     event_type: zha_event
     event_data:
       device_ieee: 00:15:8d:00:01:14:72:c6
-      command: flip
-      args:
-        flip_degrees: 180
   condition: []
   action:
-  - service: media_player.media_play_pause
-    target:
-      entity_id: media_player.kitchen
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: template
+          value_template: '{{ trigger.event.data.command == ''flip'' }}'
+        - condition: template
+          value_template: '{{ trigger.event.data.args.flip_degrees == 180 }}'
+      sequence:
+      - service: media_player.media_play_pause
+        data: {}
+        target:
+          device_id: bbb039785bef4ccf9cca246b00b6d95a
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: template
+          value_template: '{{ trigger.event.data.command == ''flip'' }}'
+        - condition: template
+          value_template: '{{ trigger.event.data.args.flip_degrees == 90}}'
+      sequence:
+      - service: media_player.media_next_track
+        data: {}
+        target:
+          device_id: bbb039785bef4ccf9cca246b00b6d95a
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: template
+          value_template: '{{ trigger.event.data.command == ''rotate_right'' }}'
+        - condition: template
+          value_template: '{{ trigger.event.data.command == ''rotate_left'' }}'
+      sequence:
+      - service: media_player.volume_set
+        target:
+          entity_id:
+          - media_player.woonkamer
+          - media_player.kitchen
+        data_template:
+          volume_level: '{{ (state_attr(''media_player.kitchen'', ''volume_level'')
+            + trigger.event.data.args.relative_degrees/1000) | round(2) | float }}'
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''shake'' }}'
+      sequence:
+      - service: media_player.play_media
+        data:
+          media_content_type: music
+          media_content_id: aac://http://icecast.omroep.nl/radio2-bb-aac
+        target:
+          device_id: bbb039785bef4ccf9cca246b00b6d95a
+    default: []
   mode: single
 - id: '1627545494458'
-  alias: 'Radio Woonkamer: On in morning when home'
+  alias: 'Sonos Kitchen: On in morning when home'
   description: ''
   trigger:
   - platform: time
@@ -1136,19 +1126,19 @@
     entity_id: group.family
     state: home
   action:
+  - service: media_player.play_media
+    data:
+      media_content_id: aac://http://icecast.omroep.nl/radio2-bb-aac
+      media_content_type: music
+    target:
+      entity_id: media_player.kitchen
   - service: media_player.volume_set
+    data:
+      volume_level: 0.1
     target:
       entity_id:
       - media_player.kitchen
       - media_player.woonkamer
-    data:
-      volume_level: 0.1
-  - service: media_player.select_source
-    data:
-      source: NPO Radio 2
-    target:
-      entity_id:
-      - media_player.kitchen
   mode: single
 - id: '1627894066119'
   alias: 'Voordeur Camera: Motion Webhook (detect)'
@@ -1342,20 +1332,13 @@
   alias: 'Espresso: Aan, niet thuis: stuur bericht'
   description: ''
   trigger:
-  - platform: device
-    type: turned_on
-    device_id: afb9ba9a32b44698c5a370115d24c71f
-    entity_id: switch.espresso_switch
-    domain: switch
-    for:
-      hours: 0
-      minutes: 20
-      seconds: 0
-      milliseconds: 0
+  - platform: state
+    entity_id: group.family
+    to: not_home
   condition:
   - condition: state
-    entity_id: group.family
-    state: not_home
+    entity_id: switch.espresso_switch
+    state: 'on'
   action:
   - service: notify.all_iphones
     data:
@@ -1388,8 +1371,8 @@
     entity_id: sensor.p2000
   condition:
   - condition: template
-    value_template: "{% if 'Waalre' in states('sensor.p2000') %}\n  True\n{% else\
-      \ %}\n  False\n{% endif %}"
+    value_template: "{% if 'Waalre' in states('sensor.p2000') %}\n  True\n{% else
+      %}\n  False\n{% endif %}"
   action:
   - service: notify.all_iphones
     data:
@@ -1517,8 +1500,7 @@
   - service: light.turn_off
     target:
       area_id: 8d6b65ee189711ebb6693b165cd80de3
-    data:
-      transition: 1
+    data: {}
   mode: single
 - id: '1639649996016'
   alias: 'Kartent: Single press'
@@ -1716,27 +1698,50 @@
       entity_id: light.maan
   mode: single
 - id: '1643985061462'
-  alias: 'ZwiftWind: Turn on when online'
+  alias: 'ZwiftWind: On/Off with Steven Online status'
   description: ''
   trigger:
   - platform: state
     entity_id: sensor.zwift_online_4332193
     to: 'True'
+    id: online
+  - platform: state
+    entity_id: sensor.zwift_online_4332193
+    to: 'False'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+    id: offline
   condition: []
   action:
-  - service: fan.turn_on
-    data:
-      percentage: 20
-    target:
-      device_id: e612d2a3a9e4648e0e3dc20b667a3507
-  - service: select.select_option
-    data:
-      option: HR
-    target:
-      device_id: e612d2a3a9e4648e0e3dc20b667a3507
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: online
+      sequence:
+      - service: fan.turn_on
+        data:
+          percentage: 20
+        target:
+          device_id: e612d2a3a9e4648e0e3dc20b667a3507
+      - service: select.select_option
+        data:
+          option: HR
+        target:
+          device_id: e612d2a3a9e4648e0e3dc20b667a3507
+    - conditions:
+      - condition: trigger
+        id: offline
+      sequence:
+      - service: fan.turn_off
+        data: {}
+        target:
+          device_id: e612d2a3a9e4648e0e3dc20b667a3507
+    default: []
   mode: single
 - id: '1644155037497'
-  alias: 'ZwiftWind: RideOn +20% Wind'
+  alias: 'ZwiftWind: RideOn +20% Wind for 5s'
   description: ''
   trigger:
   - platform: event
@@ -1843,4 +1848,515 @@
     data:
       title: Broodoven
       message: Opgewarmd
+  mode: single
+- id: '1644681111807'
+  alias: 'ZwiftWind: Turn on Fan Marcha Online'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.zwift_online_4650440
+    to: 'True'
+    from: 'False'
+  condition: []
+  action:
+  - service: fan.set_percentage
+    data:
+      percentage: 25
+    target:
+      device_id: e612d2a3a9e4648e0e3dc20b667a3507
+  mode: single
+- id: '1646147464042'
+  alias: 'Tuinverlichting: Aan in de ochtend'
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:30
+  condition:
+  - condition: sun
+    before: sunrise
+    before_offset: -00:15
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id:
+      - light.tuinhuisje_level_on_off
+  mode: single
+- id: '1646147521859'
+  alias: 'Tuinverlichting: Uit bij zonsopkomst'
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: '0'
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.tuinhuisje_level_on_off
+  mode: single
+- id: '1646418091566'
+  alias: 'Broodoven: Switch off after use'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.broodoven_power
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+    below: '500'
+  condition:
+  - condition: state
+    entity_id: switch.broodoven_switch
+    state: 'on'
+  action:
+  - service: switch.turn_off
+    data: {}
+    target:
+      entity_id: switch.broodoven_switch
+  mode: single
+- id: '1649406548028'
+  alias: 'Badkamer: Remote On Off Dim'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:04:f1:7a:5d
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''on'' }}'
+      sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.badkamer_zha_group_0x0004
+        data: {}
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''off_with_effect'' }}'
+      sequence:
+      - service: light.turn_off
+        data:
+          transition: 1
+        target:
+          entity_id: light.badkamer_zha_group_0x0004
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''up_press'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: 20
+        target:
+          entity_id: light.badkamer_zha_group_0x0004
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''down_press'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: -20
+        target:
+          entity_id: light.badkamer_zha_group_0x0004
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''up_hold'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: 5
+        target:
+          entity_id: light.badkamer_zha_group_0x0004
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''down_hold'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: -5
+        target:
+          entity_id: light.badkamer_zha_group_0x0004
+    default: []
+  mode: single
+- id: '1649407049917'
+  alias: 'Slaapkamer: Remote On Off Dim'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 00:17:88:01:02:1b:47:e8
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''on'' }}'
+      sequence:
+      - service: light.turn_on
+        data: {}
+        target:
+          entity_id: light.slaapkamer_zha_group_0x0006
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''off_with_effect'' }}'
+      sequence:
+      - service: light.turn_off
+        data:
+          transition: 1
+        target:
+          entity_id: light.slaapkamer_zha_group_0x0006
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''up_press'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: 20
+        target:
+          entity_id: light.slaapkamer_zha_group_0x0006
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''down_press'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: -20
+        target:
+          entity_id: light.slaapkamer_zha_group_0x0006
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''up_hold'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: 5
+        target:
+          entity_id: light.slaapkamer_zha_group_0x0006
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.command == ''down_hold'' }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          transition: 1
+          brightness_step_pct: -5
+        target:
+          entity_id: light.slaapkamer_zha_group_0x0006
+    default: []
+  mode: single
+- id: '1651233736028'
+  alias: Last Rain date
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.waalre_precipitation
+    to: '0.0'
+    not_from: unknown
+  condition: []
+  action:
+  - service: input_datetime.set_datetime
+    data:
+      timestamp: '{{ now().timestamp() }}'
+    target:
+      entity_id: input_datetime.last_rain
+  mode: single
+- id: '1653053837175'
+  alias: 'Tag Music: Wielen vd bus is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-5F-94-D2-A0-71-81
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/5mDKUuj6HOfNK1gmc0DEkA?si=UUevTvFTReOZP6_SarS2sA
+      media_content_type: music
+    target:
+      device_id: d5cff61eaab847fd907204e8a00d7e9a
+  mode: single
+- id: '1653053901941'
+  alias: 'Tag Music: Pinguin Dans is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-E2-D3-A2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/3oBm6wJmgi8EY5cGy18MEY?si=cdecbf8b59c247dc
+      media_content_type: music
+    target:
+      device_id: d5cff61eaab847fd907204e8a00d7e9a
+  mode: single
+- id: '1653054080907'
+  alias: 'Tag Music: Familie Vinger is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-2D-A2-D2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/2PXVGLwtrDTRICMqtiiDFL?si=431365395fe249dc
+      media_content_type: music
+    target:
+      device_id: d5cff61eaab847fd907204e8a00d7e9a
+  mode: single
+- id: '1653054229503'
+  alias: 'Tag Music: Frozen is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-7D-8F-D2-A0-71-81
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/playlist/2tHKvRVnIszmQWuX4WPUun?si=ececf46e57b34991
+      media_content_type: music
+    target:
+      device_id: d5cff61eaab847fd907204e8a00d7e9a
+  - service: media_player.shuffle_set
+    data:
+      shuffle: true
+    target:
+      device_id: d5cff61eaab847fd907204e8a00d7e9a
+  mode: single
+- id: '1653056818164'
+  alias: 'iBBQ: Probe too hot'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.ibbq_temperature_probe_1, sensor.ibbq_temperature_probe_2
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+    above: '250'
+  condition: []
+  action:
+  - service: notify.mobile_app_iphone_steven
+    data:
+      title: iBBQ
+      message: Probe too hot
+  mode: single
+- id: '1653315701877'
+  alias: 'Luiffel: Volledig in'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.luiffel_motor1_running
+    to: 'on'
+    from: 'off'
+    id: luiffel_uit
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  - platform: state
+    entity_id:
+    - binary_sensor.luiffel_motor2_running
+    id: luiffel_in_stop
+    to: 'off'
+    from: 'on'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: luiffel_in_stop
+      - condition: state
+        entity_id: switch.luiffel_relay_2
+        state: 'on'
+      sequence:
+      - service: input_boolean.turn_off
+        data: {}
+        target:
+          entity_id: input_boolean.luiffel_uit
+    - conditions:
+      - condition: trigger
+        id: luiffel_uit
+      sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id: input_boolean.luiffel_uit
+    default: []
+  mode: single
+- id: '1653337853970'
+  alias: New Automation
+  description: ''
+  use_blueprint:
+    path: poolcactus/zha_ikea_tradfri_onoff_switch.yaml
+    input:
+      remote: 8b2806cf2927878c9211fb9b7ecc3334
+      light:
+        entity_id: light.slaapkamer_zha_group_0x0006
+- id: '1653399019612'
+  alias: 'Tag Music: Ontspanning is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-3B-EC-A2-A0-71-81
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/playlist/37i9dQZF1DX3Ogo9pFvBkY?si=79dfc21efdfd404e
+      media_content_type: music
+    target:
+      entity_id:
+      - media_player.woonkamer
+  - service: media_player.shuffle_set
+    data:
+      shuffle: true
+    target:
+      entity_id:
+      - media_player.woonkamer
+  mode: single
+- id: '1653399103962'
+  alias: 'Tag Music: Hoofd Schouders Knie Teen is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-00-BD-A2-A0-71-81
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/1Sa4Pbf15yPm2HgfxnKdwh?si=9e815e3791724b23
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1653399156023'
+  alias: 'Tag Music: Berend Botje is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-2E-B0-A2-A0-71-81
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_type: music
+      media_content_id: https://open.spotify.com/track/21RgGJksbK8cpw9p3VPQf4?si=20ff9b1a3e6b4b29
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1653399219048'
+  alias: 'Tag Music: Olifantje in het bos is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-92-72-D2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/21FkXT3MLziAAjq11grbYx?si=200b4714e72044b3
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1653399273524'
+  alias: 'Tag Music: in de maneschijn is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-77-74-A2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/0jTa1WxhhWOusOU7FHCLva?si=240b152a06234791
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1653399342439'
+  alias: 'Tag Music: Zag twee beren is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-AE-FA-A2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/27kdEKenKBVsacZTixfEqu?si=554c0adfa6714377
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1655134415524'
+  alias: 'Tag Music: Lopen als een Beer is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 53-9E-20-A8
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/7yFlm4YGR5WYFCyYf2Lqv6?si=31469061fe894e20
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1658409696977'
+  alias: 'Printer: Toner of Drum vervangen'
+  description: ''
+  trigger:
+  - type: value
+    platform: device
+    device_id: ab4765296e90dfe27e852ababf405342
+    entity_id: sensor.hl_l2375dw_drum_remaining_life
+    domain: sensor
+    below: 10
+    id: Drum Low
+  - type: value
+    platform: device
+    device_id: ab4765296e90dfe27e852ababf405342
+    entity_id: sensor.hl_l2375dw_black_toner_remaining
+    domain: sensor
+    below: 10
+    id: Toner Low
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: Drum Low
+      sequence:
+      - service: notify.all_iphones
+        data:
+          message: Rol levensduur onder 10%
+          title: Printer
+    - conditions:
+      - condition: trigger
+        id: Toner Low
+      sequence:
+      - service: notify.all_iphones
+        data:
+          title: Printer
+          message: Toner niveau lager dan 10%
+    default: []
   mode: single

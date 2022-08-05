@@ -1,3 +1,13 @@
+- platform: tod
+  name: Day
+  after: sunrise
+  before: sunset
+ 
+- platform: tod
+  name: Night
+  after: sunset
+  before: sunrise
+
 - platform: rflink
   devices:
     ev1527_0ec667_02:

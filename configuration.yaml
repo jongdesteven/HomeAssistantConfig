@@ -36,13 +36,6 @@ http:
   ssl_key: !secret ssl_key_path
   #  base_url: stevenmarcha.duckdns.org:8123
 
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
-updater:
-
 # Discover some devices automatically
 discovery:
 
@@ -173,6 +166,10 @@ alarm_control_panel:
     armed_home:
       arming_time: 0
       delay_time: 0
+
+media_player:
+  - platform: mpd
+    host: raspotify.lan
 
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml

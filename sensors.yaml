@@ -139,3 +139,20 @@
   password: !secret my_zwift_password_m
   #players:
   # - !secret my_friends_zwift_player_id
+  #
+
+- platform: statistics
+  entity_id: sensor.ibbq_temperature_probe_1
+  name: "BBQ Dome change per second in last 5 minutes"
+  state_characteristic: change_second
+  max_age:
+    minutes: 5
+  sampling_size: 50
+
+- platform: statistics
+  entity_id: sensor.ibbq_temperature_probe_2
+  name: "BBQ Meat change per second in last 5 minutes"
+  state_characteristic: change_second
+  max_age:
+    minutes: 5
+  sampling_size: 50
