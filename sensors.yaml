@@ -156,3 +156,10 @@
   max_age:
     minutes: 5
   sampling_size: 50
+
+- platform: statistics
+  name: "Luchtkwaliteit gemiddelde 24uur"
+  entity_id: sensor.particulate_matter_2_5um_concentration
+  state_characteristic: average_linear
+  max_age:
+    hours: 24

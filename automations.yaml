@@ -73,10 +73,10 @@
       sequence:
       - service: light.turn_on
         data:
-          brightness: 1
           color_name: green
+          brightness: 2
         target:
-          device_id: caa868c0c10b31e0516b85abcacd3394
+          entity_id: light.stoplicht_sjors
     - conditions:
       - condition: trigger
         id: rood
@@ -84,7 +84,7 @@
       - service: light.turn_on
         data:
           color_name: red
-          brightness: 1
+          brightness: 2
         target:
           device_id: caa868c0c10b31e0516b85abcacd3394
     - conditions:
@@ -453,7 +453,7 @@
     to: 'on'
   condition:
   - condition: template
-    value_template: '{% if state_attr(''media_player.badkamer'', ''sonos_group'')
+    value_template: '{% if state_attr(''media_player.badkamer'', ''group_members'')
       | count == 1 %} true {% else %} false {% endif %}'
   action:
   - service: media_player.join
@@ -472,7 +472,7 @@
     to: 'on'
   condition:
   - condition: template
-    value_template: '{% if state_attr(''media_player.badkamer'', ''sonos_group'')
+    value_template: '{% if state_attr(''media_player.badkamer'', ''group_members'')
       | count > 1 %} true {% else %} false {% endif %}'
   action:
   - service: media_player.unjoin
@@ -2359,4 +2359,97 @@
           title: Printer
           message: Toner niveau lager dan 10%
     default: []
+  mode: single
+- id: '1659792336291'
+  alias: 'Tag Music: Mamase is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-C8-86-A2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/0MtuobjDXAwn668Gmamk2y?si=916db29dd0da42d4
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1659792433766'
+  alias: 'Tag Music: Mango Mango is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-7D-68-D2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/0F51ZGp1APMEGmCgmG8Qwo?si=2f7f8021f2d54fac
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1659792547763'
+  alias: 'Tag Music: Waterval is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-C0-A4-A2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/6Y3VGa2XlHkuJnSRCuyCIr?si=a10b88e88eb24a31
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1659792633128'
+  alias: 'Tag Music: Automatisch is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-8F-A6-D2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/2WeAyT93f7IzrwXm3ZJMb2?si=d17a8cb3eb844b79
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1659792696793'
+  alias: 'Tag Music: De Diepte is scanned'
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 04-CA-92-D2-A0-71-80
+  condition: []
+  action:
+  - service: media_player.play_media
+    data:
+      media_content_id: https://open.spotify.com/track/7uQ7e7nzbtyX87eIYHpj6Z?si=46076b0aa7164513
+      media_content_type: music
+    target:
+      entity_id: media_player.woonkamer
+  mode: single
+- id: '1661501591365'
+  alias: 'Luchtkwaliteit: 5minuten oranje'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.particulate_matter_2_5um_concentration
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    above: '30'
+  condition: []
+  action:
+  - service: notify.all_iphones
+    data:
+      title: Luchtkwaliteit
+      message: 'Luchtkwaliteit langere tijd niet goed: Oranje'
   mode: single
